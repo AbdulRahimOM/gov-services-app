@@ -86,7 +86,6 @@ func (v *TokenVerifier) ValidateToken(tokenString string) (bool, *AccountInfo, A
 	return true, &claims.AccountInfo, addlInfo, nil
 }
 func getAddlInfo(addlInfo map[string]interface{}) AddlInfoType {
-	fmt.Println("in getAddlInfo, addlInfo:", addlInfo)
 	switch addlInfo["Label"] {
 	case "ExtraPurposeInfo":
 		extraPurposeInfo := &ExtraPurposeInfo{}
@@ -97,6 +96,6 @@ func getAddlInfo(addlInfo map[string]interface{}) AddlInfoType {
 		}
 		return extraPurposeInfo
 	default:
-		panic("Invalid label")	//unimplemented labels will panic
+		panic("Invalid label")	//unimplemented labels will panic	//code should be updated to handle new labels
 	}
 }
