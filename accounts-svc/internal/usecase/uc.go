@@ -29,22 +29,22 @@ import (
 
 type IUserUC interface {
 	//login
-	GetOTPForLogin(phone *string) (string, error)
+	UserLoginGetOTP(phone *string) (string, error)
 	VerifyOtpForLogin(phone, otp *string) (*response.UserLogin, string, error)
 	VerifyPasswordForLogin(phone, password *string) (*response.UserLogin, string, error)
 
 	//signup
-	GetOTPForSignUp(phone *string) (string, error)
+	UserSignUpGetOTP(phone *string) (string, error)
 	VerifyOtpForSignUp(phone, otp *string) (*response.UserSignUp, string, error)
 	SettingPwForNewUser(userID int32, newPassword *string) (*response.NewUserSetPw, string, error)
 
 	//profile
-	GetOTPForPwChange(userID int32) (*response.GetOTPForPwChange, string, error)
-	VerifyOTPForPwChange(userID int32, otp *string) (*response.VerifyOTPForPwChange, string, error)
-	SetNewPwAfterVerifyingOTP(userID int32, newPassword *string) (string, error)
-	GetProfile(userID int32) (*dto.UserProfile, string, error)
-	UpdateProfile(*request.UpdateProfile) (string, error)
-	UpdatePasswordUsingOldPw(req *request.UpdatePasswordUsingOldPw) (string, error)
+	UserGetOTPForPwChange(userID int32) (*response.UserGetOTPForPwChange, string, error)
+	UserVerifyOTPForPwChange(userID int32, otp *string) (*response.UserVerifyOTPForPwChange, string, error)
+	UserSetNewPwAfterVerifyingOTP(userID int32, newPassword *string) (string, error)
+	UserGetProfile(userID int32) (*dto.UserProfile, string, error)
+	UserUpdateProfile(*request.UserUpdateProfile) (string, error)
+	UserUpdatePasswordUsingOldPw(req *request.UserUpdatePasswordUsingOldPw) (string, error)
 }
 
 type UserUseCase struct {

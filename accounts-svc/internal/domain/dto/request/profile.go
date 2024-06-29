@@ -1,7 +1,7 @@
 package request
 
-type UpdateProfile struct {
-	UserId   int32
+type UserUpdateProfile struct {
+	UserId    int32
 	FirstName string
 	LastName  string
 	Email     string
@@ -9,7 +9,7 @@ type UpdateProfile struct {
 	Pincode   string
 }
 
-type UpdatePasswordUsingOldPw struct {
+type UserUpdatePasswordUsingOldPw struct {
 	UserId      int32
 	OldPassword string
 	NewPassword string

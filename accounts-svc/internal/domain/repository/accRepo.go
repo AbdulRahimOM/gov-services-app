@@ -26,8 +26,8 @@ type IUserRepo interface {
 	GetMobileByUserID(userID int32) (string, error)
 	UpdatePassword(userID int32, hashedPassword *string) error
 
-	GetProfileByUserID(userID int32) (*dto.UserProfile, error)
-	UpdateProfile(*request.UpdateProfile) error
+	UserGetProfileByUserID(userID int32) (*dto.UserProfile, error)
+	UserUpdateProfile(*request.UserUpdateProfile) error
 }
 
 func NewUserRepository(db *gorm.DB) IUserRepo {
@@ -59,8 +59,8 @@ func (ur UserRepository) UpdatePasswordByUserID(userID int32, hashedPassword *st
 	return nil
 }
 
-// GetProfileByUserID
-func (ur UserRepository) GetProfileByUserID(userID int32) (*dto.UserProfile, error) {
+// UserGetProfileByUserID
+func (ur UserRepository) UserGetProfileByUserID(userID int32) (*dto.UserProfile, error) {
 	var profile dto.UserProfile
 	result := ur.DB.Raw("SELECT f_name, l_name, email, address, pincode FROM users WHERE id=?", userID).Scan(&profile)
 	if result.Error != nil {
@@ -72,7 +72,7 @@ func (ur UserRepository) GetProfileByUserID(userID int32) (*dto.UserProfile, err
 	return &profile, nil
 }
 
-func (ur UserRepository) UpdateProfile(req *request.UpdateProfile) error {
+func (ur UserRepository) UserUpdateProfile(req *request.UserUpdateProfile) error {
 	result := ur.DB.Exec("UPDATE users SET f_name=?, l_name=?, email=?, address=?, pincode=? WHERE id=?", req.FirstName, req.LastName, req.Email, req.Address, req.Pincode, req.UserId)
 	if result.Error != nil {
 		return fmt.Errorf("@db: failed to update profile: %v", result.Error)

@@ -14,8 +14,8 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/shared/tag"
 )
 
-// GetOTPForPwChange
-func (u *UserUseCase) GetOTPForPwChange(userID int32) (*response.GetOTPForPwChange, string, error) {
+// UserGetOTPForPwChange
+func (u *UserUseCase) UserGetOTPForPwChange(userID int32) (*response.UserGetOTPForPwChange, string, error) {
 	mobile, err := u.userRepo.GetMobileByUserID(userID)
 	if err != nil {
 		return nil, respcode.DBError, fmt.Errorf("failed to get mobile number: %v", err)
@@ -26,13 +26,13 @@ func (u *UserUseCase) GetOTPForPwChange(userID int32) (*response.GetOTPForPwChan
 		return nil, respcode.OtherInternalError, fmt.Errorf("failed to send OTP: %v", err)
 	}
 
-	return &response.GetOTPForPwChange{
+	return &response.UserGetOTPForPwChange{
 		Last4Digits: mobile[len(mobile)-4:],
 	}, "", nil
 }
 
-// VerifyOTPForPwChange
-func (u *UserUseCase) VerifyOTPForPwChange(userID int32, otp *string) (*response.VerifyOTPForPwChange, string, error) {
+// UserVerifyOTPForPwChange
+func (u *UserUseCase) UserVerifyOTPForPwChange(userID int32, otp *string) (*response.UserVerifyOTPForPwChange, string, error) {
 	mobile, err := u.userRepo.GetMobileByUserID(userID)
 	if err != nil {
 		return nil, respcode.DBError, fmt.Errorf("failed to get mobile number: %v", err)
@@ -64,14 +64,14 @@ func (u *UserUseCase) VerifyOTPForPwChange(userID int32, otp *string) (*response
 		return nil, respcode.OtherInternalError, fmt.Errorf("failed to generate token: %v", err)
 	}
 
-	return &response.VerifyOTPForPwChange{
+	return &response.UserVerifyOTPForPwChange{
 		TempToken: *token,
 	}, "", nil
 }
 
-// GetProfile
-func (u *UserUseCase) GetProfile(userID int32) (*dto.UserProfile, string, error) {
-	profile, err := u.userRepo.GetProfileByUserID(userID)
+// UserGetProfile
+func (u *UserUseCase) UserGetProfile(userID int32) (*dto.UserProfile, string, error) {
+	profile, err := u.userRepo.UserGetProfileByUserID(userID)
 	if err != nil {
 		return nil, respcode.DBError, fmt.Errorf("failed to get profile: %v", err)
 	}
@@ -79,9 +79,9 @@ func (u *UserUseCase) GetProfile(userID int32) (*dto.UserProfile, string, error)
 	return profile, "", nil
 }
 
-// UpdateProfile
-func (u *UserUseCase) UpdateProfile(req *request.UpdateProfile) (string, error) {
-	err := u.userRepo.UpdateProfile(req)
+// UserUpdateProfile
+func (u *UserUseCase) UserUpdateProfile(req *request.UserUpdateProfile) (string, error) {
+	err := u.userRepo.UserUpdateProfile(req)
 	if err != nil {
 		return respcode.DBError, fmt.Errorf("failed to update profile: %v", err)
 	}
@@ -89,8 +89,8 @@ func (u *UserUseCase) UpdateProfile(req *request.UpdateProfile) (string, error) 
 	return "", nil
 }
 
-// UpdatePasswordUsingOldPw
-func (u *UserUseCase) UpdatePasswordUsingOldPw(req *request.UpdatePasswordUsingOldPw) (string, error) {
+// UserUpdatePasswordUsingOldPw
+func (u *UserUseCase) UserUpdatePasswordUsingOldPw(req *request.UserUpdatePasswordUsingOldPw) (string, error) {
 	//get user details
 	hashedPw, err := u.userRepo.GetPasswordByUserID(req.UserId)
 	if err != nil {
@@ -118,8 +118,8 @@ func (u *UserUseCase) UpdatePasswordUsingOldPw(req *request.UpdatePasswordUsingO
 	return "", nil
 }
 
-// SetNewPwAfterVerifyingOTP
-func (u *UserUseCase) SetNewPwAfterVerifyingOTP(userID int32, newPassword *string) (string, error) {
+// UserSetNewPwAfterVerifyingOTP
+func (u *UserUseCase) UserSetNewPwAfterVerifyingOTP(userID int32, newPassword *string) (string, error) {
 	//hash new password
 	hashedNewPassword, err := hashpassword.Hashpassword(*newPassword)
 	if err != nil {

@@ -8,7 +8,7 @@ type UserLogin struct {
 }
 type UpdateToken struct {
 	Status string `json:"status"`
-	Token string `json:"token"`
+	Token  string `json:"token"`
 }
 type UserBasicData struct {
 	Id          int32  `json:"id"`
@@ -29,7 +29,7 @@ type PreliminaryUserData struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
-// message UserSignUpViaOTPResponse {
+// message UserSignUpVerifyOTPResponse {
 //     string message = 1;
 //     string token = 2;
 //     SignedUpUserDetails userDetails = 3;
@@ -39,8 +39,8 @@ type PreliminaryUserData struct {
 //     string phoneNumber = 4;
 // }
 
-type VerifyOTPForPwChangeResponse struct {
-	Status string `json:"status"`
-	Msg    string `json:"message"`
+type UserVerifyOTPForPwChangeResponse struct {
+	Status    string `json:"status"`
+	Msg       string `json:"message"`
 	TempToken string `json:"tempToken"`
 }

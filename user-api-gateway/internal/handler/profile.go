@@ -20,14 +20,14 @@ func (u *UserAccountHandler) Ping(c *gin.Context) {
 	})
 }
 
-// GetOTPForPwChange
-func (u *UserAccountHandler) GetOTPForPwChange(c *gin.Context) { //unimplemented
+// UserGetOTPForPwChange
+func (u *UserAccountHandler) UserGetOTPForPwChange(c *gin.Context) { //unimplemented
 	userID, ok := gateway.GetUserIdFromContext(c)
 	if !ok {
 		return
 	}
 
-	resp, err := u.accountsClient.GetOTPForPwChange(context.Background(), &pb.GetOTPForPwChangeRequest{
+	resp, err := u.accountsClient.UserGetOTPForPwChange(context.Background(), &pb.UserGetOTPForPwChangeRequest{
 		UserId: userID,
 	})
 	if err == nil {
@@ -41,10 +41,10 @@ func (u *UserAccountHandler) GetOTPForPwChange(c *gin.Context) { //unimplemented
 
 }
 
-// VerifyOTPForPwChange
-func (u *UserAccountHandler) VerifyOTPForPwChange(c *gin.Context) { //unimplemented
+// UserVerifyOTPForPwChange
+func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *gin.Context) { //unimplemented
 
-	var req request.VerifyOTPForPwChange
+	var req request.UserVerifyOTPForPwChange
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
 		return
 	}
@@ -54,12 +54,12 @@ func (u *UserAccountHandler) VerifyOTPForPwChange(c *gin.Context) { //unimplemen
 		return
 	}
 
-	resp, err := u.accountsClient.VerifyOTPForPwChange(context.Background(), &pb.VerifyOTPForPwChangeRequest{
+	resp, err := u.accountsClient.UserVerifyOTPForPwChange(context.Background(), &pb.UserVerifyOTPForPwChangeRequest{
 		UserId: userID,
 		Otp:    req.Otp,
 	})
 	if err == nil {
-		c.JSON(200, response.VerifyOTPForPwChangeResponse{
+		c.JSON(200, response.UserVerifyOTPForPwChangeResponse{
 			Status:    mystatus.Success,
 			Msg:       "OTP verified",
 			TempToken: resp.TempToken,
@@ -95,9 +95,9 @@ func (u *UserAccountHandler) SignedUpUserSettingPw(c *gin.Context) { //unimpleme
 	}
 }
 
-// UpdateProfile
-func (u *UserAccountHandler) UpdateProfile(c *gin.Context) { //unimplemented
-	var req request.UpdateProfile
+// UserUpdateProfile
+func (u *UserAccountHandler) UserUpdateProfile(c *gin.Context) { //unimplemented
+	var req request.UserUpdateProfile
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
 		return
@@ -108,7 +108,7 @@ func (u *UserAccountHandler) UpdateProfile(c *gin.Context) { //unimplemented
 		return
 	}
 
-	_, err := u.accountsClient.UpdateProfile(context.Background(), &pb.UpdateProfileRequest{
+	_, err := u.accountsClient.UserUpdateProfile(context.Background(), &pb.UserUpdateProfileRequest{
 		UserId:    userID,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
@@ -125,18 +125,18 @@ func (u *UserAccountHandler) UpdateProfile(c *gin.Context) { //unimplemented
 	}
 }
 
-// GetProfile
-func (u *UserAccountHandler) GetProfile(c *gin.Context) { //unimplemented
+// UserGetProfile
+func (u *UserAccountHandler) UserGetProfile(c *gin.Context) { //unimplemented
 	userID, ok := gateway.GetUserIdFromContext(c)
 	if !ok {
 		return
 	}
 
-	resp, err := u.accountsClient.GetProfile(context.Background(), &pb.GetProfileRequest{
+	resp, err := u.accountsClient.UserGetProfile(context.Background(), &pb.UserGetProfileRequest{
 		UserId: userID,
 	})
 	if err == nil {
-		c.JSON(200, response.GetProfileResponse{
+		c.JSON(200, response.UserGetProfileResponse{
 			Status: mystatus.Success,
 			Profile: response.Profile{
 				FirstName:   resp.FirstName,
@@ -153,8 +153,8 @@ func (u *UserAccountHandler) GetProfile(c *gin.Context) { //unimplemented
 }
 
 // UpdatePassword
-func (u *UserAccountHandler) UpdatePasswordUsingOldPw(c *gin.Context) {
-	var req request.UpdatePasswordUsingOldPw
+func (u *UserAccountHandler) UserUpdatePasswordUsingOldPw(c *gin.Context) {
+	var req request.UserUpdatePasswordUsingOldPw
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
 		return
@@ -165,7 +165,7 @@ func (u *UserAccountHandler) UpdatePasswordUsingOldPw(c *gin.Context) {
 		return
 	}
 
-	_, err := u.accountsClient.UpdatePasswordUsingOldPw(context.Background(), &pb.UpdatePasswordUsingOldPwRequest{
+	_, err := u.accountsClient.UserUpdatePasswordUsingOldPw(context.Background(), &pb.UserUpdatePasswordUsingOldPwRequest{
 		UserId:      userID,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
@@ -179,8 +179,8 @@ func (u *UserAccountHandler) UpdatePasswordUsingOldPw(c *gin.Context) {
 	}
 }
 
-// SetNewPwAfterVerifyingOTP
-func (u *UserAccountHandler) SetNewPwAfterVerifyingOTP(c *gin.Context) {
+// UserSetNewPwAfterVerifyingOTP
+func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *gin.Context) {
 	purpose := c.GetString(tag.CtxPurpose)
 	purposeStatus := c.GetString(tag.CtxPurposeStatus)
 	if purpose == "" || purpose != tag.PwChange {
@@ -210,7 +210,7 @@ func (u *UserAccountHandler) SetNewPwAfterVerifyingOTP(c *gin.Context) {
 		return
 	}
 
-	_, err := u.accountsClient.SetNewPwAfterVerifyingOTP(context.Background(), &pb.SetNewPwAfterVerifyingOTPRequest{
+	_, err := u.accountsClient.UserSetNewPwAfterVerifyingOTP(context.Background(), &pb.UserSetNewPwAfterVerifyingOTPRequest{
 		UserId:      userID,
 		NewPassword: req.NewPassword,
 	})

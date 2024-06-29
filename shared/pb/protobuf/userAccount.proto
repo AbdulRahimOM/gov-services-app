@@ -5,43 +5,43 @@ import "google/protobuf/empty.proto";
 
 service AccountService {
     //Login
-    rpc GetOTPForLogin(GetOTPForLoginRequest) returns (GetOTPForLoginResponse);   //done
-    rpc UserLoginViaOTP(UserLoginViaOTPRequest) returns (UserLoginResponse);    //done
+    rpc UserLoginGetOTP(UserLoginGetOTPRequest) returns (UserLoginGetOTPResponse);   //done
+    rpc UserLoginVerifyOTP(UserLoginVerifyOTPRequest) returns (UserLoginResponse);    //done
     rpc UserLoginViaPassword(UserLoginViaPasswordRequest) returns (UserLoginResponse);    //done
 
     //Sign up
-    rpc GetOTPForSignUp(GetOTPForSignUpRequest) returns (GetOTPForSignUpResponse);  //done
-    rpc UserSignUpViaOTP(UserSignUpViaOTPRequest) returns (UserSignUpViaOTPResponse);   //done
+    rpc UserSignUpGetOTP(UserSignUpGetOTPRequest) returns (UserSignUpGetOTPResponse);  //done
+    rpc UserSignUpVerifyOTP(UserSignUpVerifyOTPRequest) returns (UserSignUpVerifyOTPResponse);   //done
     rpc SignedUpUserSettingPw(SignedUpUserSettingPwRequest) returns (SignedUpUserSettingPwResponse);    //done
 
     //profile
-    rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);    //done
-    rpc UpdateProfile(UpdateProfileRequest) returns (google.protobuf.Empty);    //done
-    rpc UpdatePasswordUsingOldPw(UpdatePasswordUsingOldPwRequest) returns (google.protobuf.Empty);    //done
+    rpc UserGetProfile(UserGetProfileRequest) returns (UserGetProfileResponse);    //done
+    rpc UserUpdateProfile(UserUpdateProfileRequest) returns (google.protobuf.Empty);    //done
+    rpc UserUpdatePasswordUsingOldPw(UserUpdatePasswordUsingOldPwRequest) returns (google.protobuf.Empty);    //done
     
     //Password reset
-    rpc GetOTPForPwChange(GetOTPForPwChangeRequest) returns (GetOTPForPwChangeResponse);    //done
-    rpc VerifyOTPForPwChange(VerifyOTPForPwChangeRequest) returns (VerifyOTPForPwChangeResponse);   //done
-    rpc SetNewPwAfterVerifyingOTP(SetNewPwAfterVerifyingOTPRequest) returns (google.protobuf.Empty);    //unimplemented
+    rpc UserGetOTPForPwChange(UserGetOTPForPwChangeRequest) returns (UserGetOTPForPwChangeResponse);    //done
+    rpc UserVerifyOTPForPwChange(UserVerifyOTPForPwChangeRequest) returns (UserVerifyOTPForPwChangeResponse);   //done
+    rpc UserSetNewPwAfterVerifyingOTP(UserSetNewPwAfterVerifyingOTPRequest) returns (google.protobuf.Empty);    //done
 
 }
 
-message SetNewPwAfterVerifyingOTPRequest {
+message UserSetNewPwAfterVerifyingOTPRequest {
     int32 userId = 1;
     string newPassword = 2;
 }
 
-message UpdatePasswordUsingOldPwRequest {
+message UserUpdatePasswordUsingOldPwRequest {
     int32 userId = 1;
     string oldPassword = 2;
     string newPassword = 3;
 }
 
-message GetProfileRequest {
+message UserGetProfileRequest {
     int32 userId = 1;
 }
 
-message GetProfileResponse {
+message UserGetProfileResponse {
     string firstName = 1;
     string lastName = 2;
     string email = 3;
@@ -60,7 +60,7 @@ message SignedUpUserSettingPwRequest {
     string newPassword = 2;
 }
 
-message UpdateProfileRequest {
+message UserUpdateProfileRequest {
     int32 userId = 1;
     string firstName = 2;
     string lastName = 3;
@@ -75,15 +75,15 @@ message SignedUpUserSettingPwResponse {
 }
 
 //Login
-message GetOTPForLoginRequest {
+message UserLoginGetOTPRequest {
     string phoneNumber = 1;
 }
 
-message GetOTPForLoginResponse {
+message UserLoginGetOTPResponse {
     string message = 1;
 }
 
-message UserLoginViaOTPRequest {
+message UserLoginVerifyOTPRequest {
     string phoneNumber = 1;
     string otp = 2;
 }
@@ -100,20 +100,20 @@ message LoggingUserDetails {
     string phoneNumber = 4;
 }
 // Sign up
-message GetOTPForSignUpRequest {
+message UserSignUpGetOTPRequest {
     string phoneNumber = 1;
 }
 
-message GetOTPForSignUpResponse {
+message UserSignUpGetOTPResponse {
     string message = 1;
 }
 
-message UserSignUpViaOTPRequest {
+message UserSignUpVerifyOTPRequest {
     string phoneNumber = 1;
     string otp = 2;
 }
 
-message UserSignUpViaOTPResponse {
+message UserSignUpVerifyOTPResponse {
     string message = 1;
     string token = 2;
     SignedUpUserDetails userDetails = 3;
@@ -122,23 +122,23 @@ message SignedUpUserDetails {
     int32 id = 1;
     string phoneNumber = 4;
 }
-message GetOTPForPwChangeRequest {
+message UserGetOTPForPwChangeRequest {
     int32 userId = 1;
 }
-message GetOTPForPwChangeResponse {
+message UserGetOTPForPwChangeResponse {
     string last4Digits = 1;
 }
 
-message VerifyOTPForPwChangeRequest {
+message UserVerifyOTPForPwChangeRequest {
     int32 userId = 1;
     string otp = 2;
 }
 
-message VerifyOTPForPwChangeResponse {
+message UserVerifyOTPForPwChangeResponse {
     string tempToken = 1;
 }
 
 
-message VerifyOTPForPwChangeResponse2 {
+message UserVerifyOTPForPwChangeResponse2 {
     string tempToken = 1;
 }

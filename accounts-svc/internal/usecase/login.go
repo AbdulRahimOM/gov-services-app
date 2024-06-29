@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (uc UserUseCase) GetOTPForLogin(phone *string) (string, error) {
+func (uc UserUseCase) UserLoginGetOTP(phone *string) (string, error) {
 	//check if mobile number is registered
 	doUserExists, err := uc.userRepo.CheckIfMobileIsRegistered(phone)
 	if err != nil {

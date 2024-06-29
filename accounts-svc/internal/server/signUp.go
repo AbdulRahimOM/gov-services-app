@@ -17,28 +17,28 @@ type AccountsServer struct {
 	pb.UnimplementedAccountServiceServer
 }
 
-// GetOTPForLogin
-func (s *AccountsServer) GetOTPForSignUp(ctx context.Context, req *pb.GetOTPForSignUpRequest) (*pb.GetOTPForSignUpResponse, error) {
-	fmt.Println("GetOTPForSignUp")
+// UserLoginGetOTP
+func (s *AccountsServer) UserSignUpGetOTP(ctx context.Context, req *pb.UserSignUpGetOTPRequest) (*pb.UserSignUpGetOTPResponse, error) {
+	fmt.Println("UserSignUpGetOTP")
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		log.Println("Phone number must start with +91")
 		return nil, stdresponse.GetGrpcStatus(respCode.ValidationError, "Phone number must start with +91")
 	}
 
-	msg, err := s.UserUseCase.GetOTPForSignUp(&req.PhoneNumber)
+	msg, err := s.UserUseCase.UserSignUpGetOTP(&req.PhoneNumber)
 	if err != nil {
 		return nil, stdresponse.GetGrpcStatus(respCode.OtherInternalError, err.Error())
 	} else {
 		log.Println("OTP sent")
-		return &pb.GetOTPForSignUpResponse{
+		return &pb.UserSignUpGetOTPResponse{
 			Message: msg,
 		}, nil
 	}
 }
 
 // VerifyOTPForSignUp
-func (s *AccountsServer) UserSignUpViaOTP(ctx context.Context, req *pb.UserSignUpViaOTPRequest) (*pb.UserSignUpViaOTPResponse, error) {
+func (s *AccountsServer) UserSignUpVerifyOTP(ctx context.Context, req *pb.UserSignUpVerifyOTPRequest) (*pb.UserSignUpVerifyOTPResponse, error) {
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		log.Println("Phone number must start with +91")
@@ -50,7 +50,7 @@ func (s *AccountsServer) UserSignUpViaOTP(ctx context.Context, req *pb.UserSignU
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	} else {
 		log.Println("OTP verified")
-		return &pb.UserSignUpViaOTPResponse{
+		return &pb.UserSignUpVerifyOTPResponse{
 			Message: "User signed up successfully",
 			Token:   *resp.Token,
 			UserDetails: &pb.SignedUpUserDetails{

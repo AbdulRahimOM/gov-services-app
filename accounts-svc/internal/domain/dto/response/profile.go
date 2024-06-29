@@ -1,9 +1,9 @@
 package response
 
-type GetOTPForPwChange struct {
+type UserGetOTPForPwChange struct {
 	Last4Digits string `json:"last4Digits"`
 }
 
-type VerifyOTPForPwChange struct {
+type UserVerifyOTPForPwChange struct {
 	TempToken string
 }

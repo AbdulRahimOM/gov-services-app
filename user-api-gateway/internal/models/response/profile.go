@@ -5,7 +5,7 @@ type GetOTPResponse struct {
 	Last4Digits string `json:"last4Digits"`
 }
 
-type GetProfileResponse struct {
+type UserGetProfileResponse struct {
 	Status  string  `json:"status"`
 	Profile Profile `json:"profile"`
 }
@@ -15,6 +15,6 @@ type Profile struct {
 	LastName    string `json:"lastName"`
 	Email       string `json:"email"`
 	Address     string `json:"address"`
-	Pincode     string  `json:"pincode"`
+	Pincode     string `json:"pincode"`
 	PhoneNumber string `json:"phoneNumber"`
 }

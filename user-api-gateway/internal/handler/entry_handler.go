@@ -2,10 +2,10 @@ package handler
 
 import (
 	"github.com/AbdulRahimOM/gov-services-app/shared/gateway"
+	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/request"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,13 +17,13 @@ func (u *AccountEntryHandler) Ping(c *gin.Context) {
 }
 
 func (u *AccountEntryHandler) RequestOTPForLogin(c *gin.Context) {
-	var req request.GetOTPForLogin
+	var req request.UserLoginGetOTP
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
 		return
 	}
 
-	_, err := u.accountsClient.GetOTPForLogin(c, &pb.GetOTPForLoginRequest{
+	_, err := u.accountsClient.UserLoginGetOTP(c, &pb.UserLoginGetOTPRequest{
 		PhoneNumber: req.PhoneNumber,
 	})
 	if err == nil {
@@ -36,14 +36,14 @@ func (u *AccountEntryHandler) RequestOTPForLogin(c *gin.Context) {
 	}
 }
 
-func (u *AccountEntryHandler) UserLoginViaOTP(c *gin.Context) {
-	var req request.UserLoginViaOTP
+func (u *AccountEntryHandler) UserLoginVerifyOTP(c *gin.Context) {
+	var req request.UserLoginVerifyOTP
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
 		return
 	}
 
-	resp, err := u.accountsClient.UserLoginViaOTP(c, &pb.UserLoginViaOTPRequest{
+	resp, err := u.accountsClient.UserLoginVerifyOTP(c, &pb.UserLoginVerifyOTPRequest{
 		PhoneNumber: req.PhoneNumber,
 		Otp:         req.OTP,
 	})
@@ -71,7 +71,7 @@ func (u *AccountEntryHandler) RequestOTPForSignUp(c *gin.Context) {
 		return
 	}
 
-	_, err := u.accountsClient.GetOTPForSignUp(c, &pb.GetOTPForSignUpRequest{
+	_, err := u.accountsClient.UserSignUpGetOTP(c, &pb.UserSignUpGetOTPRequest{
 		PhoneNumber: req.PhoneNumber,
 	})
 	if err == nil {
@@ -91,7 +91,7 @@ func (u *AccountEntryHandler) SubmitOTPForSignUp(c *gin.Context) {
 		return
 	}
 
-	resp, err := u.accountsClient.UserSignUpViaOTP(c, &pb.UserSignUpViaOTPRequest{
+	resp, err := u.accountsClient.UserSignUpVerifyOTP(c, &pb.UserSignUpVerifyOTPRequest{
 		PhoneNumber: req.PhoneNumber,
 		Otp:         req.OTP,
 	})

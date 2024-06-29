@@ -14,9 +14,9 @@ func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryH
 	strangersGroup := engine.Group("/")
 	strangersGroup.Use(middleware.NotLoggedInCheck)
 	{
-		strangersGroup.GET("/login", entryHandler.Ping)                       //done
-		strangersGroup.POST("/login-getOTP", entryHandler.RequestOTPForLogin) //done
-		strangersGroup.POST("/login-submitOTP", entryHandler.UserLoginViaOTP) //done
+		strangersGroup.GET("/login", entryHandler.Ping)                          //done
+		strangersGroup.POST("/login-getOTP", entryHandler.RequestOTPForLogin)    //done
+		strangersGroup.POST("/login-submitOTP", entryHandler.UserLoginVerifyOTP) //done
 
 		strangersGroup.POST("/login-using-password", entryHandler.UserLoginViaPassword) //done
 
@@ -39,14 +39,13 @@ func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryH
 	{
 		profileGroup := authGroup.Group("/profile")
 		{
-			profileGroup.GET("/view", userAccHandler.GetProfile)		//done
-			profileGroup.GET("/edit-page", userAccHandler.GetProfile)	//done
-			profileGroup.POST("/update", userAccHandler.UpdateProfile) //done
-			profileGroup.POST("/update-password/using-old-pw", userAccHandler.UpdatePasswordUsingOldPw) //done
-			profileGroup.GET("/update-password/using-otp/get-otp", userAccHandler.GetOTPForPwChange)        //not tested
-			profileGroup.POST("/update-password/using-otp/verify-otp", userAccHandler.VerifyOTPForPwChange) //not tested
-			profileGroup.POST("/update-password/using-otp/set-new-pw", userAccHandler.SetNewPwAfterVerifyingOTP) //not tested
+			profileGroup.GET("/view", userAccHandler.UserGetProfile)                                                 //done
+			profileGroup.GET("/edit-page", userAccHandler.UserGetProfile)                                            //done
+			profileGroup.POST("/update", userAccHandler.UserUpdateProfile)                                           //done
+			profileGroup.POST("/update-password/using-old-pw", userAccHandler.UserUpdatePasswordUsingOldPw)          //done
+			profileGroup.GET("/update-password/using-otp/get-otp", userAccHandler.UserGetOTPForPwChange)             //not tested
+			profileGroup.POST("/update-password/using-otp/verify-otp", userAccHandler.UserVerifyOTPForPwChange)      //not tested
+			profileGroup.POST("/update-password/using-otp/set-new-pw", userAccHandler.UserSetNewPwAfterVerifyingOTP) //not tested
 		}
 	}
 }
-

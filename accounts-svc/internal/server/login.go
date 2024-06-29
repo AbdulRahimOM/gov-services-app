@@ -12,29 +12,29 @@ import (
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
 )
 
-// GetOTPForLogin
-func (s *AccountsServer) GetOTPForLogin(ctx context.Context, req *pb.GetOTPForLoginRequest) (*pb.GetOTPForLoginResponse, error) {
-	fmt.Println("GetOTPForLogin")
+// UserLoginGetOTP
+func (s *AccountsServer) UserLoginGetOTP(ctx context.Context, req *pb.UserLoginGetOTPRequest) (*pb.UserLoginGetOTPResponse, error) {
+	fmt.Println("UserLoginGetOTP")
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		log.Println("Phone number must start with +91")
 		return nil, stdresponse.GetGrpcStatus(respCode.ValidationError, "Phone number must start with +91")
 	}
 
-	responseCode, err := s.UserUseCase.GetOTPForLogin(&req.PhoneNumber)
+	responseCode, err := s.UserUseCase.UserLoginGetOTP(&req.PhoneNumber)
 	if err != nil {
 		log.Printf("failed to get OTP for login: %v", err)
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	} else {
 		log.Println("OTP sent")
-		return &pb.GetOTPForLoginResponse{
+		return &pb.UserLoginGetOTPResponse{
 			// Message: msg,
 		}, nil
 	}
 }
 
 // VerifyOTPForLogin
-func (s *AccountsServer) UserLoginViaOTP(ctx context.Context, req *pb.UserLoginViaOTPRequest) (*pb.UserLoginResponse, error) {
+func (s *AccountsServer) UserLoginVerifyOTP(ctx context.Context, req *pb.UserLoginVerifyOTPRequest) (*pb.UserLoginResponse, error) {
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		return nil, stdresponse.GetGrpcStatus(respCode.ValidationError, "Phone number must start with +91")

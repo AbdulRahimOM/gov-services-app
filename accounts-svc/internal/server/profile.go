@@ -10,59 +10,59 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// GetOTPForPwChange
-func (s *AccountsServer) GetOTPForPwChange(ctx context.Context, req *pb.GetOTPForPwChangeRequest) (*pb.GetOTPForPwChangeResponse, error) {
-	resp, responseCode, err := s.UserUseCase.GetOTPForPwChange(req.UserId)
+// UserGetOTPForPwChange
+func (s *AccountsServer) UserGetOTPForPwChange(ctx context.Context, req *pb.UserGetOTPForPwChangeRequest) (*pb.UserGetOTPForPwChangeResponse, error) {
+	resp, responseCode, err := s.UserUseCase.UserGetOTPForPwChange(req.UserId)
 	if err != nil {
 		log.Printf("failed to get OTP for password change: %v", err)
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	}
 	log.Println("OTP sent")
-	return &pb.GetOTPForPwChangeResponse{
+	return &pb.UserGetOTPForPwChangeResponse{
 		Last4Digits: resp.Last4Digits,
 	}, nil
 }
 
-// VerifyOTPForPwChange
-func (s *AccountsServer) VerifyOTPForPwChange(ctx context.Context, req *pb.VerifyOTPForPwChangeRequest) (*pb.VerifyOTPForPwChangeResponse, error) {
-	resp, responseCode, err := s.UserUseCase.VerifyOTPForPwChange(req.UserId, &req.Otp)
+// UserVerifyOTPForPwChange
+func (s *AccountsServer) UserVerifyOTPForPwChange(ctx context.Context, req *pb.UserVerifyOTPForPwChangeRequest) (*pb.UserVerifyOTPForPwChangeResponse, error) {
+	resp, responseCode, err := s.UserUseCase.UserVerifyOTPForPwChange(req.UserId, &req.Otp)
 	if err != nil {
 		log.Printf("failed to verify OTP for password change: %v", err)
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	}
 	log.Println("OTP verified")
-	return &pb.VerifyOTPForPwChangeResponse{
+	return &pb.UserVerifyOTPForPwChangeResponse{
 		TempToken: resp.TempToken,
 	}, nil
 }
 
-//GetProfile
-func (s *AccountsServer) GetProfile(ctx context.Context, req *pb.GetProfileRequest) (*pb.GetProfileResponse, error) {
-	resp, responseCode, err := s.UserUseCase.GetProfile(req.UserId)
+// UserGetProfile
+func (s *AccountsServer) UserGetProfile(ctx context.Context, req *pb.UserGetProfileRequest) (*pb.UserGetProfileResponse, error) {
+	resp, responseCode, err := s.UserUseCase.UserGetProfile(req.UserId)
 	if err != nil {
 		log.Printf("failed to get profile: %v", err)
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	}
-	
-	return &pb.GetProfileResponse{
-		FirstName: resp.FirstName,
-		LastName:  resp.LastName,
-		Email:    resp.Email,
-		Address:  resp.Address,
-		Pincode: resp.Pincode,
+
+	return &pb.UserGetProfileResponse{
+		FirstName:   resp.FirstName,
+		LastName:    resp.LastName,
+		Email:       resp.Email,
+		Address:     resp.Address,
+		Pincode:     resp.Pincode,
 		PhoneNumber: resp.PhoneNumber,
-	}, nil	
+	}, nil
 }
 
-// UpdateProfile
-func (s *AccountsServer) UpdateProfile(ctx context.Context, req *pb.UpdateProfileRequest) (*emptypb.Empty, error) {
-	responseCode, err := s.UserUseCase.UpdateProfile(&request.UpdateProfile{
-		UserId:   req.UserId,
+// UserUpdateProfile
+func (s *AccountsServer) UserUpdateProfile(ctx context.Context, req *pb.UserUpdateProfileRequest) (*emptypb.Empty, error) {
+	responseCode, err := s.UserUseCase.UserUpdateProfile(&request.UserUpdateProfile{
+		UserId:    req.UserId,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
-		Email:    req.Email,
-		Address:  req.Address,
-		Pincode: req.Pincode,
+		Email:     req.Email,
+		Address:   req.Address,
+		Pincode:   req.Pincode,
 	})
 	if err != nil {
 		log.Printf("failed to update profile: %v", err)
@@ -73,10 +73,10 @@ func (s *AccountsServer) UpdateProfile(ctx context.Context, req *pb.UpdateProfil
 	return nil, nil
 }
 
-//UpdatePasswordUsingOldPw
-func (s *AccountsServer) UpdatePasswordUsingOldPw(ctx context.Context, req *pb.UpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
-	responseCode, err := s.UserUseCase.UpdatePasswordUsingOldPw(&request.UpdatePasswordUsingOldPw{
-		UserId:   req.UserId,
+// UserUpdatePasswordUsingOldPw
+func (s *AccountsServer) UserUpdatePasswordUsingOldPw(ctx context.Context, req *pb.UserUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
+	responseCode, err := s.UserUseCase.UserUpdatePasswordUsingOldPw(&request.UserUpdatePasswordUsingOldPw{
+		UserId:      req.UserId,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
 	})
@@ -89,9 +89,9 @@ func (s *AccountsServer) UpdatePasswordUsingOldPw(ctx context.Context, req *pb.U
 	return nil, nil
 }
 
-//SetNewPwAfterVerifyingOTP
-func (s *AccountsServer) SetNewPwAfterVerifyingOTP(ctx context.Context, req *pb.SetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error) {
-	responseCode, err := s.UserUseCase.SetNewPwAfterVerifyingOTP(req.UserId, &req.NewPassword)
+// UserSetNewPwAfterVerifyingOTP
+func (s *AccountsServer) UserSetNewPwAfterVerifyingOTP(ctx context.Context, req *pb.UserSetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error) {
+	responseCode, err := s.UserUseCase.UserSetNewPwAfterVerifyingOTP(req.UserId, &req.NewPassword)
 	if err != nil {
 		log.Printf("failed to set new password: %v", err)
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())

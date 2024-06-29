@@ -11,7 +11,7 @@ import (
 	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
 )
 
-func (uc UserUseCase) GetOTPForSignUp(phone *string) (string, error) {
+func (uc UserUseCase) UserSignUpGetOTP(phone *string) (string, error) {
 	//check if mobile number is registered
 	doUserExists, err := uc.userRepo.CheckIfMobileIsRegistered(phone)
 	if err != nil {
