@@ -12,7 +12,7 @@ import (
 )
 
 type ServiceClients struct {
-	AccountsClient pb.AccountServiceClient
+	AccountsClient pb.UserAccountServiceClient
 }
 
 func InitServiceClients() (*ServiceClients, error) {
@@ -22,7 +22,7 @@ func InitServiceClients() (*ServiceClients, error) {
 	}
 
 	return &ServiceClients{
-		AccountsClient: pb.NewAccountServiceClient(clientConn),
+		AccountsClient: pb.NewUserAccountServiceClient(clientConn),
 	}, nil
 }
 

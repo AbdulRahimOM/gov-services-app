@@ -20,24 +20,24 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AccountService_UserLoginGetOTP_FullMethodName               = "/AccountService/UserLoginGetOTP"
-	AccountService_UserLoginVerifyOTP_FullMethodName            = "/AccountService/UserLoginVerifyOTP"
-	AccountService_UserLoginViaPassword_FullMethodName          = "/AccountService/UserLoginViaPassword"
-	AccountService_UserSignUpGetOTP_FullMethodName              = "/AccountService/UserSignUpGetOTP"
-	AccountService_UserSignUpVerifyOTP_FullMethodName           = "/AccountService/UserSignUpVerifyOTP"
-	AccountService_SignedUpUserSettingPw_FullMethodName         = "/AccountService/SignedUpUserSettingPw"
-	AccountService_UserGetProfile_FullMethodName                = "/AccountService/UserGetProfile"
-	AccountService_UserUpdateProfile_FullMethodName             = "/AccountService/UserUpdateProfile"
-	AccountService_UserUpdatePasswordUsingOldPw_FullMethodName  = "/AccountService/UserUpdatePasswordUsingOldPw"
-	AccountService_UserGetOTPForPwChange_FullMethodName         = "/AccountService/UserGetOTPForPwChange"
-	AccountService_UserVerifyOTPForPwChange_FullMethodName      = "/AccountService/UserVerifyOTPForPwChange"
-	AccountService_UserSetNewPwAfterVerifyingOTP_FullMethodName = "/AccountService/UserSetNewPwAfterVerifyingOTP"
+	UserAccountService_UserLoginGetOTP_FullMethodName               = "/UserAccountService/UserLoginGetOTP"
+	UserAccountService_UserLoginVerifyOTP_FullMethodName            = "/UserAccountService/UserLoginVerifyOTP"
+	UserAccountService_UserLoginViaPassword_FullMethodName          = "/UserAccountService/UserLoginViaPassword"
+	UserAccountService_UserSignUpGetOTP_FullMethodName              = "/UserAccountService/UserSignUpGetOTP"
+	UserAccountService_UserSignUpVerifyOTP_FullMethodName           = "/UserAccountService/UserSignUpVerifyOTP"
+	UserAccountService_SignedUpUserSettingPw_FullMethodName         = "/UserAccountService/SignedUpUserSettingPw"
+	UserAccountService_UserGetProfile_FullMethodName                = "/UserAccountService/UserGetProfile"
+	UserAccountService_UserUpdateProfile_FullMethodName             = "/UserAccountService/UserUpdateProfile"
+	UserAccountService_UserUpdatePasswordUsingOldPw_FullMethodName  = "/UserAccountService/UserUpdatePasswordUsingOldPw"
+	UserAccountService_UserGetOTPForPwChange_FullMethodName         = "/UserAccountService/UserGetOTPForPwChange"
+	UserAccountService_UserVerifyOTPForPwChange_FullMethodName      = "/UserAccountService/UserVerifyOTPForPwChange"
+	UserAccountService_UserSetNewPwAfterVerifyingOTP_FullMethodName = "/UserAccountService/UserSetNewPwAfterVerifyingOTP"
 )
 
-// AccountServiceClient is the client API for AccountService service.
+// UserAccountServiceClient is the client API for UserAccountService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AccountServiceClient interface {
+type UserAccountServiceClient interface {
 	// Login
 	UserLoginGetOTP(ctx context.Context, in *UserLoginGetOTPRequest, opts ...grpc.CallOption) (*UserLoginGetOTPResponse, error)
 	UserLoginVerifyOTP(ctx context.Context, in *UserLoginVerifyOTPRequest, opts ...grpc.CallOption) (*UserLoginResponse, error)
@@ -56,126 +56,126 @@ type AccountServiceClient interface {
 	UserSetNewPwAfterVerifyingOTP(ctx context.Context, in *UserSetNewPwAfterVerifyingOTPRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type accountServiceClient struct {
+type userAccountServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAccountServiceClient(cc grpc.ClientConnInterface) AccountServiceClient {
-	return &accountServiceClient{cc}
+func NewUserAccountServiceClient(cc grpc.ClientConnInterface) UserAccountServiceClient {
+	return &userAccountServiceClient{cc}
 }
 
-func (c *accountServiceClient) UserLoginGetOTP(ctx context.Context, in *UserLoginGetOTPRequest, opts ...grpc.CallOption) (*UserLoginGetOTPResponse, error) {
+func (c *userAccountServiceClient) UserLoginGetOTP(ctx context.Context, in *UserLoginGetOTPRequest, opts ...grpc.CallOption) (*UserLoginGetOTPResponse, error) {
 	out := new(UserLoginGetOTPResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserLoginGetOTP_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserLoginGetOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserLoginVerifyOTP(ctx context.Context, in *UserLoginVerifyOTPRequest, opts ...grpc.CallOption) (*UserLoginResponse, error) {
+func (c *userAccountServiceClient) UserLoginVerifyOTP(ctx context.Context, in *UserLoginVerifyOTPRequest, opts ...grpc.CallOption) (*UserLoginResponse, error) {
 	out := new(UserLoginResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserLoginVerifyOTP_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserLoginVerifyOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserLoginViaPassword(ctx context.Context, in *UserLoginViaPasswordRequest, opts ...grpc.CallOption) (*UserLoginResponse, error) {
+func (c *userAccountServiceClient) UserLoginViaPassword(ctx context.Context, in *UserLoginViaPasswordRequest, opts ...grpc.CallOption) (*UserLoginResponse, error) {
 	out := new(UserLoginResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserLoginViaPassword_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserLoginViaPassword_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserSignUpGetOTP(ctx context.Context, in *UserSignUpGetOTPRequest, opts ...grpc.CallOption) (*UserSignUpGetOTPResponse, error) {
+func (c *userAccountServiceClient) UserSignUpGetOTP(ctx context.Context, in *UserSignUpGetOTPRequest, opts ...grpc.CallOption) (*UserSignUpGetOTPResponse, error) {
 	out := new(UserSignUpGetOTPResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserSignUpGetOTP_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserSignUpGetOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserSignUpVerifyOTP(ctx context.Context, in *UserSignUpVerifyOTPRequest, opts ...grpc.CallOption) (*UserSignUpVerifyOTPResponse, error) {
+func (c *userAccountServiceClient) UserSignUpVerifyOTP(ctx context.Context, in *UserSignUpVerifyOTPRequest, opts ...grpc.CallOption) (*UserSignUpVerifyOTPResponse, error) {
 	out := new(UserSignUpVerifyOTPResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserSignUpVerifyOTP_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserSignUpVerifyOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) SignedUpUserSettingPw(ctx context.Context, in *SignedUpUserSettingPwRequest, opts ...grpc.CallOption) (*SignedUpUserSettingPwResponse, error) {
+func (c *userAccountServiceClient) SignedUpUserSettingPw(ctx context.Context, in *SignedUpUserSettingPwRequest, opts ...grpc.CallOption) (*SignedUpUserSettingPwResponse, error) {
 	out := new(SignedUpUserSettingPwResponse)
-	err := c.cc.Invoke(ctx, AccountService_SignedUpUserSettingPw_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_SignedUpUserSettingPw_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserGetProfile(ctx context.Context, in *UserGetProfileRequest, opts ...grpc.CallOption) (*UserGetProfileResponse, error) {
+func (c *userAccountServiceClient) UserGetProfile(ctx context.Context, in *UserGetProfileRequest, opts ...grpc.CallOption) (*UserGetProfileResponse, error) {
 	out := new(UserGetProfileResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserGetProfile_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserGetProfile_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserUpdateProfile(ctx context.Context, in *UserUpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *userAccountServiceClient) UserUpdateProfile(ctx context.Context, in *UserUpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, AccountService_UserUpdateProfile_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserUpdateProfile_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserUpdatePasswordUsingOldPw(ctx context.Context, in *UserUpdatePasswordUsingOldPwRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *userAccountServiceClient) UserUpdatePasswordUsingOldPw(ctx context.Context, in *UserUpdatePasswordUsingOldPwRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, AccountService_UserUpdatePasswordUsingOldPw_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserUpdatePasswordUsingOldPw_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserGetOTPForPwChange(ctx context.Context, in *UserGetOTPForPwChangeRequest, opts ...grpc.CallOption) (*UserGetOTPForPwChangeResponse, error) {
+func (c *userAccountServiceClient) UserGetOTPForPwChange(ctx context.Context, in *UserGetOTPForPwChangeRequest, opts ...grpc.CallOption) (*UserGetOTPForPwChangeResponse, error) {
 	out := new(UserGetOTPForPwChangeResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserGetOTPForPwChange_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserGetOTPForPwChange_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserVerifyOTPForPwChange(ctx context.Context, in *UserVerifyOTPForPwChangeRequest, opts ...grpc.CallOption) (*UserVerifyOTPForPwChangeResponse, error) {
+func (c *userAccountServiceClient) UserVerifyOTPForPwChange(ctx context.Context, in *UserVerifyOTPForPwChangeRequest, opts ...grpc.CallOption) (*UserVerifyOTPForPwChangeResponse, error) {
 	out := new(UserVerifyOTPForPwChangeResponse)
-	err := c.cc.Invoke(ctx, AccountService_UserVerifyOTPForPwChange_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserVerifyOTPForPwChange_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accountServiceClient) UserSetNewPwAfterVerifyingOTP(ctx context.Context, in *UserSetNewPwAfterVerifyingOTPRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *userAccountServiceClient) UserSetNewPwAfterVerifyingOTP(ctx context.Context, in *UserSetNewPwAfterVerifyingOTPRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, AccountService_UserSetNewPwAfterVerifyingOTP_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserAccountService_UserSetNewPwAfterVerifyingOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AccountServiceServer is the server API for AccountService service.
-// All implementations must embed UnimplementedAccountServiceServer
+// UserAccountServiceServer is the server API for UserAccountService service.
+// All implementations must embed UnimplementedUserAccountServiceServer
 // for forward compatibility
-type AccountServiceServer interface {
+type UserAccountServiceServer interface {
 	// Login
 	UserLoginGetOTP(context.Context, *UserLoginGetOTPRequest) (*UserLoginGetOTPResponse, error)
 	UserLoginVerifyOTP(context.Context, *UserLoginVerifyOTPRequest) (*UserLoginResponse, error)
@@ -192,332 +192,332 @@ type AccountServiceServer interface {
 	UserGetOTPForPwChange(context.Context, *UserGetOTPForPwChangeRequest) (*UserGetOTPForPwChangeResponse, error)
 	UserVerifyOTPForPwChange(context.Context, *UserVerifyOTPForPwChangeRequest) (*UserVerifyOTPForPwChangeResponse, error)
 	UserSetNewPwAfterVerifyingOTP(context.Context, *UserSetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedAccountServiceServer()
+	mustEmbedUnimplementedUserAccountServiceServer()
 }
 
-// UnimplementedAccountServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAccountServiceServer struct {
+// UnimplementedUserAccountServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedUserAccountServiceServer struct {
 }
 
-func (UnimplementedAccountServiceServer) UserLoginGetOTP(context.Context, *UserLoginGetOTPRequest) (*UserLoginGetOTPResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserLoginGetOTP(context.Context, *UserLoginGetOTPRequest) (*UserLoginGetOTPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserLoginGetOTP not implemented")
 }
-func (UnimplementedAccountServiceServer) UserLoginVerifyOTP(context.Context, *UserLoginVerifyOTPRequest) (*UserLoginResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserLoginVerifyOTP(context.Context, *UserLoginVerifyOTPRequest) (*UserLoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserLoginVerifyOTP not implemented")
 }
-func (UnimplementedAccountServiceServer) UserLoginViaPassword(context.Context, *UserLoginViaPasswordRequest) (*UserLoginResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserLoginViaPassword(context.Context, *UserLoginViaPasswordRequest) (*UserLoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserLoginViaPassword not implemented")
 }
-func (UnimplementedAccountServiceServer) UserSignUpGetOTP(context.Context, *UserSignUpGetOTPRequest) (*UserSignUpGetOTPResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserSignUpGetOTP(context.Context, *UserSignUpGetOTPRequest) (*UserSignUpGetOTPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSignUpGetOTP not implemented")
 }
-func (UnimplementedAccountServiceServer) UserSignUpVerifyOTP(context.Context, *UserSignUpVerifyOTPRequest) (*UserSignUpVerifyOTPResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserSignUpVerifyOTP(context.Context, *UserSignUpVerifyOTPRequest) (*UserSignUpVerifyOTPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSignUpVerifyOTP not implemented")
 }
-func (UnimplementedAccountServiceServer) SignedUpUserSettingPw(context.Context, *SignedUpUserSettingPwRequest) (*SignedUpUserSettingPwResponse, error) {
+func (UnimplementedUserAccountServiceServer) SignedUpUserSettingPw(context.Context, *SignedUpUserSettingPwRequest) (*SignedUpUserSettingPwResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignedUpUserSettingPw not implemented")
 }
-func (UnimplementedAccountServiceServer) UserGetProfile(context.Context, *UserGetProfileRequest) (*UserGetProfileResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserGetProfile(context.Context, *UserGetProfileRequest) (*UserGetProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserGetProfile not implemented")
 }
-func (UnimplementedAccountServiceServer) UserUpdateProfile(context.Context, *UserUpdateProfileRequest) (*emptypb.Empty, error) {
+func (UnimplementedUserAccountServiceServer) UserUpdateProfile(context.Context, *UserUpdateProfileRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserUpdateProfile not implemented")
 }
-func (UnimplementedAccountServiceServer) UserUpdatePasswordUsingOldPw(context.Context, *UserUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
+func (UnimplementedUserAccountServiceServer) UserUpdatePasswordUsingOldPw(context.Context, *UserUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserUpdatePasswordUsingOldPw not implemented")
 }
-func (UnimplementedAccountServiceServer) UserGetOTPForPwChange(context.Context, *UserGetOTPForPwChangeRequest) (*UserGetOTPForPwChangeResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserGetOTPForPwChange(context.Context, *UserGetOTPForPwChangeRequest) (*UserGetOTPForPwChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserGetOTPForPwChange not implemented")
 }
-func (UnimplementedAccountServiceServer) UserVerifyOTPForPwChange(context.Context, *UserVerifyOTPForPwChangeRequest) (*UserVerifyOTPForPwChangeResponse, error) {
+func (UnimplementedUserAccountServiceServer) UserVerifyOTPForPwChange(context.Context, *UserVerifyOTPForPwChangeRequest) (*UserVerifyOTPForPwChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserVerifyOTPForPwChange not implemented")
 }
-func (UnimplementedAccountServiceServer) UserSetNewPwAfterVerifyingOTP(context.Context, *UserSetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error) {
+func (UnimplementedUserAccountServiceServer) UserSetNewPwAfterVerifyingOTP(context.Context, *UserSetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSetNewPwAfterVerifyingOTP not implemented")
 }
-func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
+func (UnimplementedUserAccountServiceServer) mustEmbedUnimplementedUserAccountServiceServer() {}
 
-// UnsafeAccountServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AccountServiceServer will
+// UnsafeUserAccountServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserAccountServiceServer will
 // result in compilation errors.
-type UnsafeAccountServiceServer interface {
-	mustEmbedUnimplementedAccountServiceServer()
+type UnsafeUserAccountServiceServer interface {
+	mustEmbedUnimplementedUserAccountServiceServer()
 }
 
-func RegisterAccountServiceServer(s grpc.ServiceRegistrar, srv AccountServiceServer) {
-	s.RegisterService(&AccountService_ServiceDesc, srv)
+func RegisterUserAccountServiceServer(s grpc.ServiceRegistrar, srv UserAccountServiceServer) {
+	s.RegisterService(&UserAccountService_ServiceDesc, srv)
 }
 
-func _AccountService_UserLoginGetOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserLoginGetOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserLoginGetOTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserLoginGetOTP(ctx, in)
+		return srv.(UserAccountServiceServer).UserLoginGetOTP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserLoginGetOTP_FullMethodName,
+		FullMethod: UserAccountService_UserLoginGetOTP_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserLoginGetOTP(ctx, req.(*UserLoginGetOTPRequest))
+		return srv.(UserAccountServiceServer).UserLoginGetOTP(ctx, req.(*UserLoginGetOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserLoginVerifyOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserLoginVerifyOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserLoginVerifyOTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserLoginVerifyOTP(ctx, in)
+		return srv.(UserAccountServiceServer).UserLoginVerifyOTP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserLoginVerifyOTP_FullMethodName,
+		FullMethod: UserAccountService_UserLoginVerifyOTP_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserLoginVerifyOTP(ctx, req.(*UserLoginVerifyOTPRequest))
+		return srv.(UserAccountServiceServer).UserLoginVerifyOTP(ctx, req.(*UserLoginVerifyOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserLoginViaPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserLoginViaPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserLoginViaPasswordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserLoginViaPassword(ctx, in)
+		return srv.(UserAccountServiceServer).UserLoginViaPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserLoginViaPassword_FullMethodName,
+		FullMethod: UserAccountService_UserLoginViaPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserLoginViaPassword(ctx, req.(*UserLoginViaPasswordRequest))
+		return srv.(UserAccountServiceServer).UserLoginViaPassword(ctx, req.(*UserLoginViaPasswordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserSignUpGetOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserSignUpGetOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserSignUpGetOTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserSignUpGetOTP(ctx, in)
+		return srv.(UserAccountServiceServer).UserSignUpGetOTP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserSignUpGetOTP_FullMethodName,
+		FullMethod: UserAccountService_UserSignUpGetOTP_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserSignUpGetOTP(ctx, req.(*UserSignUpGetOTPRequest))
+		return srv.(UserAccountServiceServer).UserSignUpGetOTP(ctx, req.(*UserSignUpGetOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserSignUpVerifyOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserSignUpVerifyOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserSignUpVerifyOTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserSignUpVerifyOTP(ctx, in)
+		return srv.(UserAccountServiceServer).UserSignUpVerifyOTP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserSignUpVerifyOTP_FullMethodName,
+		FullMethod: UserAccountService_UserSignUpVerifyOTP_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserSignUpVerifyOTP(ctx, req.(*UserSignUpVerifyOTPRequest))
+		return srv.(UserAccountServiceServer).UserSignUpVerifyOTP(ctx, req.(*UserSignUpVerifyOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_SignedUpUserSettingPw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_SignedUpUserSettingPw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SignedUpUserSettingPwRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).SignedUpUserSettingPw(ctx, in)
+		return srv.(UserAccountServiceServer).SignedUpUserSettingPw(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_SignedUpUserSettingPw_FullMethodName,
+		FullMethod: UserAccountService_SignedUpUserSettingPw_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).SignedUpUserSettingPw(ctx, req.(*SignedUpUserSettingPwRequest))
+		return srv.(UserAccountServiceServer).SignedUpUserSettingPw(ctx, req.(*SignedUpUserSettingPwRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserGetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserGetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserGetProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserGetProfile(ctx, in)
+		return srv.(UserAccountServiceServer).UserGetProfile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserGetProfile_FullMethodName,
+		FullMethod: UserAccountService_UserGetProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserGetProfile(ctx, req.(*UserGetProfileRequest))
+		return srv.(UserAccountServiceServer).UserGetProfile(ctx, req.(*UserGetProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserUpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserUpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserUpdateProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserUpdateProfile(ctx, in)
+		return srv.(UserAccountServiceServer).UserUpdateProfile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserUpdateProfile_FullMethodName,
+		FullMethod: UserAccountService_UserUpdateProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserUpdateProfile(ctx, req.(*UserUpdateProfileRequest))
+		return srv.(UserAccountServiceServer).UserUpdateProfile(ctx, req.(*UserUpdateProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserUpdatePasswordUsingOldPw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserUpdatePasswordUsingOldPw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserUpdatePasswordUsingOldPwRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserUpdatePasswordUsingOldPw(ctx, in)
+		return srv.(UserAccountServiceServer).UserUpdatePasswordUsingOldPw(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserUpdatePasswordUsingOldPw_FullMethodName,
+		FullMethod: UserAccountService_UserUpdatePasswordUsingOldPw_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserUpdatePasswordUsingOldPw(ctx, req.(*UserUpdatePasswordUsingOldPwRequest))
+		return srv.(UserAccountServiceServer).UserUpdatePasswordUsingOldPw(ctx, req.(*UserUpdatePasswordUsingOldPwRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserGetOTPForPwChange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserGetOTPForPwChange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserGetOTPForPwChangeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserGetOTPForPwChange(ctx, in)
+		return srv.(UserAccountServiceServer).UserGetOTPForPwChange(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserGetOTPForPwChange_FullMethodName,
+		FullMethod: UserAccountService_UserGetOTPForPwChange_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserGetOTPForPwChange(ctx, req.(*UserGetOTPForPwChangeRequest))
+		return srv.(UserAccountServiceServer).UserGetOTPForPwChange(ctx, req.(*UserGetOTPForPwChangeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserVerifyOTPForPwChange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserVerifyOTPForPwChange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserVerifyOTPForPwChangeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserVerifyOTPForPwChange(ctx, in)
+		return srv.(UserAccountServiceServer).UserVerifyOTPForPwChange(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserVerifyOTPForPwChange_FullMethodName,
+		FullMethod: UserAccountService_UserVerifyOTPForPwChange_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserVerifyOTPForPwChange(ctx, req.(*UserVerifyOTPForPwChangeRequest))
+		return srv.(UserAccountServiceServer).UserVerifyOTPForPwChange(ctx, req.(*UserVerifyOTPForPwChangeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountService_UserSetNewPwAfterVerifyingOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAccountService_UserSetNewPwAfterVerifyingOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserSetNewPwAfterVerifyingOTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountServiceServer).UserSetNewPwAfterVerifyingOTP(ctx, in)
+		return srv.(UserAccountServiceServer).UserSetNewPwAfterVerifyingOTP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountService_UserSetNewPwAfterVerifyingOTP_FullMethodName,
+		FullMethod: UserAccountService_UserSetNewPwAfterVerifyingOTP_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).UserSetNewPwAfterVerifyingOTP(ctx, req.(*UserSetNewPwAfterVerifyingOTPRequest))
+		return srv.(UserAccountServiceServer).UserSetNewPwAfterVerifyingOTP(ctx, req.(*UserSetNewPwAfterVerifyingOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AccountService_ServiceDesc is the grpc.ServiceDesc for AccountService service.
+// UserAccountService_ServiceDesc is the grpc.ServiceDesc for UserAccountService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AccountService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "AccountService",
-	HandlerType: (*AccountServiceServer)(nil),
+var UserAccountService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "UserAccountService",
+	HandlerType: (*UserAccountServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "UserLoginGetOTP",
-			Handler:    _AccountService_UserLoginGetOTP_Handler,
+			Handler:    _UserAccountService_UserLoginGetOTP_Handler,
 		},
 		{
 			MethodName: "UserLoginVerifyOTP",
-			Handler:    _AccountService_UserLoginVerifyOTP_Handler,
+			Handler:    _UserAccountService_UserLoginVerifyOTP_Handler,
 		},
 		{
 			MethodName: "UserLoginViaPassword",
-			Handler:    _AccountService_UserLoginViaPassword_Handler,
+			Handler:    _UserAccountService_UserLoginViaPassword_Handler,
 		},
 		{
 			MethodName: "UserSignUpGetOTP",
-			Handler:    _AccountService_UserSignUpGetOTP_Handler,
+			Handler:    _UserAccountService_UserSignUpGetOTP_Handler,
 		},
 		{
 			MethodName: "UserSignUpVerifyOTP",
-			Handler:    _AccountService_UserSignUpVerifyOTP_Handler,
+			Handler:    _UserAccountService_UserSignUpVerifyOTP_Handler,
 		},
 		{
 			MethodName: "SignedUpUserSettingPw",
-			Handler:    _AccountService_SignedUpUserSettingPw_Handler,
+			Handler:    _UserAccountService_SignedUpUserSettingPw_Handler,
 		},
 		{
 			MethodName: "UserGetProfile",
-			Handler:    _AccountService_UserGetProfile_Handler,
+			Handler:    _UserAccountService_UserGetProfile_Handler,
 		},
 		{
 			MethodName: "UserUpdateProfile",
-			Handler:    _AccountService_UserUpdateProfile_Handler,
+			Handler:    _UserAccountService_UserUpdateProfile_Handler,
 		},
 		{
 			MethodName: "UserUpdatePasswordUsingOldPw",
-			Handler:    _AccountService_UserUpdatePasswordUsingOldPw_Handler,
+			Handler:    _UserAccountService_UserUpdatePasswordUsingOldPw_Handler,
 		},
 		{
 			MethodName: "UserGetOTPForPwChange",
-			Handler:    _AccountService_UserGetOTPForPwChange_Handler,
+			Handler:    _UserAccountService_UserGetOTPForPwChange_Handler,
 		},
 		{
 			MethodName: "UserVerifyOTPForPwChange",
-			Handler:    _AccountService_UserVerifyOTPForPwChange_Handler,
+			Handler:    _UserAccountService_UserVerifyOTPForPwChange_Handler,
 		},
 		{
 			MethodName: "UserSetNewPwAfterVerifyingOTP",
-			Handler:    _AccountService_UserSetNewPwAfterVerifyingOTP_Handler,
+			Handler:    _UserAccountService_UserSetNewPwAfterVerifyingOTP_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

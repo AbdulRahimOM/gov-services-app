@@ -13,7 +13,7 @@ import (
 )
 
 // UserLoginGetOTP
-func (s *AccountsServer) UserLoginGetOTP(ctx context.Context, req *pb.UserLoginGetOTPRequest) (*pb.UserLoginGetOTPResponse, error) {
+func (s *UserAccountsServer) UserLoginGetOTP(ctx context.Context, req *pb.UserLoginGetOTPRequest) (*pb.UserLoginGetOTPResponse, error) {
 	fmt.Println("UserLoginGetOTP")
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
@@ -34,7 +34,7 @@ func (s *AccountsServer) UserLoginGetOTP(ctx context.Context, req *pb.UserLoginG
 }
 
 // VerifyOTPForLogin
-func (s *AccountsServer) UserLoginVerifyOTP(ctx context.Context, req *pb.UserLoginVerifyOTPRequest) (*pb.UserLoginResponse, error) {
+func (s *UserAccountsServer) UserLoginVerifyOTP(ctx context.Context, req *pb.UserLoginVerifyOTPRequest) (*pb.UserLoginResponse, error) {
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		return nil, stdresponse.GetGrpcStatus(respCode.ValidationError, "Phone number must start with +91")
@@ -57,7 +57,7 @@ func (s *AccountsServer) UserLoginVerifyOTP(ctx context.Context, req *pb.UserLog
 }
 
 // UserLoginViaPassword
-func (s *AccountsServer) UserLoginViaPassword(ctx context.Context, req *pb.UserLoginViaPasswordRequest) (*pb.UserLoginResponse, error) {
+func (s *UserAccountsServer) UserLoginViaPassword(ctx context.Context, req *pb.UserLoginViaPasswordRequest) (*pb.UserLoginResponse, error) {
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		return nil, stdresponse.GetGrpcStatus(respCode.ValidationError, "Phone number must start with +91")

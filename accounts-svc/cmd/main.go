@@ -29,7 +29,7 @@ func main() {
 		grpcServer.GracefulStop()
 		log.Println("Server gracefully stopped")
 	}()
-	pb.RegisterAccountServiceServer(grpcServer, server)
+	pb.RegisterUserAccountServiceServer(grpcServer, server)
 
 	err = grpcServer.Serve(lis)
 	if err != nil {

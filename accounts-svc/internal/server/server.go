@@ -6,15 +6,15 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase"
 )
 
-func InitializeServer() *AccountsServer {
+func InitializeServer() *UserAccountsServer {
 	userRepository := repo.NewUserRepository(db.DB)
 	userUseCase := usecase.NewUserUseCase(userRepository)
 
-	return newAccountsServer(userUseCase)
+	return newUserAccountsServer(userUseCase)
 }
 
-func newAccountsServer(userUseCase usecase.IUserUC) *AccountsServer {
-	return &AccountsServer{
+func newUserAccountsServer(userUseCase usecase.IUserUC) *UserAccountsServer {
+	return &UserAccountsServer{
 		UserUseCase: userUseCase,
 	}
 }

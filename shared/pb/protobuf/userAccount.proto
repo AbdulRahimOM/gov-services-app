@@ -3,7 +3,7 @@ syntax = "proto3";
 option go_package = "./pb/generated;pb";
 import "google/protobuf/empty.proto";
 
-service AccountService {
+service UserAccountService {
     //Login
     rpc UserLoginGetOTP(UserLoginGetOTPRequest) returns (UserLoginGetOTPResponse);   //done
     rpc UserLoginVerifyOTP(UserLoginVerifyOTPRequest) returns (UserLoginResponse);    //done

@@ -5,20 +5,20 @@ import (
 )
 
 type UserAccountHandler struct {
-	accountsClient pb.AccountServiceClient
+	accountsClient pb.UserAccountServiceClient
 }
 
-func NewUserAccountHandler(client pb.AccountServiceClient) *UserAccountHandler {
+func NewUserAccountHandler(client pb.UserAccountServiceClient) *UserAccountHandler {
 	return &UserAccountHandler{
 		accountsClient: client,
 	}
 }
 
 type AccountEntryHandler struct {
-	accountsClient pb.AccountServiceClient
+	accountsClient pb.UserAccountServiceClient
 }
 
-func NewEntryHandler(client pb.AccountServiceClient) *AccountEntryHandler {
+func NewEntryHandler(client pb.UserAccountServiceClient) *AccountEntryHandler {
 	return &AccountEntryHandler{
 		accountsClient: client,
 	}

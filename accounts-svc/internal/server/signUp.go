@@ -12,13 +12,13 @@ import (
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
 )
 
-type AccountsServer struct {
+type UserAccountsServer struct {
 	UserUseCase usecase.IUserUC
-	pb.UnimplementedAccountServiceServer
+	pb.UnimplementedUserAccountServiceServer
 }
 
 // UserLoginGetOTP
-func (s *AccountsServer) UserSignUpGetOTP(ctx context.Context, req *pb.UserSignUpGetOTPRequest) (*pb.UserSignUpGetOTPResponse, error) {
+func (s *UserAccountsServer) UserSignUpGetOTP(ctx context.Context, req *pb.UserSignUpGetOTPRequest) (*pb.UserSignUpGetOTPResponse, error) {
 	fmt.Println("UserSignUpGetOTP")
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
@@ -38,7 +38,7 @@ func (s *AccountsServer) UserSignUpGetOTP(ctx context.Context, req *pb.UserSignU
 }
 
 // VerifyOTPForSignUp
-func (s *AccountsServer) UserSignUpVerifyOTP(ctx context.Context, req *pb.UserSignUpVerifyOTPRequest) (*pb.UserSignUpVerifyOTPResponse, error) {
+func (s *UserAccountsServer) UserSignUpVerifyOTP(ctx context.Context, req *pb.UserSignUpVerifyOTPRequest) (*pb.UserSignUpVerifyOTPResponse, error) {
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		log.Println("Phone number must start with +91")
@@ -62,7 +62,7 @@ func (s *AccountsServer) UserSignUpVerifyOTP(ctx context.Context, req *pb.UserSi
 }
 
 // SignedUpUserSettingPw
-func (s *AccountsServer) SignedUpUserSettingPw(ctx context.Context, req *pb.SignedUpUserSettingPwRequest) (*pb.SignedUpUserSettingPwResponse, error) {
+func (s *UserAccountsServer) SignedUpUserSettingPw(ctx context.Context, req *pb.SignedUpUserSettingPwRequest) (*pb.SignedUpUserSettingPwResponse, error) {
 	resp, responseCode, err := s.UserUseCase.SettingPwForNewUser(req.UserId, &req.NewPassword)
 	if err != nil {
 		log.Printf("failed to set password for signed up user: %v", err)

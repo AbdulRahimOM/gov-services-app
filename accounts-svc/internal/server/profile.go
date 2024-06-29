@@ -11,7 +11,7 @@ import (
 )
 
 // UserGetOTPForPwChange
-func (s *AccountsServer) UserGetOTPForPwChange(ctx context.Context, req *pb.UserGetOTPForPwChangeRequest) (*pb.UserGetOTPForPwChangeResponse, error) {
+func (s *UserAccountsServer) UserGetOTPForPwChange(ctx context.Context, req *pb.UserGetOTPForPwChangeRequest) (*pb.UserGetOTPForPwChangeResponse, error) {
 	resp, responseCode, err := s.UserUseCase.UserGetOTPForPwChange(req.UserId)
 	if err != nil {
 		log.Printf("failed to get OTP for password change: %v", err)
@@ -24,7 +24,7 @@ func (s *AccountsServer) UserGetOTPForPwChange(ctx context.Context, req *pb.User
 }
 
 // UserVerifyOTPForPwChange
-func (s *AccountsServer) UserVerifyOTPForPwChange(ctx context.Context, req *pb.UserVerifyOTPForPwChangeRequest) (*pb.UserVerifyOTPForPwChangeResponse, error) {
+func (s *UserAccountsServer) UserVerifyOTPForPwChange(ctx context.Context, req *pb.UserVerifyOTPForPwChangeRequest) (*pb.UserVerifyOTPForPwChangeResponse, error) {
 	resp, responseCode, err := s.UserUseCase.UserVerifyOTPForPwChange(req.UserId, &req.Otp)
 	if err != nil {
 		log.Printf("failed to verify OTP for password change: %v", err)
@@ -37,7 +37,7 @@ func (s *AccountsServer) UserVerifyOTPForPwChange(ctx context.Context, req *pb.U
 }
 
 // UserGetProfile
-func (s *AccountsServer) UserGetProfile(ctx context.Context, req *pb.UserGetProfileRequest) (*pb.UserGetProfileResponse, error) {
+func (s *UserAccountsServer) UserGetProfile(ctx context.Context, req *pb.UserGetProfileRequest) (*pb.UserGetProfileResponse, error) {
 	resp, responseCode, err := s.UserUseCase.UserGetProfile(req.UserId)
 	if err != nil {
 		log.Printf("failed to get profile: %v", err)
@@ -55,7 +55,7 @@ func (s *AccountsServer) UserGetProfile(ctx context.Context, req *pb.UserGetProf
 }
 
 // UserUpdateProfile
-func (s *AccountsServer) UserUpdateProfile(ctx context.Context, req *pb.UserUpdateProfileRequest) (*emptypb.Empty, error) {
+func (s *UserAccountsServer) UserUpdateProfile(ctx context.Context, req *pb.UserUpdateProfileRequest) (*emptypb.Empty, error) {
 	responseCode, err := s.UserUseCase.UserUpdateProfile(&request.UserUpdateProfile{
 		UserId:    req.UserId,
 		FirstName: req.FirstName,
@@ -74,7 +74,7 @@ func (s *AccountsServer) UserUpdateProfile(ctx context.Context, req *pb.UserUpda
 }
 
 // UserUpdatePasswordUsingOldPw
-func (s *AccountsServer) UserUpdatePasswordUsingOldPw(ctx context.Context, req *pb.UserUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
+func (s *UserAccountsServer) UserUpdatePasswordUsingOldPw(ctx context.Context, req *pb.UserUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
 	responseCode, err := s.UserUseCase.UserUpdatePasswordUsingOldPw(&request.UserUpdatePasswordUsingOldPw{
 		UserId:      req.UserId,
 		OldPassword: req.OldPassword,
@@ -90,7 +90,7 @@ func (s *AccountsServer) UserUpdatePasswordUsingOldPw(ctx context.Context, req *
 }
 
 // UserSetNewPwAfterVerifyingOTP
-func (s *AccountsServer) UserSetNewPwAfterVerifyingOTP(ctx context.Context, req *pb.UserSetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error) {
+func (s *UserAccountsServer) UserSetNewPwAfterVerifyingOTP(ctx context.Context, req *pb.UserSetNewPwAfterVerifyingOTPRequest) (*emptypb.Empty, error) {
 	responseCode, err := s.UserUseCase.UserSetNewPwAfterVerifyingOTP(req.UserId, &req.NewPassword)
 	if err != nil {
 		log.Printf("failed to set new password: %v", err)
