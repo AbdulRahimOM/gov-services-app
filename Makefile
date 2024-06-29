@@ -1,0 +1,37 @@
+.PHONY: 
+	running-user-api-gateway \
+	running-account-service \
+	watching-proto \
+	all \
+	running-in-background-watching-proto \
+	running-in-background-user-api-gateway \
+	running-in-background-account-service \
+	all-in-background \
+
+running-watching-proto:
+	cd shared && make watching-proto
+
+running-user-api-gateway:
+	cd user-api-gateway && make running
+
+running-account-service:
+	cd accounts-svc && make running
+
+all: 
+	make running-watching-proto 
+	make running-user-api-gateway 
+	make running-account-service
+
+running-in-background-watching-proto:
+	cd shared && make watching-proto-in-background
+
+running-in-background-user-api-gateway:
+	cd user-api-gateway && make running-in-background
+
+running-in-background-account-service:
+	cd accounts-svc && make running-in-background
+
+all-in-background: 
+	make running-in-background-watching-proto 
+	make running-in-background-user-api-gateway 
+	make running-in-background-account-service

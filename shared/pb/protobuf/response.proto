@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+
+option go_package = "./std-response/std-response;stdresponse";
+
+
+message ErrResponse {
+    string ResponseCode = 1;
+    string Error = 2;
+}
+message MultiErrResponse {
+    string ResponseCode = 1;
+    repeated string Errors = 2;
+}
