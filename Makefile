@@ -2,7 +2,6 @@
 	running-user-api-gateway \
 	running-account-service \
 	watching-proto \
-	all \
 	running-in-background-watching-proto \
 	running-in-background-user-api-gateway \
 	running-in-background-account-service \
@@ -16,11 +15,6 @@ running-user-api-gateway:
 
 running-account-service:
 	cd accounts-svc && make running
-
-all: 
-	make running-watching-proto 
-	make running-user-api-gateway 
-	make running-account-service
 
 running-in-background-watching-proto:
 	cd shared && make watching-proto-in-background
