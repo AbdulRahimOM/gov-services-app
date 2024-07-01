@@ -3,10 +3,10 @@ package adminuc
 import (
 	"fmt"
 
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
-	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
-	respcode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
+	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 )
 
 // AdminGetProfile

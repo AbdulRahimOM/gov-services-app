@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"time"
 
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
-	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
-	respcode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
-	"github.com/AbdulRahimOM/gov-services-app/shared/tag"
+	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
+	"github.com/AbdulRahimOM/gov-services-app/internal/tag"
 )
 
 // UserGetOTPForPwChange

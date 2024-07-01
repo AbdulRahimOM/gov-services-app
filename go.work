@@ -3,7 +3,6 @@ go 1.22.2
 use (
     ./accounts-svc
     ./user-api-gateway
-    ./shared
     ./internal
     ./admin-api-gateway
 )

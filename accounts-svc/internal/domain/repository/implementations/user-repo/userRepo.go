@@ -7,7 +7,7 @@ import (
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	repointerface "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/interface"
-	dberror "github.com/AbdulRahimOM/gov-services-app/shared/std-response/error/db"
+	dberror "github.com/AbdulRahimOM/gov-services-app/internal/std-response/error/db"
 
 	"gorm.io/gorm"
 )

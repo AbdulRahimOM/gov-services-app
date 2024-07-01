@@ -1,5 +1,5 @@
-github.com/AbdulRahimOM/go-utils v0.0.0-20240621110116-8c26d8a55271 h1:Ws1lURmZi51nUxdmJ2O26NogrV3j0+fX+QZ5nCBg3dE=
-github.com/AbdulRahimOM/go-utils v0.0.0-20240621110116-8c26d8a55271/go.mod h1:lCgIbRaOlTZ9vCdAddRJxff6/zYZCSevs3QDimCAy0o=
+github.com/AbdulRahimOM/go-utils v0.0.0-20240625005829-7d8214cf7d50 h1:858pf6WFJRcZ9xFi2I0kck/NjWdG4lBPi5Vhja8arIc=
+github.com/AbdulRahimOM/go-utils v0.0.0-20240625005829-7d8214cf7d50/go.mod h1:lCgIbRaOlTZ9vCdAddRJxff6/zYZCSevs3QDimCAy0o=
 github.com/bytedance/sonic v1.11.6 h1:oUp34TzMlL+OY1OUWxHqsdkgC/Zfc85zGqw9siXjrc0=
 github.com/bytedance/sonic v1.11.6/go.mod h1:LysEHSvpvDySVdC2f87zGWf6CIKJcAvqab1ZaiQtds4=
 github.com/bytedance/sonic/loader v0.1.1 h1:c+e5Pt1k/cy5wMveRDyk2X4B9hF4g7an8N3zCYjJFNM=

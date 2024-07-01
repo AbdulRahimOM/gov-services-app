@@ -4,7 +4,7 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/routes"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"

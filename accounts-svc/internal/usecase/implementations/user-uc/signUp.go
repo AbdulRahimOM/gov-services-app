@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
-	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
-	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
+	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 )
 
 func (uc UserUseCase) UserSignUpGetOTP(phone *string) (string, error) {

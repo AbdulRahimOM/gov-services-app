@@ -3,8 +3,8 @@ package adminAccHandler
 import (
 	"context"
 
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
-	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
 )
 
 // AdminLoginViaPassword

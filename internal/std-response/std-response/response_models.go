@@ -1,6 +1,6 @@
 package stdresponse
 
-import "github.com/AbdulRahimOM/gov-services-app/shared/validation"
+import "github.com/AbdulRahimOM/gov-services-app/internal/validation"
 
 type SRE struct {
 	Status string `json:"status"`

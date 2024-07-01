@@ -1,7 +1,7 @@
 package handler
 
 import (
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 )
 
 type UserAccountHandler struct {

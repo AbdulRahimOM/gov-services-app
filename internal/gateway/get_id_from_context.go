@@ -1,9 +1,9 @@
 package gateway
 
 import (
-	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
-	respcode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
-	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
+	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
+	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
+	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +17,7 @@ func GetUserIdFromContext(c *gin.Context) (int32, bool) {
 		})
 		return 0, false
 	}
-	
+
 	return userID.(int32), true
 }
 
@@ -31,6 +31,6 @@ func GetAdminIdFromContext(c *gin.Context) (int32, bool) {
 		})
 		return 0, false
 	}
-	
+
 	return adminID.(int32), true
 }

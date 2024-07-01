@@ -5,10 +5,11 @@ import (
 	"log"
 
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
-	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
+
 // AdminGetProfile
 func (s *AdminAccountsServer) AdminGetProfile(ctx context.Context, req *pb.AdminGetProfileRequest) (*pb.AdminGetProfileResponse, error) {
 	resp, responseCode, err := s.AdminUseCase.AdminGetProfile(req.AdminId)
@@ -27,11 +28,10 @@ func (s *AdminAccountsServer) AdminGetProfile(ctx context.Context, req *pb.Admin
 	}, nil
 }
 
-
 // AdminUpdatePasswordUsingOldPw
 func (s *AdminAccountsServer) AdminUpdatePasswordUsingOldPw(ctx context.Context, req *pb.AdminUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
 	responseCode, err := s.AdminUseCase.AdminUpdatePasswordUsingOldPw(&request.AdminUpdatePasswordUsingOldPw{
-		AdminId:      req.AdminId,
+		AdminId:     req.AdminId,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
 	})
@@ -44,7 +44,7 @@ func (s *AdminAccountsServer) AdminUpdatePasswordUsingOldPw(ctx context.Context,
 	return nil, nil
 }
 
-//AdminUpdateProfile
+// AdminUpdateProfile
 func (s *AdminAccountsServer) AdminUpdateProfile(ctx context.Context, req *pb.AdminUpdateProfileRequest) (*emptypb.Empty, error) {
 	responseCode, err := s.AdminUseCase.AdminUpdateProfile(&request.AdminUpdateProfile{
 		AdminId:     req.AdminId,

@@ -6,7 +6,7 @@ import (
 
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
-	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
+	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 
 	"github.com/gin-gonic/gin"
 )

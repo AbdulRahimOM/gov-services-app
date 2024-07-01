@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/AbdulRahimOM/gov-services-app/shared/gateway"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
-	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
+	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/request"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
 

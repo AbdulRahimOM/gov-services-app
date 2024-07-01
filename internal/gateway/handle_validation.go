@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
-	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
-	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
-	"github.com/AbdulRahimOM/gov-services-app/shared/validation"
+	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
+	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
+	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
+	"github.com/AbdulRahimOM/gov-services-app/internal/validation"
 	"github.com/gin-gonic/gin"
 )
 

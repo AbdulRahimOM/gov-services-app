@@ -10,7 +10,7 @@
 	all-in-background \
 
 running-watching-proto:
-	cd shared && make watching-proto
+	cd internal && make watching-proto
 
 running-user-api-gateway:
 	cd user-api-gateway && make running
@@ -22,7 +22,7 @@ running-account-service:
 	cd accounts-svc && make running
 
 running-in-background-watching-proto:
-	cd shared && make watching-proto-in-background
+	cd internal && make watching-proto-in-background
 
 running-in-background-user-api-gateway:
 	cd user-api-gateway && make running-in-background

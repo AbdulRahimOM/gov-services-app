@@ -1,14 +1,14 @@
 package server
 
 import (
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/implementations/admin-repo"
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/implementations/user-repo"
+	adminrepo "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/implementations/admin-repo"
+	userrepo "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/implementations/user-repo"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/infrastructure/db"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/adminAccHandler"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/userAccHandler"
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc"
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/user-uc"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
+	adminuc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc"
+	useruc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/user-uc"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 )
 
 func InitializeServer() (pb.UserAccountServiceServer, pb.AdminAccountServiceServer) {

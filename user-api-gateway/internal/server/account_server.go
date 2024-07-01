@@ -1,9 +1,9 @@
 package server
 
 import (
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/routes"
 
 	"github.com/gin-gonic/gin"

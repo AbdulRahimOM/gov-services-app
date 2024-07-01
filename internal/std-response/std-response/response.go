@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	respcode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
+	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

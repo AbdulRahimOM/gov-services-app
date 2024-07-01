@@ -7,7 +7,7 @@ import (
 	repo "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/interface"
 	usecase "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/interface"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
-	twilioOTP "github.com/AbdulRahimOM/gov-services-app/shared/twilio"
+	twilioOTP "github.com/AbdulRahimOM/gov-services-app/internal/twilio"
 )
 
 type AdminUseCase struct {

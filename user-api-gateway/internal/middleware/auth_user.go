@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
-	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
+	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
 
 	"github.com/gin-gonic/gin"

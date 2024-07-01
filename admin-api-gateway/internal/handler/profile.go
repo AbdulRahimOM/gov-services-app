@@ -5,9 +5,9 @@ import (
 
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/request"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
-	"github.com/AbdulRahimOM/gov-services-app/shared/gateway"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
-	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
+	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	"github.com/gin-gonic/gin"
 )
 
@@ -75,7 +75,7 @@ func (u *AdminAccountHandler) AdminUpdatePasswordUsingOldPw(c *gin.Context) {
 	}
 }
 
-//AdminUpdateProfile
+// AdminUpdateProfile
 func (u *AdminAccountHandler) AdminUpdateProfile(c *gin.Context) {
 	var req request.AdminUpdateProfile
 
@@ -89,12 +89,12 @@ func (u *AdminAccountHandler) AdminUpdateProfile(c *gin.Context) {
 	}
 
 	_, err := u.accountsClient.AdminUpdateProfile(context.Background(), &pb.AdminUpdateProfileRequest{
-		AdminId:    adminID,
-		FirstName:  req.FirstName,
-		LastName:   req.LastName,
-		Email:      req.Email,
-		Address:    req.Address,
-		Pincode:    req.Pincode,
+		AdminId:   adminID,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+		Email:     req.Email,
+		Address:   req.Address,
+		Pincode:   req.Pincode,
 	})
 	if err == nil {
 		c.JSON(200, response.SM{

@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# cd shared
+# cd internal
 # echo "Current directory: $(pwd)"
 
 protoc --go_out=. --go-grpc_out=. ./**/*.proto

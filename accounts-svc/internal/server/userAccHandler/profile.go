@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
-	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
-	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

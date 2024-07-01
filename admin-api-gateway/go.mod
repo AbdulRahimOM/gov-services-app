@@ -4,7 +4,6 @@ go 1.22.2
 
 require (
 	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0
-	github.com/AbdulRahimOM/gov-services-app/shared v0.0.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/spf13/viper v1.19.0
 	google.golang.org/grpc v1.64.0
@@ -12,7 +11,6 @@ require (
 
 replace (
 	github.com/AbdulRahimOM/gov-services-app/internal => ../internal
-	github.com/AbdulRahimOM/gov-services-app/shared => ../shared
 )
 
 require (
