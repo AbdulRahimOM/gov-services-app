@@ -8,11 +8,7 @@ type User struct {
 	Email     string `gorm:"email;default:''"`
 	Address   string `gorm:"address;default:''"`
 	Pincode   string  `gorm:"pincode;default:''"`
-	Mobile    uint   `gorm:"not null"`
+	Mobile    string   `gorm:"not null"`
 	IsBlocked bool   `gorm:"is_blocked;default:false"`
 }
 
-type DoingSignupUser struct {
-	ID     int32  `gorm:"primaryKey"`
-	Mobile string `gorm:"not null"`
-}

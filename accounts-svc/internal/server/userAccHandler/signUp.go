@@ -1,4 +1,4 @@
-package server
+package userAccHandler
 
 import (
 	"context"
@@ -6,16 +6,10 @@ import (
 	"log"
 	"strings"
 
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase"
 	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
 	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"
 )
-
-type UserAccountsServer struct {
-	UserUseCase usecase.IUserUC
-	pb.UnimplementedUserAccountServiceServer
-}
 
 // UserLoginGetOTP
 func (s *UserAccountsServer) UserSignUpGetOTP(ctx context.Context, req *pb.UserSignUpGetOTPRequest) (*pb.UserSignUpGetOTPResponse, error) {

@@ -29,6 +29,7 @@ const (
 	//Potential bugs (will reach this code if the code is not handled properly)
 	BugNoUserInContext       = "BUG-ERR-001" //Caution: If user is not set in context by the middleware
 	GrpcUnimplementedHandler = "BUG-ERR-002" //Caution: Missing handler in the grpc server
+	BugNoAdminInContext      = "BUG-ERR-003" //Caution: If admin is not set in context by the middleware
 )
 
 var errCodeMap = map[string]codes.Code{}

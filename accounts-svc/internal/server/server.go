@@ -1,20 +1,24 @@
 package server
 
 import (
-	repo "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/implementations/admin-repo"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/implementations/user-repo"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/infrastructure/db"
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/adminAccHandler"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/userAccHandler"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/user-uc"
+	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
 )
 
-func InitializeServer() *UserAccountsServer {
-	userRepository := repo.NewUserRepository(db.DB)
-	userUseCase := usecase.NewUserUseCase(userRepository)
+func InitializeServer() (pb.UserAccountServiceServer, pb.AdminAccountServiceServer) {
+	userRepository := userrepo.NewUserRepository(db.DB)
+	userUseCase := useruc.NewUserUseCase(userRepository)
+	userAccSvcServer := userAccHandler.NewUserAccountsServer(userUseCase)
 
-	return newUserAccountsServer(userUseCase)
-}
+	adminRepository := adminrepo.NewAdminRepository(db.DB)
+	adminUseCase := adminuc.NewAdminUseCase(adminRepository)
+	adminAccSvcServer := adminAccHandler.NewAdminAccountsServer(adminUseCase)
 
-func newUserAccountsServer(userUseCase usecase.IUserUC) *UserAccountsServer {
-	return &UserAccountsServer{
-		UserUseCase: userUseCase,
-	}
+	return userAccSvcServer, adminAccSvcServer
 }

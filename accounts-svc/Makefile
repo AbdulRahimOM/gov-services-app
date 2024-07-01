@@ -1,12 +1,8 @@
 .PHONY: 
-	proto \
 	server \
 	running \
 	running-local \
 	running-in-background
-	
-proto:
-	protoc --go_out=. --go-grpc_out=. ./internal/infrastructure/pb/protobuf/*.proto
 
 server:
 	go run cmd/main.go

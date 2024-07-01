@@ -1,4 +1,4 @@
-package server
+package userAccHandler
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	"log"
 	"strings"
 
-	// pb "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/infrastructure/pb/generated"
 	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
 	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"

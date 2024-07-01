@@ -31,8 +31,9 @@ func migrateTables() {
 		log.Fatal("Couldn't migrate models. Error:", err)
 	}
 
-	if err := DB.AutoMigrate(&models.DoingSignupUser{}); err != nil {
+	if err := DB.AutoMigrate(&models.Admin{}); err != nil {
 		log.Fatal("Couldn't migrate models. Error:", err)
 	}
+
 	fmt.Println("Migrated tables successfully")
 }

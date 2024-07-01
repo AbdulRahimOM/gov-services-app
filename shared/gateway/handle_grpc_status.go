@@ -3,7 +3,7 @@ package gateway
 import (
 	"log"
 
-	statuscode "github.com/AbdulRahimOM/go-utils/status-code"
+	statuscode "github.com/AbdulRahimOM/go-utils/statuscode"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
 	respCode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/shared/std-response/std-response"

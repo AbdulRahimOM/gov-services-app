@@ -1,4 +1,4 @@
-package usecase
+package useruc
 
 import (
 	"fmt"
@@ -9,6 +9,7 @@ import (
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
 	hashpassword "github.com/AbdulRahimOM/gov-services-app/shared/hash-password"
 	responsecode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

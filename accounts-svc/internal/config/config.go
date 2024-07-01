@@ -2,15 +2,9 @@ package config
 
 import (
 	"log"
-	"os"
 
 	"github.com/spf13/viper"
 )
-
-// Twilio OTP generation.....................
-var TwilioAccountSid string
-var TwilioAuthToken string
-var TwilioServiceSid string
 
 var EnvValues struct {
 	Port  string `mapstructure:"PORT"`
@@ -29,10 +23,6 @@ var Twilio struct {
 
 func init() {
 	loadConfig()
-	// Twilio OTP generation.....................
-	TwilioAccountSid = os.Getenv("TWILIO_ACCOUNT_SID")
-	TwilioAuthToken = os.Getenv("TWILIO_AUTH_TOKEN")
-	TwilioServiceSid = os.Getenv("TWILIO_SERVICE_SID")
 }
 
 func loadConfig() {
