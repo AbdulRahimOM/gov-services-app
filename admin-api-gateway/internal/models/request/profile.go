@@ -5,7 +5,7 @@ type AdminUpdateProfile struct {
 	LastName  string `json:"last_name" binding:"required" validate:"min=2,max=20,alpha"`
 	Email     string `json:"email" binding:"required" validate:"email"`
 	Address   string `json:"address" binding:"required" validate:"min=6,max=100"`
-	Pincode   string `json:"pincode" validate:"required,min=6,max=6,pincode"`
+	Pincode   string `json:"pincode" validate:"min=6,max=6,pincode"`
 }
 
 type AdminVerifyOTPForPwChange struct {
@@ -13,27 +13,12 @@ type AdminVerifyOTPForPwChange struct {
 }
 
 type SettingNewPassword struct {
-	NewPassword     string `json:"new_password" binding:"required" validate:"required,min=6,max=50"`
-	ConfirmPassword string `json:"confirm_password" binding:"required" validate:"required,eqfield=NewPassword"`
+	NewPassword     string `json:"new_password" binding:"required" validate:"min=6,max=50"`
+	ConfirmPassword string `json:"confirm_password" binding:"required" validate:"eqfield=NewPassword"`
 }
-
-/*
-{
-	"new_password": "password",
-	"confirm_password": "password"
-}
-*/
 
 type AdminUpdatePasswordUsingOldPw struct {
-	OldPassword     string `json:"old_password" binding:"required" validate:"required,min=6,max=50"`
-	NewPassword     string `json:"new_password" binding:"required" validate:"required,min=6,max=50"`
-	ConfirmPassword string `json:"confirm_password" binding:"required" validate:"required,eqfield=NewPassword"`
+	OldPassword     string `json:"old_password" binding:"required" validate:"min=6,max=50"`
+	NewPassword     string `json:"new_password" binding:"required" validate:"min=6,max=50"`
+	ConfirmPassword string `json:"confirm_password" binding:"required" validate:"eqfield=NewPassword"`
 }
-
-/*
-{
-	"old_password": "password",
-	"new_password": "password",
-	"confirm_password": "password"
-}
-*/
