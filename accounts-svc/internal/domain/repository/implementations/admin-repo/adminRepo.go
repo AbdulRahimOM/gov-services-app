@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	repointerface "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/interface"
 	dberror "github.com/AbdulRahimOM/gov-services-app/shared/std-response/error/db"
 
@@ -47,7 +48,7 @@ func (ur AdminRepository) UpdatePasswordByAdminID(adminID int32, hashedPassword 
 // AdminGetProfileByAdminID
 func (ur AdminRepository) AdminGetProfileByAdminID(adminID int32) (*dto.AdminProfile, error) {
 	var profile dto.AdminProfile
-	result := ur.DB.Raw("SELECT f_name, l_name, email, address, pincode FROM admins WHERE id=?", adminID).Scan(&profile)
+	result := ur.DB.Raw("SELECT f_name, l_name, email, address, pincode, phone_number FROM admins WHERE id=?", adminID).Scan(&profile)
 	if result.Error != nil {
 		return nil, fmt.Errorf("@db: failed to get profile: %v", result.Error)
 	}
@@ -69,4 +70,16 @@ func (ur AdminRepository) GetAdminWithPasswordByUsername(username *string) (*dto
 		return nil, nil, fmt.Errorf("@db: failed to get admin: %v", err)
 	}
 	return &dtoAdmin, &hashedPw, nil
+}
+
+func (ur AdminRepository) AdminUpdateProfile(req *request.AdminUpdateProfile) error {
+	result := ur.DB.Exec("UPDATE admins SET f_name=?, l_name=?, email=?, address=?, pincode=?, phone_number=? WHERE id=?",
+		req.FirstName, req.LastName, req.Email, req.Address, req.Pincode, req.PhoneNumber, req.AdminId)
+	if result.Error != nil {
+		return fmt.Errorf("@db: failed to update profile: %v", result.Error)
+	}
+	if result.RowsAffected == 0 {
+		return dberror.ErrRecordNotFound
+	}
+	return nil
 }

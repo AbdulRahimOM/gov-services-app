@@ -12,5 +12,6 @@ type IAdminUC interface {
 
 	//profile
 	AdminGetProfile(adminID int32) (*dto.AdminProfile, string, error)
+	AdminUpdateProfile(req *request.AdminUpdateProfile) (string, error)
 	AdminUpdatePasswordUsingOldPw(req *request.AdminUpdatePasswordUsingOldPw) (string, error)
 }

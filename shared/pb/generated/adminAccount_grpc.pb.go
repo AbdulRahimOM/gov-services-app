@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	AdminAccountService_AdminLoginViaPassword_FullMethodName         = "/AdminAccountService/AdminLoginViaPassword"
 	AdminAccountService_AdminGetProfile_FullMethodName               = "/AdminAccountService/AdminGetProfile"
+	AdminAccountService_AdminUpdateProfile_FullMethodName            = "/AdminAccountService/AdminUpdateProfile"
 	AdminAccountService_AdminUpdatePasswordUsingOldPw_FullMethodName = "/AdminAccountService/AdminUpdatePasswordUsingOldPw"
 )
 
@@ -33,6 +34,7 @@ type AdminAccountServiceClient interface {
 	AdminLoginViaPassword(ctx context.Context, in *AdminLoginViaPasswordRequest, opts ...grpc.CallOption) (*AdminLoginResponse, error)
 	// profile
 	AdminGetProfile(ctx context.Context, in *AdminGetProfileRequest, opts ...grpc.CallOption) (*AdminGetProfileResponse, error)
+	AdminUpdateProfile(ctx context.Context, in *AdminUpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AdminUpdatePasswordUsingOldPw(ctx context.Context, in *AdminUpdatePasswordUsingOldPwRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -62,6 +64,15 @@ func (c *adminAccountServiceClient) AdminGetProfile(ctx context.Context, in *Adm
 	return out, nil
 }
 
+func (c *adminAccountServiceClient) AdminUpdateProfile(ctx context.Context, in *AdminUpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AdminAccountService_AdminUpdateProfile_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminAccountServiceClient) AdminUpdatePasswordUsingOldPw(ctx context.Context, in *AdminUpdatePasswordUsingOldPwRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, AdminAccountService_AdminUpdatePasswordUsingOldPw_FullMethodName, in, out, opts...)
@@ -79,6 +90,7 @@ type AdminAccountServiceServer interface {
 	AdminLoginViaPassword(context.Context, *AdminLoginViaPasswordRequest) (*AdminLoginResponse, error)
 	// profile
 	AdminGetProfile(context.Context, *AdminGetProfileRequest) (*AdminGetProfileResponse, error)
+	AdminUpdateProfile(context.Context, *AdminUpdateProfileRequest) (*emptypb.Empty, error)
 	AdminUpdatePasswordUsingOldPw(context.Context, *AdminUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedAdminAccountServiceServer()
 }
@@ -92,6 +104,9 @@ func (UnimplementedAdminAccountServiceServer) AdminLoginViaPassword(context.Cont
 }
 func (UnimplementedAdminAccountServiceServer) AdminGetProfile(context.Context, *AdminGetProfileRequest) (*AdminGetProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminGetProfile not implemented")
+}
+func (UnimplementedAdminAccountServiceServer) AdminUpdateProfile(context.Context, *AdminUpdateProfileRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AdminUpdateProfile not implemented")
 }
 func (UnimplementedAdminAccountServiceServer) AdminUpdatePasswordUsingOldPw(context.Context, *AdminUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminUpdatePasswordUsingOldPw not implemented")
@@ -145,6 +160,24 @@ func _AdminAccountService_AdminGetProfile_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminAccountService_AdminUpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUpdateProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminAccountServiceServer).AdminUpdateProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminAccountService_AdminUpdateProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminAccountServiceServer).AdminUpdateProfile(ctx, req.(*AdminUpdateProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AdminAccountService_AdminUpdatePasswordUsingOldPw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AdminUpdatePasswordUsingOldPwRequest)
 	if err := dec(in); err != nil {
@@ -177,6 +210,10 @@ var AdminAccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AdminGetProfile",
 			Handler:    _AdminAccountService_AdminGetProfile_Handler,
+		},
+		{
+			MethodName: "AdminUpdateProfile",
+			Handler:    _AdminAccountService_AdminUpdateProfile_Handler,
 		},
 		{
 			MethodName: "AdminUpdatePasswordUsingOldPw",

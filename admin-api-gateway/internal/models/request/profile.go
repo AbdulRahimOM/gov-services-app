@@ -6,6 +6,7 @@ type AdminUpdateProfile struct {
 	Email     string `json:"email" binding:"required" validate:"email"`
 	Address   string `json:"address" binding:"required" validate:"min=6,max=100"`
 	Pincode   string `json:"pincode" validate:"min=6,max=6,pincode"`
+	PhoneNumber string `json:"phone_number" binding:"required" validate:"min=13,max=13,numeric"`
 }
 
 type AdminVerifyOTPForPwChange struct {

@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
@@ -27,8 +26,7 @@ func doSuperAdminExists() (bool, error) {
 	if result.Error != nil {
 		return false, result.Error
 	}
-	if result.RowsAffected == 0 {
-		fmt.Println("Rows affected: 0")
+	if count == 0 {
 		return false, nil
 	}
 	return true, nil

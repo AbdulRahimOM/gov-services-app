@@ -47,3 +47,13 @@ func (u *AdminUseCase) AdminUpdatePasswordUsingOldPw(req *request.AdminUpdatePas
 
 	return "", nil
 }
+
+// AdminUpdateProfile
+func (u *AdminUseCase) AdminUpdateProfile(req *request.AdminUpdateProfile) (string, error) {
+	err := u.adminRepo.AdminUpdateProfile(req)
+	if err != nil {
+		return respcode.DBError, fmt.Errorf("failed to update profile: %v", err)
+	}
+
+	return "", nil
+}

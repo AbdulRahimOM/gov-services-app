@@ -44,3 +44,22 @@ func (s *AdminAccountsServer) AdminUpdatePasswordUsingOldPw(ctx context.Context,
 	return nil, nil
 }
 
+//AdminUpdateProfile
+func (s *AdminAccountsServer) AdminUpdateProfile(ctx context.Context, req *pb.AdminUpdateProfileRequest) (*emptypb.Empty, error) {
+	responseCode, err := s.AdminUseCase.AdminUpdateProfile(&request.AdminUpdateProfile{
+		AdminId:     req.AdminId,
+		FirstName:   req.FirstName,
+		LastName:    req.LastName,
+		Email:       req.Email,
+		Address:     req.Address,
+		Pincode:     req.Pincode,
+		PhoneNumber: req.PhoneNumber,
+	})
+	if err != nil {
+		log.Printf("failed to update profile: %v", err)
+		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
+	}
+
+	log.Println("Profile updated")
+	return nil, nil
+}

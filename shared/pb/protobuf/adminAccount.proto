@@ -5,12 +5,25 @@ import "google/protobuf/empty.proto";
 
 service AdminAccountService {
     //Login
-    rpc AdminLoginViaPassword(AdminLoginViaPasswordRequest) returns (AdminLoginResponse);    //unimplemented
+    rpc AdminLoginViaPassword(AdminLoginViaPasswordRequest) returns (AdminLoginResponse);    //done
 
     //profile
-    rpc AdminGetProfile(AdminGetProfileRequest) returns (AdminGetProfileResponse);    //unimplemented
-    rpc AdminUpdatePasswordUsingOldPw(AdminUpdatePasswordUsingOldPwRequest) returns (google.protobuf.Empty);    //unimplemented
+    rpc AdminGetProfile(AdminGetProfileRequest) returns (AdminGetProfileResponse);    //done
+    rpc AdminUpdateProfile(AdminUpdateProfileRequest) returns (google.protobuf.Empty);    //unimplemented
+    rpc AdminUpdatePasswordUsingOldPw(AdminUpdatePasswordUsingOldPwRequest) returns (google.protobuf.Empty);    //done
+
 }
+
+message AdminUpdateProfileRequest {
+    int32 adminId = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string email = 4;
+    string address = 5;
+    string pincode = 6;
+    string phoneNumber = 7;
+}
+
 message AdminUpdatePasswordUsingOldPwRequest {
     int32 adminId = 1;
     string oldPassword = 2;

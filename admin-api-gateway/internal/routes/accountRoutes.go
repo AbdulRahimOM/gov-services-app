@@ -25,6 +25,8 @@ func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryH
 		profileGroup := authGroup.Group("/profile")
 		{
 			profileGroup.GET("/view", adminAccHandler.AdminGetProfile)                                        //done
+			profileGroup.GET("/edit-page", adminAccHandler.AdminGetProfile)                                   //done
+			profileGroup.POST("/update", adminAccHandler.AdminUpdateProfile)                                  //done
 			profileGroup.POST("/update-password/using-old-pw", adminAccHandler.AdminUpdatePasswordUsingOldPw) //done
 		}
 	}

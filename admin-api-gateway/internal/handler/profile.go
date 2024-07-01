@@ -74,3 +74,33 @@ func (u *AdminAccountHandler) AdminUpdatePasswordUsingOldPw(c *gin.Context) {
 		gateway.HandleGrpcStatus(c, err)
 	}
 }
+
+//AdminUpdateProfile
+func (u *AdminAccountHandler) AdminUpdateProfile(c *gin.Context) {
+	var req request.AdminUpdateProfile
+
+	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
+		return
+	}
+
+	adminID, ok := gateway.GetAdminIdFromContext(c)
+	if !ok {
+		return
+	}
+
+	_, err := u.accountsClient.AdminUpdateProfile(context.Background(), &pb.AdminUpdateProfileRequest{
+		AdminId:    adminID,
+		FirstName:  req.FirstName,
+		LastName:   req.LastName,
+		Email:      req.Email,
+		Address:    req.Address,
+		Pincode:    req.Pincode,
+	})
+	if err == nil {
+		c.JSON(200, response.SM{
+			Status: mystatus.Success,
+		})
+	} else {
+		gateway.HandleGrpcStatus(c, err)
+	}
+}
