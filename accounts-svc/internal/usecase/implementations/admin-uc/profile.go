@@ -5,7 +5,7 @@ import (
 
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
-	hashpassword "github.com/AbdulRahimOM/gov-services-app/shared/hash-password"
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	respcode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
 )
 

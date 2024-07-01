@@ -9,7 +9,7 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
-	hashpassword "github.com/AbdulRahimOM/gov-services-app/shared/hash-password"
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	respcode "github.com/AbdulRahimOM/gov-services-app/shared/std-response/response-code"
 	"github.com/AbdulRahimOM/gov-services-app/shared/tag"
 )

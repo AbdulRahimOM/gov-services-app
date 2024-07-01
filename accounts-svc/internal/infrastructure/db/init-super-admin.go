@@ -5,7 +5,7 @@ import (
 
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
-	hashpassword "github.com/AbdulRahimOM/gov-services-app/shared/hash-password"
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 )
 
 func init() {

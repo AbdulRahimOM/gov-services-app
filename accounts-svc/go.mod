@@ -3,6 +3,7 @@ module github.com/AbdulRahimOM/gov-services-app/accounts-svc
 go 1.22.2
 
 require (
+	github.com/AbdulRahimOM/go-utils/hashPassword v0.0.0-20240625005829-7d8214cf7d50
 	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-00010101000000-000000000000
 	github.com/AbdulRahimOM/gov-services-app/shared v0.0.0-00010101000000-000000000000
 	github.com/spf13/viper v1.19.0
