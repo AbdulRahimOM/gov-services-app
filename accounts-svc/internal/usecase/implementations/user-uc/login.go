@@ -15,14 +15,14 @@ import (
 )
 
 func (uc UserUseCase) UserLoginGetOTP(phone *string) (string, error) {
-	//check if mobile number is registered
-	doUserExists, err := uc.userRepo.CheckIfMobileIsRegistered(phone)
+	//check if phoneNumber number is registered
+	doUserExists, err := uc.userRepo.CheckIfPhoneNumberIsRegistered(phone)
 	if err != nil {
-		return responsecode.DBError, fmt.Errorf("at database error: failed to check if mobile is registered: %v", err)
+		return responsecode.DBError, fmt.Errorf("at database error: failed to check if phoneNumber is registered: %v", err)
 	}
 
 	if !doUserExists {
-		return responsecode.MobileNotRegistered, fmt.Errorf("mobile number not registered")
+		return responsecode.PhoneNumberNotRegistered, fmt.Errorf("phoneNumber number not registered")
 	}
 
 	//send otp
@@ -46,10 +46,10 @@ func (uc UserUseCase) VerifyOtpForLogin(phone, otp *string) (*response.UserLogin
 	}
 
 	//get user details
-	user, err := uc.userRepo.GetUserByMobile(phone)
+	user, err := uc.userRepo.GetUserByPhoneNumber(phone)
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
-			return nil, responsecode.CorruptRequest, fmt.Errorf("user not registered with this mobile number, but attempted to verify otp for login")
+			return nil, responsecode.CorruptRequest, fmt.Errorf("user not registered with this phoneNumber number, but attempted to verify otp for login")
 		} else {
 			return nil, responsecode.DBError, fmt.Errorf("at database: failed to get user details: %v", err)
 		}
@@ -74,10 +74,10 @@ func (uc UserUseCase) VerifyOtpForLogin(phone, otp *string) (*response.UserLogin
 // VerifyPasswordForLogin
 func (uc UserUseCase) VerifyPasswordForLogin(phone, password *string) (*response.UserLogin, string, error) {
 	//verify password
-	user, hashedPw, err := uc.userRepo.GetUserWithPasswordByMobile(phone)
+	user, hashedPw, err := uc.userRepo.GetUserWithPasswordByPhoneNumber(phone)
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
-			return nil, responsecode.CorruptRequest, fmt.Errorf("no user registered with this mobile number")
+			return nil, responsecode.CorruptRequest, fmt.Errorf("no user registered with this phoneNumber number")
 		} else {
 			return nil, responsecode.DBError, fmt.Errorf("at database: failed to get user password: %v", err)
 		}

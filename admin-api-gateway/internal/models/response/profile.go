@@ -13,8 +13,12 @@ type AdminGetProfileResponse struct {
 type Profile struct {
 	FirstName   string `json:"firstName"`
 	LastName    string `json:"lastName"`
+	Username	string `json:"username"`
 	Email       string `json:"email"`
 	Address     string `json:"address"`
 	Pincode     string `json:"pincode"`
 	PhoneNumber string `json:"phoneNumber"`
+	DeptID      int32  `json:"deptId"`
+	Designation string `json:"designation"`
+	RankID      int32  `json:"rankId"`
 }

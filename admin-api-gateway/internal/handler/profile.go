@@ -18,7 +18,7 @@ func (u *AdminAccountHandler) Ping(c *gin.Context) {
 }
 
 // AdminGetProfile
-func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) { //unimplemented
+func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) {
 	adminID, ok := gateway.GetAdminIdFromContext(c)
 	if !ok {
 		return
@@ -33,10 +33,14 @@ func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) { //unimplemented
 			Profile: response.Profile{
 				FirstName:   resp.FirstName,
 				LastName:    resp.LastName,
+				Username:    resp.Username,
 				Email:       resp.Email,
 				Address:     resp.Address,
 				PhoneNumber: resp.PhoneNumber,
 				Pincode:     resp.Pincode,
+				DeptID:      resp.DeptId,
+				Designation: resp.Designation,
+				RankID:      resp.RankId,
 			},
 		})
 	} else {

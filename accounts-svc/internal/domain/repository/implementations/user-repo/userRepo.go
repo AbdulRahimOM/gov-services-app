@@ -69,30 +69,30 @@ func (ur UserRepository) UserUpdateProfile(req *request.UserUpdateProfile) error
 	return nil
 }
 
-func (ur UserRepository) GetMobileByUserID(userID int32) (string, error) {
-	var mobile string
-	result := ur.DB.Raw("SELECT mobile FROM users WHERE id=?", userID).Scan(&mobile)
+func (ur UserRepository) GetPhoneNumberByUserID(userID int32) (string, error) {
+	var phoneNumber string
+	result := ur.DB.Raw("SELECT phone_number FROM users WHERE id=?", userID).Scan(&phoneNumber)
 	if result.Error != nil {
-		return "", fmt.Errorf("@db: failed to get mobile: %v", result.Error)
+		return "", fmt.Errorf("@db: failed to get phone number: %v", result.Error)
 	}
 	if result.RowsAffected == 0 {
 		return "", dberror.ErrRecordNotFound
 	}
-	return mobile, nil
+	return phoneNumber, nil
 }
 
-func (ur UserRepository) CheckIfMobileIsRegistered(mobile *string) (bool, error) {
+func (ur UserRepository) CheckIfPhoneNumberIsRegistered(phoneNumber *string) (bool, error) {
 	var exists bool
-	err := ur.DB.Raw("SELECT EXISTS(SELECT 1 FROM users WHERE mobile = ?)", *mobile).Scan(&exists).Error
+	err := ur.DB.Raw("SELECT EXISTS(SELECT 1 FROM users WHERE phone_number = ?)", *phoneNumber).Scan(&exists).Error
 	if err != nil {
-		return false, fmt.Errorf("@db: failed to check if mobile is registered: %v", err)
+		return false, fmt.Errorf("@db: failed to check if phone number is registered: %v", err)
 	}
 	return exists, nil
 }
 
-func (ur UserRepository) GetUserByMobile(mobile *string) (*dto.LoggedInUser, error) {
+func (ur UserRepository) GetUserByPhoneNumber(phoneNumber *string) (*dto.LoggedInUser, error) {
 	var dtoUser dto.LoggedInUser
-	result := ur.DB.Raw("SELECT id, f_name, l_name FROM users WHERE mobile=?", *mobile).Scan(&dtoUser)
+	result := ur.DB.Raw("SELECT id, f_name, l_name FROM users WHERE phone_number=?", *phoneNumber).Scan(&dtoUser)
 	if result.Error != nil {
 		return nil, fmt.Errorf("@db: failed to get user: %v", result.Error)
 
@@ -103,10 +103,10 @@ func (ur UserRepository) GetUserByMobile(mobile *string) (*dto.LoggedInUser, err
 	return &dtoUser, nil
 }
 
-func (ur UserRepository) GetUserWithPasswordByMobile(mobile *string) (*dto.LoggedInUser, *string, error) {
+func (ur UserRepository) GetUserWithPasswordByPhoneNumber(phoneNumber *string) (*dto.LoggedInUser, *string, error) {
 	var dtoUser dto.LoggedInUser
 	var hashedPw string
-	row := ur.DB.Raw("SELECT id, f_name, l_name, hashed_pw FROM users WHERE mobile=?", *mobile).Row()
+	row := ur.DB.Raw("SELECT id, f_name, l_name, hashed_pw FROM users WHERE phone_number=?", *phoneNumber).Row()
 	err := row.Scan(&dtoUser.ID, &dtoUser.FName, &dtoUser.LName, &hashedPw)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -117,9 +117,9 @@ func (ur UserRepository) GetUserWithPasswordByMobile(mobile *string) (*dto.Logge
 	return &dtoUser, &hashedPw, nil
 }
 
-func (ur UserRepository) CreateSigningUpUser(mobile *string, isBlocked bool) (int32, error) {
+func (ur UserRepository) CreateSigningUpUser(phoneNumber *string, isBlocked bool) (int32, error) {
 	var id int32
-	result := ur.DB.Raw("INSERT INTO users (mobile) VALUES (?) RETURNING id", *mobile).Scan(&id)
+	result := ur.DB.Raw("INSERT INTO users (phone_number) VALUES (?) RETURNING id", *phoneNumber).Scan(&id)
 	if result.Error != nil {
 		return 0, fmt.Errorf("@db: failed to create signing up user: %v", result.Error)
 	}

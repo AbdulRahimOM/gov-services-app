@@ -18,7 +18,7 @@ const (
 	superAdminFirstName   = "superAdmin"
 	superAdminLastName    = ""
 	superAdminRankID      = 1
-	superAdminResignation = "superAdmin"
+	superAdminDesignation = "superAdmin"
 )
 
 func doSuperAdminExists() (bool, error) {
@@ -66,7 +66,7 @@ func initSuperAdminIfNotInitialized() {
 		Username:    superAdminUsername,
 		HashedPW:    hashedPW,
 		RankID:      superAdminRankID,
-		Resignation: superAdminResignation,
+		Designation: superAdminDesignation,
 	}
 
 	result := DB.Create(&superAdmin)

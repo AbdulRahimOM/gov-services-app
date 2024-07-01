@@ -16,29 +16,29 @@ import (
 
 // UserGetOTPForPwChange
 func (u *UserUseCase) UserGetOTPForPwChange(userID int32) (*response.UserGetOTPForPwChange, string, error) {
-	mobile, err := u.userRepo.GetMobileByUserID(userID)
+	phoneNumber, err := u.userRepo.GetPhoneNumberByUserID(userID)
 	if err != nil {
-		return nil, respcode.DBError, fmt.Errorf("failed to get mobile number: %v", err)
+		return nil, respcode.DBError, fmt.Errorf("failed to get phoneNumber number: %v", err)
 	}
 
-	err = u.twilioOTPClient.SendOtp("+" + mobile)
+	err = u.twilioOTPClient.SendOtp("+" + phoneNumber)
 	if err != nil {
 		return nil, respcode.OtherInternalError, fmt.Errorf("failed to send OTP: %v", err)
 	}
 
 	return &response.UserGetOTPForPwChange{
-		Last4Digits: mobile[len(mobile)-4:],
+		Last4Digits: phoneNumber[len(phoneNumber)-4:],
 	}, "", nil
 }
 
 // UserVerifyOTPForPwChange
 func (u *UserUseCase) UserVerifyOTPForPwChange(userID int32, otp *string) (*response.UserVerifyOTPForPwChange, string, error) {
-	mobile, err := u.userRepo.GetMobileByUserID(userID)
+	phoneNumber, err := u.userRepo.GetPhoneNumberByUserID(userID)
 	if err != nil {
-		return nil, respcode.DBError, fmt.Errorf("failed to get mobile number: %v", err)
+		return nil, respcode.DBError, fmt.Errorf("failed to get phoneNumber number: %v", err)
 	}
 
-	isVerified, err := u.twilioOTPClient.VerifyOtp(mobile, *otp)
+	isVerified, err := u.twilioOTPClient.VerifyOtp(phoneNumber, *otp)
 	if err != nil {
 		return nil, respcode.OtherInternalError, fmt.Errorf("failed to verify OTP: %v", err)
 	}

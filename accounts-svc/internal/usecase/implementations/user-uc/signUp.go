@@ -12,13 +12,13 @@ import (
 )
 
 func (uc UserUseCase) UserSignUpGetOTP(phone *string) (string, error) {
-	//check if mobile number is registered
-	doUserExists, err := uc.userRepo.CheckIfMobileIsRegistered(phone)
+	//check if phoneNumber number is registered
+	doUserExists, err := uc.userRepo.CheckIfPhoneNumberIsRegistered(phone)
 	if err != nil {
-		return respCode.DBError, fmt.Errorf("at database error: failed to check if mobile is registered: %v", err)
+		return respCode.DBError, fmt.Errorf("at database error: failed to check if phoneNumber is registered: %v", err)
 	}
 	if doUserExists {
-		return respCode.MobileAlreadyRegistered, fmt.Errorf("mobile number already registered")
+		return respCode.PhoneNumberAlreadyRegistered, fmt.Errorf("phoneNumber number already registered")
 	}
 
 	//send otp
@@ -30,13 +30,13 @@ func (uc UserUseCase) UserSignUpGetOTP(phone *string) (string, error) {
 }
 
 func (uc UserUseCase) VerifyOtpForSignUp(phone, otp *string) (*response.UserSignUp, string, error) {
-	//check if mobile number is registered
-	doUserExists, err := uc.userRepo.CheckIfMobileIsRegistered(phone)
+	//check if phoneNumber number is registered
+	doUserExists, err := uc.userRepo.CheckIfPhoneNumberIsRegistered(phone)
 	if err != nil {
-		return nil, respCode.DBError, fmt.Errorf("at database error: failed to check if mobile is registered: %v", err)
+		return nil, respCode.DBError, fmt.Errorf("at database error: failed to check if phoneNumber is registered: %v", err)
 	}
 	if doUserExists {
-		return nil, respCode.MobileAlreadyRegistered, fmt.Errorf("mobile number already registered")
+		return nil, respCode.PhoneNumberAlreadyRegistered, fmt.Errorf("phoneNumber number already registered")
 	}
 
 	//verify otp

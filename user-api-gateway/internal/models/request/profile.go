@@ -13,12 +13,12 @@ type UserVerifyOTPForPwChange struct {
 }
 
 type SettingNewPassword struct {
-	NewPassword     string `json:"new_password" binding:"required" validate:"min=,max=50"`
+	NewPassword     string `json:"new_password" binding:"required" validate:"min=5,max=50"`
 	ConfirmPassword string `json:"confirm_password" binding:"required" validate:"eqfield=NewPassword"`
 }
 
 type UserUpdatePasswordUsingOldPw struct {
 	OldPassword     string `json:"old_password" binding:"required" validate:"min=5,max=50"`
-	NewPassword     string `json:"new_password" binding:"required" validate:"min=5,max=50"`
+	NewPassword     string `json:"new_password" binding:"required" validate:"min=5,max=50,nefield=OldPassword"`
 	ConfirmPassword string `json:"confirm_password" binding:"required" validate:"eqfield=NewPassword"`
 }

@@ -1,20 +1,24 @@
 package response
 
 type AdminLogin struct {
-	Status string `json:"status"`
-	// Msg      string        `json:"message"`
+	Status    string         `json:"status"`
 	AdminData AdminBasicData `json:"admin"`
 	Token     string         `json:"token"`
 }
+
 type UpdateToken struct {
 	Status string `json:"status"`
 	Token  string `json:"token"`
 }
+
 type AdminBasicData struct {
 	Id          int32  `json:"id"`
 	FirstName   string `json:"firstName"`
 	LastName    string `json:"lastName"`
 	PhoneNumber string `json:"phoneNumber"`
+	DeptID      int32  `json:"deptId"`
+	RankID      int32  `json:"rankId"`
+	Designation string `json:"designation"`
 }
 
 type AdminSignUp struct {
@@ -28,16 +32,6 @@ type PreliminaryAdminData struct {
 	Id          int32  `json:"id"`
 	PhoneNumber string `json:"phoneNumber"`
 }
-
-// message AdminSignUpViaOTPResponse {
-//     string message = 1;
-//     string token = 2;
-//     SignedUpAdminDetails adminDetails = 3;
-// }
-// message SignedUpAdminDetails {
-//     int32 id = 1;
-//     string phoneNumber = 4;
-// }
 
 type AdminVerifyOTPForPwChangeResponse struct {
 	Status    string `json:"status"`

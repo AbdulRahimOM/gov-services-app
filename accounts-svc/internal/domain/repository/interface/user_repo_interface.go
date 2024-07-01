@@ -6,14 +6,14 @@ import (
 )
 
 type IUserRepo interface {
-	CheckIfMobileIsRegistered(mobile *string) (bool, error)
-	GetUserByMobile(mobile *string) (*dto.LoggedInUser, error)
-	GetUserWithPasswordByMobile(mobile *string) (*dto.LoggedInUser, *string, error)
+	CheckIfPhoneNumberIsRegistered(phoneNumber *string) (bool, error)
+	GetUserByPhoneNumber(phoneNumber *string) (*dto.LoggedInUser, error)
+	GetUserWithPasswordByPhoneNumber(phoneNumber *string) (*dto.LoggedInUser, *string, error)
 	GetPasswordByUserID(userID int32) (*string, error)
 	UpdatePasswordByUserID(userID int32, hashedPassword *string) error
-	CreateSigningUpUser(mobile *string, isBlocked bool) (int32, error)
+	CreateSigningUpUser(phoneNumber *string, isBlocked bool) (int32, error)
 
-	GetMobileByUserID(userID int32) (string, error)
+	GetPhoneNumberByUserID(userID int32) (string, error)
 	UpdatePassword(userID int32, hashedPassword *string) error
 
 	UserGetProfileByUserID(userID int32) (*dto.UserProfile, error)

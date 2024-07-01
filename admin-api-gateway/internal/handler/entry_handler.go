@@ -4,8 +4,8 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/request"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	"github.com/AbdulRahimOM/gov-services-app/shared/gateway"
-	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
 	pb "github.com/AbdulRahimOM/gov-services-app/shared/pb/generated"
+	mystatus "github.com/AbdulRahimOM/gov-services-app/shared/std-response/my_status"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +24,7 @@ func (u *AccountEntryHandler) AdminLoginViaPassword(c *gin.Context) {
 	}
 	resp, err := u.accountsClient.AdminLoginViaPassword(c, &pb.AdminLoginViaPasswordRequest{
 		Username: req.Username,
-		Password:    req.Password,
+		Password: req.Password,
 	})
 	if err == nil {
 		c.JSON(200, response.AdminLogin{
@@ -34,6 +34,9 @@ func (u *AccountEntryHandler) AdminLoginViaPassword(c *gin.Context) {
 				FirstName:   resp.AdminDetails.FirstName,
 				LastName:    resp.AdminDetails.LastName,
 				PhoneNumber: resp.AdminDetails.PhoneNumber,
+				DeptID:      resp.AdminDetails.DeptId,
+				RankID:      resp.AdminDetails.RankId,
+				Designation: resp.AdminDetails.Designation,
 			},
 			Token: resp.Token,
 		})

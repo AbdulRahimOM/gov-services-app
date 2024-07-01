@@ -28,6 +28,10 @@ message AdminGetProfileResponse {
     string address = 4;
     string pincode = 5;
     string phoneNumber = 6;
+    string designation = 7;
+    int32 deptId = 8;
+    int32 rankId = 9;
+    string username = 10;
 }
 
 message AdminLoginViaPasswordRequest {
@@ -46,4 +50,7 @@ message LoggingAdminDetails {
     string firstName = 2;
     string lastName = 3;
     string phoneNumber = 4;
+    int32 deptId = 5;
+    int32 rankId = 6;
+    string designation = 7;
 }

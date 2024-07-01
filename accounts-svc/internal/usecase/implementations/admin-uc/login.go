@@ -19,7 +19,7 @@ func (uc AdminUseCase) VerifyPasswordForLogin(username, password *string) (*resp
 	admin, hashedPw, err := uc.adminRepo.GetAdminWithPasswordByUsername(username)
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
-			return nil, responsecode.CorruptRequest, fmt.Errorf("no admin registered with this mobile number")
+			return nil, responsecode.CorruptRequest, fmt.Errorf("no admin registered with this phoneNumber number")
 		} else {
 			return nil, responsecode.DBError, fmt.Errorf("at database: failed to get admin password: %v", err)
 		}
@@ -41,7 +41,7 @@ func (uc AdminUseCase) VerifyPasswordForLogin(username, password *string) (*resp
 	}
 
 	return &response.AdminLogin{
-		Admin:  admin,
+		Admin: admin,
 		Token: token,
 	}, "", nil
 }

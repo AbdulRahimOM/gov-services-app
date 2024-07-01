@@ -9,9 +9,9 @@ type Admin struct {
 	Email       string `gorm:"email;default:''"`
 	Address     string `gorm:"address;default:''"`
 	Pincode     string `gorm:"pincode;default:''"`
-	Mobile      string `gorm:"mobile;default:''"`
+	PhoneNumber string `gorm:"phoneNumber;default:''"`
 	DeptID      int32  `gorm:"dept_id;default:0"`
-	Resignation string `gorm:"role_id;default:0"`
+	Designation string `gorm:"role_id;default:0"`
 	RankID      int32  `gorm:"rank_id;default:0"`
 
 	IsActive bool `gorm:"is_active;default:true"`

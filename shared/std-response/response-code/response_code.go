@@ -11,14 +11,14 @@ const (
 	CorruptRequest  = "GEN-ERR-003"
 
 	//Account Credentials
-	MobileNotRegistered         = "ACC-ERR-001"
-	MobileAlreadyRegistered     = "ACC-ERR-002"
-	InvalidOTP                  = "ACC-ERR-003"
-	Unauthenticated             = "ACC-ERR-004"
-	Unauthorized                = "ACC-ERR-005"
-	InvalidPassword             = "ACC-ERR-006"
-	TokenExpired                = "ACC-ERR-007"
-	NotEnoughPermissionsInToken = "ACC-ERR-008"
+	PhoneNumberNotRegistered     = "ACC-ERR-001"
+	PhoneNumberAlreadyRegistered = "ACC-ERR-002"
+	InvalidOTP                   = "ACC-ERR-003"
+	Unauthenticated              = "ACC-ERR-004"
+	Unauthorized                 = "ACC-ERR-005"
+	InvalidPassword              = "ACC-ERR-006"
+	TokenExpired                 = "ACC-ERR-007"
+	NotEnoughPermissionsInToken  = "ACC-ERR-008"
 
 	//Internal
 	DBError                = "INT-ERR-001"
@@ -41,8 +41,8 @@ func init() {
 	errCodeMap[CorruptRequest] = codes.InvalidArgument
 
 	//Account Credentials
-	errCodeMap[MobileNotRegistered] = codes.NotFound
-	errCodeMap[MobileAlreadyRegistered] = codes.AlreadyExists
+	errCodeMap[PhoneNumberNotRegistered] = codes.NotFound
+	errCodeMap[PhoneNumberAlreadyRegistered] = codes.AlreadyExists
 	errCodeMap[InvalidOTP] = codes.Unauthenticated
 	errCodeMap[Unauthenticated] = codes.Unauthenticated
 	errCodeMap[Unauthorized] = codes.PermissionDenied
