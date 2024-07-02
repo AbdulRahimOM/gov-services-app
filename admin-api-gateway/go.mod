@@ -10,11 +10,13 @@ require (
 )
 
 replace (
+	github.com/AbdulRahimOM/go-utils/mymath => ../../go-utils/mymath
 	github.com/AbdulRahimOM/gov-services-app/internal => ../internal
 )
 
 require (
 	github.com/AbdulRahimOM/go-utils v0.0.0-20240625005829-7d8214cf7d50 // indirect
+	github.com/AbdulRahimOM/go-utils/mymath v0.0.0 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect

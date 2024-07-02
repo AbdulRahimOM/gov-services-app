@@ -12,6 +12,41 @@ service AdminAccountService {
     rpc AdminUpdateProfile(AdminUpdateProfileRequest) returns (google.protobuf.Empty);    //unimplemented
     rpc AdminUpdatePasswordUsingOldPw(AdminUpdatePasswordUsingOldPwRequest) returns (google.protobuf.Empty);    //done
 
+    //manage account
+    rpc AdminGetAdmins(AdminGetAdminsRequest) returns (AdminGetAdminsResponse);    //done
+
+}
+
+message AdminGetAdminsRequest {
+    int32 adminId = 1;
+    AdminSearchCriteria searchCriteria = 2;
+}
+
+message AdminSearchCriteria {
+    int32 deptId = 1;
+    int32 rankId = 2;
+    string designation = 3;
+    string firstName = 4;
+    string lastName = 5;
+    string email = 6;
+    string phoneNumber = 7;
+}
+
+message AdminGetAdminsResponse {
+    repeated Admin admin = 1;
+}
+
+message Admin {
+    int32 id = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string email = 4;
+    string address = 5;
+    string pincode = 6;
+    string phoneNumber = 7;
+    string designation = 8;
+    int32 deptId = 9;
+    int32 rankId = 10;
 }
 
 message AdminUpdateProfileRequest {
@@ -67,3 +102,4 @@ message LoggingAdminDetails {
     int32 rankId = 6;
     string designation = 7;
 }
+

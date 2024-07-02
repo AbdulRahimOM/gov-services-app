@@ -95,6 +95,7 @@ func (u *AdminAccountHandler) AdminUpdateProfile(c *gin.Context) {
 		Email:     req.Email,
 		Address:   req.Address,
 		Pincode:   req.Pincode,
+		PhoneNumber: req.PhoneNumber,
 	})
 	if err == nil {
 		c.JSON(200, response.SM{

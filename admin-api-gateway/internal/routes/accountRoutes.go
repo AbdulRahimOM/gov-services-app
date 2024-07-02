@@ -29,5 +29,7 @@ func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryH
 			profileGroup.POST("/update", adminAccHandler.AdminUpdateProfile)                                  //done
 			profileGroup.POST("/update-password/using-old-pw", adminAccHandler.AdminUpdatePasswordUsingOldPw) //done
 		}
+
+		authGroup.GET("/view-admins", adminAccHandler.AdminGetAdmins) //unimplemented
 	}
 }

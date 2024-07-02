@@ -24,6 +24,7 @@ const (
 	AdminAccountService_AdminGetProfile_FullMethodName               = "/AdminAccountService/AdminGetProfile"
 	AdminAccountService_AdminUpdateProfile_FullMethodName            = "/AdminAccountService/AdminUpdateProfile"
 	AdminAccountService_AdminUpdatePasswordUsingOldPw_FullMethodName = "/AdminAccountService/AdminUpdatePasswordUsingOldPw"
+	AdminAccountService_AdminGetAdmins_FullMethodName                = "/AdminAccountService/AdminGetAdmins"
 )
 
 // AdminAccountServiceClient is the client API for AdminAccountService service.
@@ -36,6 +37,8 @@ type AdminAccountServiceClient interface {
 	AdminGetProfile(ctx context.Context, in *AdminGetProfileRequest, opts ...grpc.CallOption) (*AdminGetProfileResponse, error)
 	AdminUpdateProfile(ctx context.Context, in *AdminUpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AdminUpdatePasswordUsingOldPw(ctx context.Context, in *AdminUpdatePasswordUsingOldPwRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// manage account
+	AdminGetAdmins(ctx context.Context, in *AdminGetAdminsRequest, opts ...grpc.CallOption) (*AdminGetAdminsResponse, error)
 }
 
 type adminAccountServiceClient struct {
@@ -82,6 +85,15 @@ func (c *adminAccountServiceClient) AdminUpdatePasswordUsingOldPw(ctx context.Co
 	return out, nil
 }
 
+func (c *adminAccountServiceClient) AdminGetAdmins(ctx context.Context, in *AdminGetAdminsRequest, opts ...grpc.CallOption) (*AdminGetAdminsResponse, error) {
+	out := new(AdminGetAdminsResponse)
+	err := c.cc.Invoke(ctx, AdminAccountService_AdminGetAdmins_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminAccountServiceServer is the server API for AdminAccountService service.
 // All implementations must embed UnimplementedAdminAccountServiceServer
 // for forward compatibility
@@ -92,6 +104,8 @@ type AdminAccountServiceServer interface {
 	AdminGetProfile(context.Context, *AdminGetProfileRequest) (*AdminGetProfileResponse, error)
 	AdminUpdateProfile(context.Context, *AdminUpdateProfileRequest) (*emptypb.Empty, error)
 	AdminUpdatePasswordUsingOldPw(context.Context, *AdminUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error)
+	// manage account
+	AdminGetAdmins(context.Context, *AdminGetAdminsRequest) (*AdminGetAdminsResponse, error)
 	mustEmbedUnimplementedAdminAccountServiceServer()
 }
 
@@ -110,6 +124,9 @@ func (UnimplementedAdminAccountServiceServer) AdminUpdateProfile(context.Context
 }
 func (UnimplementedAdminAccountServiceServer) AdminUpdatePasswordUsingOldPw(context.Context, *AdminUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminUpdatePasswordUsingOldPw not implemented")
+}
+func (UnimplementedAdminAccountServiceServer) AdminGetAdmins(context.Context, *AdminGetAdminsRequest) (*AdminGetAdminsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AdminGetAdmins not implemented")
 }
 func (UnimplementedAdminAccountServiceServer) mustEmbedUnimplementedAdminAccountServiceServer() {}
 
@@ -196,6 +213,24 @@ func _AdminAccountService_AdminUpdatePasswordUsingOldPw_Handler(srv interface{},
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminAccountService_AdminGetAdmins_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminGetAdminsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminAccountServiceServer).AdminGetAdmins(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminAccountService_AdminGetAdmins_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminAccountServiceServer).AdminGetAdmins(ctx, req.(*AdminGetAdminsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminAccountService_ServiceDesc is the grpc.ServiceDesc for AdminAccountService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -218,6 +253,10 @@ var AdminAccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AdminUpdatePasswordUsingOldPw",
 			Handler:    _AdminAccountService_AdminUpdatePasswordUsingOldPw_Handler,
+		},
+		{
+			MethodName: "AdminGetAdmins",
+			Handler:    _AdminAccountService_AdminGetAdmins_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

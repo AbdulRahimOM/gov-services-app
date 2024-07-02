@@ -1,14 +1,17 @@
 package respcode
 
 import (
+	"log"
+
 	"google.golang.org/grpc/codes"
 )
 
 const (
 	//General
-	BindingError    = "GEN-ERR-001"
-	ValidationError = "GEN-ERR-002"
-	CorruptRequest  = "GEN-ERR-003"
+	BindingError       = "GEN-ERR-001"
+	ValidationError    = "GEN-ERR-002"
+	CorruptRequest     = "GEN-ERR-003"
+	InvalidQueryParams = "GEN-ERR-004"
 
 	//Account Credentials
 	PhoneNumberNotRegistered     = "ACC-ERR-001"
@@ -36,32 +39,36 @@ var errCodeMap = map[string]codes.Code{}
 
 func init() {
 	//General
-	errCodeMap[BindingError] = codes.InvalidArgument
-	errCodeMap[ValidationError] = codes.InvalidArgument
-	errCodeMap[CorruptRequest] = codes.InvalidArgument
+	errCodeMap[BindingError] = codes.InvalidArgument    //GEN-ERR-001
+	errCodeMap[ValidationError] = codes.InvalidArgument //GEN-ERR-002
+	errCodeMap[CorruptRequest] = codes.InvalidArgument  //GEN-ERR-003
 
 	//Account Credentials
-	errCodeMap[PhoneNumberNotRegistered] = codes.NotFound
-	errCodeMap[PhoneNumberAlreadyRegistered] = codes.AlreadyExists
-	errCodeMap[InvalidOTP] = codes.Unauthenticated
-	errCodeMap[Unauthenticated] = codes.Unauthenticated
-	errCodeMap[Unauthorized] = codes.PermissionDenied
-	errCodeMap[InvalidPassword] = codes.PermissionDenied
+	errCodeMap[PhoneNumberNotRegistered] = codes.NotFound            //ACC-ERR-001
+	errCodeMap[PhoneNumberAlreadyRegistered] = codes.AlreadyExists   //ACC-ERR-002
+	errCodeMap[InvalidOTP] = codes.Unauthenticated                   //ACC-ERR-003
+	errCodeMap[Unauthenticated] = codes.Unauthenticated              //ACC-ERR-004
+	errCodeMap[Unauthorized] = codes.PermissionDenied                //ACC-ERR-005
+	errCodeMap[InvalidPassword] = codes.PermissionDenied             //ACC-ERR-006
+	errCodeMap[TokenExpired] = codes.PermissionDenied                //ACC-ERR-007
+	errCodeMap[NotEnoughPermissionsInToken] = codes.PermissionDenied //ACC-ERR-008
 
 	//Internal
-	errCodeMap[DBError] = codes.Internal
-	errCodeMap[OtherInternalError] = codes.Internal
-	errCodeMap[GrpcCommunicationError] = codes.Internal
-	errCodeMap[UnknownErrorViaGrpc] = codes.Internal
+	errCodeMap[DBError] = codes.Internal                //INT-ERR-001
+	errCodeMap[OtherInternalError] = codes.Internal     //INT-ERR-002
+	errCodeMap[GrpcCommunicationError] = codes.Internal //INT-ERR-003
+	errCodeMap[UnknownErrorViaGrpc] = codes.Internal    //INT-ERR-004
 
 	//Potential bugs
-	errCodeMap[BugNoUserInContext] = codes.Unimplemented
-	errCodeMap[GrpcUnimplementedHandler] = codes.Unimplemented
+	errCodeMap[BugNoUserInContext] = codes.Unimplemented       //BUG-ERR-001
+	errCodeMap[GrpcUnimplementedHandler] = codes.Unimplemented //BUG-ERR-002
+	errCodeMap[BugNoAdminInContext] = codes.Unimplemented      //BUG-ERR-003
 }
 
 // GetGRPCCode returns the grpc code for the given error code string of the application
 func GetGRPCCode(errCode string) codes.Code {
 	if grpcCode, ok := errCodeMap[errCode]; !ok {
+		log.Printf("Unimplemented/Unknown error code: %s", errCode)
 		return codes.Unknown
 	} else {
 		return grpcCode

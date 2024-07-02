@@ -17,6 +17,7 @@ const (
 	superAdminFirstName   = "superAdmin"
 	superAdminLastName    = ""
 	superAdminRankID      = 1
+	superAdminDeptID      = 1
 	superAdminDesignation = "superAdmin"
 )
 
@@ -65,6 +66,7 @@ func initSuperAdminIfNotInitialized() {
 		HashedPW:    hashedPW,
 		RankID:      superAdminRankID,
 		Designation: superAdminDesignation,
+		DeptID:      superAdminDeptID,
 	}
 
 	result := DB.Create(&superAdmin)
