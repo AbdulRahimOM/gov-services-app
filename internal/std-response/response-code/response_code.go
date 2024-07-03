@@ -23,6 +23,9 @@ const (
 	TokenExpired                 = "ACC-ERR-007"
 	NotEnoughPermissionsInToken  = "ACC-ERR-008"
 
+	//Data
+	AlreadyExists = "DATA-ERR-001"
+
 	//Internal
 	DBError                = "INT-ERR-001"
 	OtherInternalError     = "INT-ERR-002"
@@ -33,6 +36,7 @@ const (
 	BugNoUserInContext       = "BUG-ERR-001" //Caution: If user is not set in context by the middleware
 	GrpcUnimplementedHandler = "BUG-ERR-002" //Caution: Missing handler in the grpc server
 	BugNoAdminInContext      = "BUG-ERR-003" //Caution: If admin is not set in context by the middleware
+	FailureToGenerate        = "BUG-ERR-004" //Caution: If failed to generate something
 )
 
 var errCodeMap = map[string]codes.Code{}

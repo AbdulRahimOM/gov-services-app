@@ -30,6 +30,23 @@ func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryH
 			profileGroup.POST("/update-password/using-old-pw", adminAccHandler.AdminUpdatePasswordUsingOldPw) //done
 		}
 
-		authGroup.GET("/view-admins", adminAccHandler.AdminGetAdmins) //unimplemented
+		manageAdminsGroup := authGroup.Group("/manage-admins")
+		{
+			manageAdminsGroup.GET("/view", adminAccHandler.AdminGetAdmins)  //done
+			manageAdminsGroup.PUT("/add", adminAccHandler.AdminAddSubAdmin) //implementing
+		}
+
+		deptGroup := authGroup.Group("/depts")
+		{
+			deptGroup.PUT("/add", adminAccHandler.AdminAddDept) //done
+			deptGroup.GET("/view", adminAccHandler.AdminGetDepts) //done
+		}
+
+		officeGroup := authGroup.Group("/offices")
+		{
+			// officeGroup.PUT("/add", adminAccHandler.AdminCreateSubOffice) //
+			officeGroup.GET("/view", adminAccHandler.AdminGetOffices)      //
+		}
+
 	}
 }

@@ -6,6 +6,7 @@ import (
 
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
 	repointerface "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/interface"
 	dberror "github.com/AbdulRahimOM/gov-services-app/internal/std-response/error/db"
 
@@ -18,6 +19,56 @@ type AdminRepository struct {
 
 func NewAdminRepository(db *gorm.DB) repointerface.IAdminRepo {
 	return &AdminRepository{DB: db}
+}
+
+//CheckIfAdminUsernameExists
+func (ur AdminRepository) CheckIfAdminUsernameExists(username *string) (bool, error) {
+	var count int64
+	result := ur.DB.Raw("SELECT COUNT(*) FROM admins WHERE username=?", *username).Scan(&count)
+	if result.Error != nil {
+		return false, fmt.Errorf("@db: failed to check if admin username exists: %v", result.Error)
+	}
+	return count > 0, nil
+}
+
+//AddSubAdmin
+func (ur AdminRepository) AddSubAdmin(newSubAdmin *models.Admin) (int32, error) {
+
+	result := ur.DB.Create(newSubAdmin)
+	if result.Error != nil {
+		return 0, fmt.Errorf("@db: failed to add sub admin: %v", result.Error)
+	}
+	return newSubAdmin.ID, nil
+}
+
+// AdminGetOffices
+func (ur AdminRepository) AdminGetOffices() (*[]models.Office, error) {
+	var offices []models.Office
+	result := ur.DB.Find(&offices)
+	if result.Error != nil {
+		return nil, fmt.Errorf("@db: failed to get offices: %v", result.Error)
+	}
+	return &offices, nil
+}
+
+// GetDepts
+func (ur AdminRepository) GetDepts() (*[]models.Department, error) {
+	var depts []models.Department
+	result := ur.DB.Find(&depts)
+	if result.Error != nil {
+		return nil, fmt.Errorf("@db: failed to get depts: %v", result.Error)
+	}
+	return &depts, nil
+}
+
+// CheckIfDeptNameExists
+func (ur AdminRepository) CheckIfDeptNameExists(deptName *string) (bool, error) {
+	var count int64
+	result := ur.DB.Raw("SELECT COUNT(*) FROM departments WHERE name=?", *deptName).Scan(&count)
+	if result.Error != nil {
+		return false, fmt.Errorf("@db: failed to check if dept name exists: %v", result.Error)
+	}
+	return count > 0, nil
 }
 
 // GetPasswordByAdminID

@@ -9,12 +9,97 @@ service AdminAccountService {
 
     //profile
     rpc AdminGetProfile(AdminGetProfileRequest) returns (AdminGetProfileResponse);    //done
-    rpc AdminUpdateProfile(AdminUpdateProfileRequest) returns (google.protobuf.Empty);    //unimplemented
+    rpc AdminUpdateProfile(AdminUpdateProfileRequest) returns (google.protobuf.Empty);    //done
     rpc AdminUpdatePasswordUsingOldPw(AdminUpdatePasswordUsingOldPwRequest) returns (google.protobuf.Empty);    //done
 
     //manage account
     rpc AdminGetAdmins(AdminGetAdminsRequest) returns (AdminGetAdminsResponse);    //done
+    rpc AdminAddSubAdmin(AdminAddSubAdminRequest) returns (AdminAddSubAdminResponse);    //not yet implemented
 
+    //manage dept
+    rpc AdminAddDept(AdminAddDeptRequest) returns (AdminAddDeptResponse);    //done
+    rpc AdminGetDepts(google.protobuf.Empty) returns (AdminGetDeptsResponse);    //
+
+    //manage offices
+    rpc AdminAddOffice(AdminAddOfficeRequest) returns (AdminAddOfficeResponse);    //done
+    rpc AdminGetOffices(AdminGetOfficesRequest) returns (AdminGetOfficesResponse);    //
+}
+
+message AdminGetOfficesRequest {
+}
+
+message AdminGetOfficesResponse {
+    repeated Office office = 1;
+}
+
+message Office {
+    int32 id = 1;
+    int32 deptId = 2;
+    int32 hierarchyRank = 3;
+    string regionName = 4;
+    int32 headOfficerId = 5;
+    string officeLocation = 6;
+    int32 superiorOfficeId = 7;
+}
+
+message AdminAddOfficeRequest {
+    int32 adminId = 1;
+    newOffice newOffice = 2;
+}
+
+message newOffice {
+    int32 deptId = 1;
+    int32 hierarchyRank = 2;
+    string regionName = 3;
+    string officeLocation = 4;
+    int32 superiorOfficeId = 5;
+}
+
+message AdminAddOfficeResponse {
+    int32 newOfficeID = 1;
+}
+
+message AdminGetDeptsResponse {
+    repeated Dept dept = 1;
+}
+
+message Dept {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message AdminAddDeptRequest {
+    int32 adminId = 1;
+    newDept newDept = 2;
+}
+
+message newDept {
+    string name = 1;
+    string description = 2;
+}
+
+message AdminAddDeptResponse {
+    int32 newDeptID = 1;
+}
+
+message AdminAddSubAdminRequest {
+    int32 adminId = 1;
+    newSubAdmin newSubAdmin = 2;
+}
+message AdminAddSubAdminResponse {
+    int32 newSubAdminID = 1;
+}
+
+message newSubAdmin{
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    int32 deptId = 5;
+    int32 rankId = 6;
+    string designation = 7;
+    int32 officeId = 8;
 }
 
 message AdminGetAdminsRequest {

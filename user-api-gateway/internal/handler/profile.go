@@ -21,7 +21,7 @@ func (u *UserAccountHandler) Ping(c *gin.Context) {
 }
 
 // UserGetOTPForPwChange
-func (u *UserAccountHandler) UserGetOTPForPwChange(c *gin.Context) { //unimplemented
+func (u *UserAccountHandler) UserGetOTPForPwChange(c *gin.Context) { //done
 	userID, ok := gateway.GetUserIdFromContext(c)
 	if !ok {
 		return
@@ -42,7 +42,7 @@ func (u *UserAccountHandler) UserGetOTPForPwChange(c *gin.Context) { //unimpleme
 }
 
 // UserVerifyOTPForPwChange
-func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *gin.Context) { //unimplemented
+func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *gin.Context) { //done
 
 	var req request.UserVerifyOTPForPwChange
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -69,7 +69,7 @@ func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *gin.Context) { //unimpl
 	}
 }
 
-func (u *UserAccountHandler) SignedUpUserSettingPw(c *gin.Context) { //unimplemented
+func (u *UserAccountHandler) SignedUpUserSettingPw(c *gin.Context) { //done
 	var req request.SettingNewPassword
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -96,7 +96,7 @@ func (u *UserAccountHandler) SignedUpUserSettingPw(c *gin.Context) { //unimpleme
 }
 
 // UserUpdateProfile
-func (u *UserAccountHandler) UserUpdateProfile(c *gin.Context) { //unimplemented
+func (u *UserAccountHandler) UserUpdateProfile(c *gin.Context) { //done
 	var req request.UserUpdateProfile
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -126,7 +126,7 @@ func (u *UserAccountHandler) UserUpdateProfile(c *gin.Context) { //unimplemented
 }
 
 // UserGetProfile
-func (u *UserAccountHandler) UserGetProfile(c *gin.Context) { //unimplemented
+func (u *UserAccountHandler) UserGetProfile(c *gin.Context) { //done
 	userID, ok := gateway.GetUserIdFromContext(c)
 	if !ok {
 		return
