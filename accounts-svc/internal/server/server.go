@@ -11,7 +11,10 @@ import (
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 )
 
-func InitializeServer() (pb.UserAccountServiceServer, pb.AdminAccountServiceServer) {
+func InitializeServer() (
+	pb.UserAccountServiceServer,
+	pb.AdminAccountServiceServer,
+) {
 	userRepository := userrepo.NewUserRepository(db.DB)
 	userUseCase := useruc.NewUserUseCase(userRepository)
 	userAccSvcServer := userAccHandler.NewUserAccountsServer(userUseCase)

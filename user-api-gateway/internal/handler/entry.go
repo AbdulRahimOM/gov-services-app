@@ -10,13 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (u *AccountEntryHandler) Ping(c *gin.Context) {
+func (u *UserAccountHandler) Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
 	})
 }
 
-func (u *AccountEntryHandler) RequestOTPForLogin(c *gin.Context) {
+func (u *UserAccountHandler) RequestOTPForLogin(c *gin.Context) {
 	var req request.UserLoginGetOTP
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -36,7 +36,7 @@ func (u *AccountEntryHandler) RequestOTPForLogin(c *gin.Context) {
 	}
 }
 
-func (u *AccountEntryHandler) UserLoginVerifyOTP(c *gin.Context) {
+func (u *UserAccountHandler) UserLoginVerifyOTP(c *gin.Context) {
 	var req request.UserLoginVerifyOTP
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -64,7 +64,7 @@ func (u *AccountEntryHandler) UserLoginVerifyOTP(c *gin.Context) {
 	}
 }
 
-func (u *AccountEntryHandler) RequestOTPForSignUp(c *gin.Context) {
+func (u *UserAccountHandler) RequestOTPForSignUp(c *gin.Context) {
 	var req request.GetOTPForSignup
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -84,7 +84,7 @@ func (u *AccountEntryHandler) RequestOTPForSignUp(c *gin.Context) {
 	}
 }
 
-func (u *AccountEntryHandler) SubmitOTPForSignUp(c *gin.Context) {
+func (u *UserAccountHandler) SubmitOTPForSignUp(c *gin.Context) {
 	var req request.UserSignpViaOTP
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
@@ -110,7 +110,7 @@ func (u *AccountEntryHandler) SubmitOTPForSignUp(c *gin.Context) {
 	}
 }
 
-func (u *AccountEntryHandler) UserLoginViaPassword(c *gin.Context) {
+func (u *UserAccountHandler) UserLoginViaPassword(c *gin.Context) {
 	var req request.UserLoginViaPassword
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {

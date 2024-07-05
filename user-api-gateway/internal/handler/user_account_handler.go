@@ -1,8 +1,6 @@
 package handler
 
-import (
-	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
-)
+import pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 
 type UserAccountHandler struct {
 	accountsClient pb.UserAccountServiceClient
@@ -10,16 +8,6 @@ type UserAccountHandler struct {
 
 func NewUserAccountHandler(client pb.UserAccountServiceClient) *UserAccountHandler {
 	return &UserAccountHandler{
-		accountsClient: client,
-	}
-}
-
-type AccountEntryHandler struct {
-	accountsClient pb.UserAccountServiceClient
-}
-
-func NewEntryHandler(client pb.UserAccountServiceClient) *AccountEntryHandler {
-	return &AccountEntryHandler{
 		accountsClient: client,
 	}
 }

@@ -11,12 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (u *AdminAccountHandler) Ping(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
-}
-
 // AdminGetProfile
 func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) {
 	adminID, ok := gateway.GetAdminIdFromContext(c)

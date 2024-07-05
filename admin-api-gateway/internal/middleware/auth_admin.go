@@ -55,3 +55,8 @@ func AdminAuthCheck(c *gin.Context) {
 
 	c.Next()
 }
+
+// SuperAdminCheck
+func SuperAdminCheck (c *gin.Context){
+	
+}

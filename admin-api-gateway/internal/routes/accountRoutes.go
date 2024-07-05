@@ -7,15 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryHandler, adminAccHandler *handler.AdminAccountHandler) {
+func RegisterRoutes(engine *gin.RouterGroup, adminAccHandler *handler.AdminAccountHandler) {
 	engine.Use(middleware.ClearCache)
 
 	//routes for those who are not logged in______________________________________________
 	strangersGroup := engine.Group("/admin")
 	strangersGroup.Use(middleware.NotLoggedInCheck)
 	{
-		strangersGroup.GET("/login", entryHandler.Ping)                                  //done
-		strangersGroup.POST("/login-using-password", entryHandler.AdminLoginViaPassword) //done
+		strangersGroup.GET("/login",adminAccHandler.Ping)                                  //done
+		strangersGroup.POST("/login-using-password",adminAccHandler.AdminLoginViaPassword) //done
 	}
 
 	//routes for those who are logged in-------------------------------------------------
@@ -36,16 +36,26 @@ func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryH
 			manageAdminsGroup.PUT("/add", adminAccHandler.AdminAddSubAdmin) //implementing
 		}
 
-		deptGroup := authGroup.Group("/depts")
-		{
-			deptGroup.PUT("/add", adminAccHandler.AdminAddDept) //done
-			deptGroup.GET("/view", adminAccHandler.AdminGetDepts) //done
-		}
+		// deptGroup := authGroup.Group("/depts")
+		// {
+		// deptGroup.PUT("/add", adminAccHandler.AdminAddDept) //done
+		// deptGroup.GET("/view", adminAccHandler.AdminGetDepts) //done
+		// }
 
 		officeGroup := authGroup.Group("/offices")
 		{
 			// officeGroup.PUT("/add", adminAccHandler.AdminCreateSubOffice) //
-			officeGroup.GET("/view", adminAccHandler.AdminGetOffices)      //
+			officeGroup.GET("/view", adminAccHandler.AdminGetOffices) //
+		}
+
+		superAdminGroup := authGroup.Group("/rank-1-role")
+		superAdminGroup.Use(middleware.CheckRank(1))
+		{
+			// appointments := superAdminGroup.Group("/appoint")
+			{
+				// appointments.PUT("/SNO", adminAccHandler.AppointStateNodalOfficer)
+				// appointments.PUT("/state-SDyNO", adminAccHandler.AppointStateDeputyNodalOfficer)
+			}
 		}
 
 	}

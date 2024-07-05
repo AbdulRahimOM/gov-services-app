@@ -10,27 +10,27 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AdminGetDepts
-func (h *AdminAccountHandler) AdminGetDepts(c *gin.Context) {
-	resp, err := h.accountsClient.AdminGetDepts(c, nil)
+// // AdminGetDepts
+// func (h *AdminAccountHandler) AdminGetDepts(c *gin.Context) {
+// 	resp, err := h.accountsClient.AdminGetDepts(c, nil)
 
-	if err == nil {
-		var depts []*commondto.Department
-		for _, dept := range resp.Dept {
-			depts = append(depts, &commondto.Department{
-				ID:          dept.Id,
-				Name:        dept.Name,
-				Description: dept.Description,
-			})
-		}
-		c.JSON(200, response.AdminGetDepts{
-			Status: mystatus.Success,
-			Depts:  depts,
-		})
-	} else {
-		gateway.HandleGrpcStatus(c, err)
-	}
-}
+// 	if err == nil {
+// 		var depts []*commondto.Department
+// 		for _, dept := range resp.Dept {
+// 			depts = append(depts, &commondto.Department{
+// 				ID:          dept.Id,
+// 				Name:        dept.Name,
+// 				Description: dept.Description,
+// 			})
+// 		}
+// 		c.JSON(200, response.AdminGetDepts{
+// 			Status: mystatus.Success,
+// 			Depts:  depts,
+// 		})
+// 	} else {
+// 		gateway.HandleGrpcStatus(c, err)
+// 	}
+// }
 
 // AdminGetAddSubAdminPage
 func (h *AdminAccountHandler) AdminAddSubAdmin(c *gin.Context) {

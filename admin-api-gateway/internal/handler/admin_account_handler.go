@@ -14,12 +14,12 @@ func NewAdminAccountHandler(client pb.AdminAccountServiceClient) *AdminAccountHa
 	}
 }
 
-type AccountEntryHandler struct {
+type AccountHandler struct {
 	accountsClient pb.AdminAccountServiceClient
 }
 
-func NewEntryHandler(client pb.AdminAccountServiceClient) *AccountEntryHandler {
-	return &AccountEntryHandler{
+func NewEntryHandler(client pb.AdminAccountServiceClient) *AccountHandler {
+	return &AccountHandler{
 		accountsClient: client,
 	}
 }

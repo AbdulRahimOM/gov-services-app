@@ -12,7 +12,7 @@ import (
 )
 
 type ServiceClients struct {
-	AccountsClient pb.UserAccountServiceClient
+	UserAccountsClient pb.UserAccountServiceClient
 }
 
 func InitServiceClients() (*ServiceClients, error) {
@@ -22,13 +22,12 @@ func InitServiceClients() (*ServiceClients, error) {
 	}
 
 	return &ServiceClients{
-		AccountsClient: pb.NewUserAccountServiceClient(clientConn),
+		UserAccountsClient: pb.NewUserAccountServiceClient(clientConn),
 	}, nil
 }
 
 func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
-	entryHandler := handler.NewEntryHandler(serviceClients.AccountsClient)
-	accountHandler := handler.NewUserAccountHandler(serviceClients.AccountsClient)
+	accountHandler := handler.NewUserAccountHandler(serviceClients.UserAccountsClient)
 
-	routes.RegisterRoutes(engine.Group("/"), entryHandler, accountHandler)
+	routes.RegisterRoutes(engine.Group("/"), accountHandler)
 }

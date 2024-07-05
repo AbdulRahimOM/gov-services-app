@@ -10,13 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (u *AccountEntryHandler) Ping(c *gin.Context) {
+func (u *AdminAccountHandler) Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
 	})
 }
 
-func (u *AccountEntryHandler) AdminLoginViaPassword(c *gin.Context) {
+func (u *AdminAccountHandler) AdminLoginViaPassword(c *gin.Context) {
 	var req request.AdminLoginViaPassword
 
 	if ok := gateway.BindAndValidateRequest(c, &req); !ok {

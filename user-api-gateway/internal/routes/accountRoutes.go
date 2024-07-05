@@ -7,22 +7,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(engine *gin.RouterGroup, entryHandler *handler.AccountEntryHandler, userAccHandler *handler.UserAccountHandler) {
+func RegisterRoutes(engine *gin.RouterGroup, userAccHandler *handler.UserAccountHandler) {
 	engine.Use(middleware.ClearCache)
 
 	//routes for those who are not logged in______________________________________________
 	strangersGroup := engine.Group("/")
 	strangersGroup.Use(middleware.NotLoggedInCheck)
 	{
-		strangersGroup.GET("/login", entryHandler.Ping)                          //done
-		strangersGroup.POST("/login-getOTP", entryHandler.RequestOTPForLogin)    //done
-		strangersGroup.POST("/login-submitOTP", entryHandler.UserLoginVerifyOTP) //done
+		strangersGroup.GET("/login", userAccHandler.Ping)                          //done
+		strangersGroup.POST("/login-getOTP", userAccHandler.RequestOTPForLogin)    //done
+		strangersGroup.POST("/login-submitOTP", userAccHandler.UserLoginVerifyOTP) //done
 
-		strangersGroup.POST("/login-using-password", entryHandler.UserLoginViaPassword) //done
+		strangersGroup.POST("/login-using-password", userAccHandler.UserLoginViaPassword) //done
 
-		strangersGroup.GET("/register", entryHandler.Ping)                          //done
-		strangersGroup.POST("/register-getOTP", entryHandler.RequestOTPForSignUp)   //done
-		strangersGroup.POST("/register-submitOTP", entryHandler.SubmitOTPForSignUp) //done
+		strangersGroup.GET("/register", userAccHandler.Ping)                          //done
+		strangersGroup.POST("/register-getOTP", userAccHandler.RequestOTPForSignUp)   //done
+		strangersGroup.POST("/register-submitOTP", userAccHandler.SubmitOTPForSignUp) //done
 
 	}
 

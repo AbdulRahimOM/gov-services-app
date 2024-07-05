@@ -27,8 +27,7 @@ func InitServiceClients() (*ServiceClients, error) {
 }
 
 func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
-	entryHandler := handler.NewEntryHandler(serviceClients.AccountsClient)
 	accountHandler := handler.NewAdminAccountHandler(serviceClients.AccountsClient)
 
-	routes.RegisterRoutes(engine.Group("/"), entryHandler, accountHandler)
+	routes.RegisterRoutes(engine.Group("/"), accountHandler)
 }
