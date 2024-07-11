@@ -5,7 +5,6 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
-	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 )
 
 type IAdminRepo interface {
@@ -20,12 +19,12 @@ type IAdminRepo interface {
 	//office management
 	AdminGetOffices(searchCriteria *request.OfficeSearchCriteria) (*[]models.Office, error)
 	GetOfficeIDByAdminID(adminID int32) (officeID int32, err error)
-	GetSuperiorOfficeIdByOfficeId(officeID int32)(superiorOfficeID int32,err error)
+	GetSuperiorOfficeIdByOfficeId(officeID int32) (superiorOfficeID int32, err error)
 	GetOfficeDetailsByAdminID(adminID int32) (officeDetails *dto.OfficeDetails, err error)
 	GetOfficeDetailsByOfficeID(officeID int32) (officeDetails *dto.OfficeDetails, err error)
 	AddChildOffice(newOffice *models.Office) (int32, error)
 	GetRankOfOffice(officeID int32) (int32, error)
-	CheckOccupancyByDesignation(officeID int32,designation string) (bool, error)
+	CheckOccupancyByDesignation(officeID int32, designation string) (bool, error)
 	CheckIfOfficeNameExists(name *string) (bool, error)
 	CheckIfOfficeExists(officeID int32) (bool, error)
 
@@ -33,10 +32,4 @@ type IAdminRepo interface {
 	AdminGetAdmins(searchCriteria *request.AdminSearchCriteria) (*[]commondto.Admin, error)
 	AddSubAdmin(newSubAdmin *models.Admin) (int32, error)
 	CheckIfAdminUsernameExists(username *string) (bool, error)
-	
-}
-
-type IKsebRepo interface {
-	RegisterSectionCode(sectionCodeReq *requests.KsebRegSectionCode) (int32, error)
-	CheckIfSectionCodeExists(sectionCode string) (bool, error)
 }

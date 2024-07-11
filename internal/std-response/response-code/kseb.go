@@ -6,4 +6,8 @@ const (
 	KSEB_SectionCodeExists      = "KSEB-ERR-001"
 	KSEB_SectionOfficeNotExists = "KSEB-ERR-002"
 	KSEB_SectionOfficeNotValid  = "KSEB-ERR-003"
+
+	//Consumer number related
+	KSEB_ConsumerNumberInvalid = "KSEB-ERR-004"
+	
 )

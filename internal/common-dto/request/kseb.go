@@ -6,5 +6,5 @@ type KsebRegSectionCode struct {
 }
 
 type UserAddConsumerNumber struct {
-	ConsumerNumber string `json:"consumer_number" binding:"required" validate:"len=11,numeric"`
+	ConsumerNumber string `json:"consumer_number" binding:"required" validate:"len=13,numeric"`
 }

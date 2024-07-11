@@ -43,5 +43,9 @@ func migrateTables() {
 		log.Fatal("Couldn't migrate models.KsebSectionCode. Error:", err)
 	}
 
+	if err := DB.AutoMigrate(&models.UserKsebConsumerNumber{}); err != nil {
+		log.Fatal("Couldn't migrate models.KsebConsumerNumber. Error:", err)
+	}
+
 	fmt.Println("Migrated tables successfully")
 }

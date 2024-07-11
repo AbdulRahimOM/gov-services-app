@@ -27,4 +27,5 @@ type IUserUC interface {
 }
 
 type IKsebUserUC interface {
+	AddConsumerNumber(userID int32, consumerNumber string) (string, error)
 }

@@ -35,3 +35,24 @@ func (kr KsebRepository) CheckIfSectionCodeExists(sectionCode string) (bool, err
 	}
 	return count > 0, nil
 }
+
+func (kr KsebRepository) IsSectionCodeRegistered(sectionCode string) (bool, error) {
+	var count int64
+	result := kr.DB.Raw("SELECT COUNT(*) FROM kseb_section_codes WHERE section_code=?", sectionCode).Scan(&count)
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return count > 0, nil
+}
+
+func (kr KsebRepository) AddConsumerNumber(userID int32, consumerNumber string) error {
+	entry := models.UserKsebConsumerNumber{
+		UserID:         userID,
+		ConsumerNumber: consumerNumber,
+	}
+	result := kr.DB.Create(&entry)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
