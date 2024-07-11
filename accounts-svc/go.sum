@@ -1,7 +1,7 @@
 github.com/AbdulRahimOM/go-utils/hashPassword v0.0.0-20240625005829-7d8214cf7d50 h1:sd/WXpFNS1YVw4Es1JVM6T3BgNJaItf1jKyfHXNVCaM=
 github.com/AbdulRahimOM/go-utils/hashPassword v0.0.0-20240625005829-7d8214cf7d50/go.mod h1:EBev3kL2hwsHDhUMq+oowLOh1wV4fsTK8iDXP/jA/3k=
-github.com/AbdulRahimOM/go-utils/helper v0.0.0-20240703022705-9120e0329f0f h1:P8FKpqDWOe+18myvuhEMN023vYqvNOIdPNi0M37Y7T4=
-github.com/AbdulRahimOM/go-utils/helper v0.0.0-20240703022705-9120e0329f0f/go.mod h1:ptEQ+9+xiQEzXnCFGgK7Hz1n/m37JhdXe80hfxyLQD0=
+github.com/AbdulRahimOM/go-utils/helper v0.0.0-20240710141430-3e08a5bcd862 h1:Sxm37jiXRjtAaXjanwMY5pdB1Q6/0O3v331NcnllHvA=
+github.com/AbdulRahimOM/go-utils/helper v0.0.0-20240710141430-3e08a5bcd862/go.mod h1:ptEQ+9+xiQEzXnCFGgK7Hz1n/m37JhdXe80hfxyLQD0=
 github.com/beevik/etree v1.1.0/go.mod h1:r8Aw8JqVegEf0w2fDnATrX9VpkMcyFeM0FhwO62wh+A=
 github.com/bytedance/sonic v1.11.6 h1:oUp34TzMlL+OY1OUWxHqsdkgC/Zfc85zGqw9siXjrc0=
 github.com/bytedance/sonic v1.11.6/go.mod h1:LysEHSvpvDySVdC2f87zGWf6CIKJcAvqab1ZaiQtds4=

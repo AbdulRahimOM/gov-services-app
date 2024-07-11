@@ -14,7 +14,6 @@ service AdminAccountService {
 
     //manage account
     rpc AdminGetAdmins(AdminGetAdminsRequest) returns (AdminGetAdminsResponse);    //done
-    rpc AdminAddSubAdmin(AdminAddSubAdminRequest) returns (AdminAddSubAdminResponse);    //not yet implemented
 
     //manage dept
     rpc AdminAddDept(AdminAddDeptRequest) returns (AdminAddDeptResponse);    //done
@@ -22,12 +21,17 @@ service AdminAccountService {
 
     //manage offices
     rpc AdminAddOffice(AdminAddOfficeRequest) returns (AdminAddOfficeResponse);    //done
-    rpc AdminGetOffices(AdminGetOfficesRequest) returns (AdminGetOfficesResponse);    //
+    rpc AdminGetOffices(officeSearchCriteria) returns (AdminGetOfficesResponse);    //
 }
 
-message AdminGetOfficesRequest {
+message officeSearchCriteria {
+    int32 id = 1;
+    string name = 2;
+    int32 deptID = 3;
+    int32 rank = 4;
+    string address = 5;
+    int32 superiorOfficeID = 6;
 }
-
 message AdminGetOfficesResponse {
     repeated Office office = 1;
 }
@@ -35,11 +39,10 @@ message AdminGetOfficesResponse {
 message Office {
     int32 id = 1;
     int32 deptId = 2;
-    int32 hierarchyRank = 3;
-    string regionName = 4;
-    int32 headOfficerId = 5;
-    string officeLocation = 6;
-    int32 superiorOfficeId = 7;
+    int32 rank = 3;
+    string name = 4;
+    string address = 5;
+    int32 superiorOfficeId = 6;
 }
 
 message AdminAddOfficeRequest {
@@ -49,9 +52,9 @@ message AdminAddOfficeRequest {
 
 message newOffice {
     int32 deptId = 1;
-    int32 hierarchyRank = 2;
+    int32 rank = 2;
     string regionName = 3;
-    string officeLocation = 4;
+    string address = 4;
     int32 superiorOfficeId = 5;
 }
 
@@ -83,23 +86,11 @@ message AdminAddDeptResponse {
     int32 newDeptID = 1;
 }
 
-message AdminAddSubAdminRequest {
-    int32 adminId = 1;
-    newSubAdmin newSubAdmin = 2;
-}
-message AdminAddSubAdminResponse {
-    int32 newSubAdminID = 1;
-}
-
 message newSubAdmin{
     string firstName = 1;
     string lastName = 2;
     string email = 3;
     string phoneNumber = 4;
-    int32 deptId = 5;
-    int32 rankId = 6;
-    string designation = 7;
-    int32 officeId = 8;
 }
 
 message AdminGetAdminsRequest {
@@ -108,13 +99,12 @@ message AdminGetAdminsRequest {
 }
 
 message AdminSearchCriteria {
-    int32 deptId = 1;
-    int32 rankId = 2;
-    string designation = 3;
-    string firstName = 4;
-    string lastName = 5;
-    string email = 6;
-    string phoneNumber = 7;
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    string designation = 5;
+    int32 officeId = 6;
 }
 
 message AdminGetAdminsResponse {
@@ -130,8 +120,7 @@ message Admin {
     string pincode = 6;
     string phoneNumber = 7;
     string designation = 8;
-    int32 deptId = 9;
-    int32 rankId = 10;
+    int32 officeId = 9;
 }
 
 message AdminUpdateProfileRequest {
@@ -161,9 +150,6 @@ message AdminGetProfileResponse {
     string address = 4;
     string pincode = 5;
     string phoneNumber = 6;
-    string designation = 7;
-    int32 deptId = 8;
-    int32 rankId = 9;
     string username = 10;
 }
 
@@ -183,8 +169,8 @@ message LoggingAdminDetails {
     string firstName = 2;
     string lastName = 3;
     string phoneNumber = 4;
-    int32 deptId = 5;
-    int32 rankId = 6;
+    // int32 deptId = 5;
+    // int32 rankId = 6;
     string designation = 7;
 }
 

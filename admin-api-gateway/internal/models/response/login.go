@@ -16,8 +16,8 @@ type AdminBasicData struct {
 	FirstName   string `json:"firstName"`
 	LastName    string `json:"lastName"`
 	PhoneNumber string `json:"phoneNumber"`
-	DeptID      int32  `json:"deptId"`
-	RankID      int32  `json:"rankId"`
+	// DeptID      int32  `json:"deptId"`
+	// RankID      int32  `json:"rankId"`
 	Designation string `json:"designation"`
 }
 

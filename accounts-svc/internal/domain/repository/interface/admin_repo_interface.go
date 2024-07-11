@@ -15,17 +15,19 @@ type IAdminRepo interface {
 	AdminGetProfileByAdminID(adminID int32) (*dto.AdminProfile, error)
 	AdminUpdateProfile(req *request.AdminUpdateProfile) error
 
-	//department management
-	CheckIfDeptNameExists(deptName *string) (bool, error)
-	GetDepts() (*[]models.Department, error)
-	AddDept(newDept request.NewDept) (int32, error)
-
 	//office management
-	AdminGetOffices() (*[]models.Office, error)
+	AdminGetOffices(searchCriteria *request.OfficeSearchCriteria) (*[]models.Office, error)
+	GetOfficeIDByAdminID(adminID int32) (officeID int32, err error)
+	GetSuperiorOfficeIdByOfficeId(officeID int32)(superiorOfficeID int32,err error)
+	GetOfficeDetailsByAdminID(adminID int32) (officeDetails *dto.OfficeDetails, err error)
+	AddChildOffice(newOffice *models.Office) (int32, error)
+	GetRankOfOffice(officeID int32) (int32, error)
+	CheckOccupancyByDesignation(officeID int32,designation string) (bool, error)
+	CheckIfOfficeNameExists(name *string) (bool, error)
 
 	//account management
 	AdminGetAdmins(searchCriteria *request.AdminSearchCriteria) (*[]commondto.Admin, error)
-	GetRankByAdminID(adminID int32) (int32, error)
 	AddSubAdmin(newSubAdmin *models.Admin) (int32, error)
 	CheckIfAdminUsernameExists(username *string) (bool, error)
+	
 }

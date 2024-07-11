@@ -1,4 +1,4 @@
-package adminuc
+package adminaccount
 
 import (
 	"log"

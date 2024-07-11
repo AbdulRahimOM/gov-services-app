@@ -3,13 +3,22 @@ package adminAccHandler
 import (
 	"context"
 
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
 )
 
 // AdminGetOffices
-func (s *AdminAccountsServer) AdminGetOffices(c context.Context, req *pb.AdminGetOfficesRequest) (*pb.AdminGetOfficesResponse, error) {
-	offices, responseCode, err := s.AdminUseCase.AdminGetOffices()
+func (s *AdminAccountsServer) AdminGetOffices(c context.Context, req *pb.OfficeSearchCriteria) (*pb.AdminGetOfficesResponse, error) {
+	searchCriteria := request.OfficeSearchCriteria{
+		Name:             req.Name,
+		Address:          req.Address,
+		Id:               req.Id,
+		DeptID:           req.DeptID,
+		Rank:             req.Rank,
+		SuperiorOfficeID: req.SuperiorOfficeID,
+	}
+	offices, responseCode, err := s.AdminUseCase.AdminGetOffices(&searchCriteria)
 	if err != nil {
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	} else {
@@ -17,11 +26,10 @@ func (s *AdminAccountsServer) AdminGetOffices(c context.Context, req *pb.AdminGe
 		for i, office := range *offices {
 			pbOffices[i] = &pb.Office{
 				Id:               office.ID,
+				Name:             office.Name,
 				DeptId:           office.DeptID,
-				HierarchyRank:    office.HierarchyRank,
-				RegionName:       office.RegionName,
-				HeadOfficerId:    office.HeadOfficerID,
-				OfficeLocation:   office.OfficeLocation,
+				Rank:             office.Rank,
+				Address:          office.Address,
 				SuperiorOfficeId: office.SuperiorOfficeID,
 			}
 		}

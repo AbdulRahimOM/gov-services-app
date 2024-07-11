@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option go_package = "./pb/generated;pb";
+import "google/protobuf/empty.proto";
+
+service AppointmentService {
+    rpc AppointAttender(AttenderAppointmentRequest) returns (google.protobuf.Empty);
+    rpc CreateChildOffice(CreateChildOfficeRequest) returns (CreateChildOfficeResponse);
+    rpc AppointChildOfficeHead(OfficeHeadAppointmentRequest) returns (google.protobuf.Empty);
+    rpc AppointChildOfficeDeputyHead(OfficeHeadAppointmentRequest) returns (google.protobuf.Empty);
+}
+
+message CreateChildOfficeRequest {
+    int32 adminID = 1;
+    proposedChildOffice proposedChildOffice = 2;
+}
+
+message CreateChildOfficeResponse {
+    int32 childOfficeID = 1;
+}
+
+message proposedChildOffice {
+    string name = 1;
+    string address = 2;
+}
+
+message AttenderAppointmentRequest {
+    appointer appointer = 1;
+    appointee appointee = 2;
+}
+message OfficeHeadAppointmentRequest {
+    appointer appointer = 1;
+    appointee appointee = 2;
+    int32 childOfficeID = 3;
+}
+message appointer {
+    int32 id = 1;
+}
+
+message appointee {
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string phoneNumber = 4;
+}
+

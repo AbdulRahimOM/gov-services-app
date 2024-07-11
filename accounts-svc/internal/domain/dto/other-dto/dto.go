@@ -10,6 +10,9 @@ type LoggedInAdmin struct {
 	FName  string
 	LName  string
 	PhoneNumber string
+	// DeptID int32
+	// RankID int32
+	Designation string
 }
 
 type UserProfile struct {
@@ -28,4 +31,10 @@ type AdminProfile struct {
 	Address     string `json:"address" gorm:"column:address"`
 	Pincode     string `json:"pincode" gorm:"column:pincode"`
 	PhoneNumber string `json:"phoneNumber" gorm:"column:phone_number"`
+}
+
+type OfficeDetails struct {
+	ID               int32  `json:"id"`
+	Rank			 int32  `json:"rank"`
+	DeptID 		 int32  `json:"deptId"`
 }

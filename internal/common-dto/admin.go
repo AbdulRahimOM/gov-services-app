@@ -8,23 +8,16 @@ type Admin struct {
 	Address     string `json:"address" gorm:"column:address"`
 	Pincode     string `json:"pincode" gorm:"column:pincode"`
 	PhoneNumber string `json:"phoneNumber" gorm:"column:phone_number"`
-	DeptID      int32  `json:"deptId" gorm:"column:dept_id"`
+	OfficeId   int32  `json:"officeId" gorm:"column:office_id"`
+	// PostID      int32  `json:"postId" gorm:"column:post_id"`
 	Designation string `json:"designation" gorm:"column:designation"`
-	RankID      int32  `json:"rankId" gorm:"column:rank_id"`
-}
-
-type Department struct {
-	ID          int32  `json:"id"`
-	Name        string `json:"name" gorm:"column:name"`
-	Description string `json:"description" gorm:"column:description"`
 }
 
 type Office struct {
 	ID               int32  `json:"id"`
+	Name             string `json:"name" gorm:"column:name"`
 	DeptID           int32  `json:"deptId" gorm:"column:dept_id"`
-	HierarchyRank    int32  `json:"hierarchyRank" gorm:"column:hierarchy_rank"`
-	RegionName       string `json:"regionName" gorm:"column:region_name"`
-	HeadOfficerID    int32  `json:"headOfficerId" gorm:"column:head_officer"`
-	OfficeLocation   string `json:"officeLocation" gorm:"column:office_location"`
+	Rank             int32  `json:"rank" gorm:"column:hierarchy_rank"`
+	Address          string `json:"address" gorm:"column:address"`
 	SuperiorOfficeID int32  `json:"superiorOfficeId" gorm:"column:parent_office_id"`
 }

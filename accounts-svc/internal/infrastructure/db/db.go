@@ -35,13 +35,17 @@ func migrateTables() {
 		log.Fatal("Couldn't migrate models.Admin. Error:", err)
 	}
 
-	if err := DB.AutoMigrate(&models.Department{}); err != nil {
-		log.Fatal("Couldn't migrate models.Department. Error:", err)
-	}
-
 	if err := DB.AutoMigrate(&models.Office{}); err != nil {
 		log.Fatal("Couldn't migrate models.Office. Error:", err)
 	}
+
+	// if err := DB.AutoMigrate(&models.Department{}); err != nil {
+	// 	log.Fatal("Couldn't migrate models.Department. Error:", err)
+	// }
+
+	// if err:=DB.AutoMigrate(&models.Post{});err!=nil{
+	// 	log.Fatal("Couldn't migrate models.Post. Error:",err)
+	// }
 
 	fmt.Println("Migrated tables successfully")
 }

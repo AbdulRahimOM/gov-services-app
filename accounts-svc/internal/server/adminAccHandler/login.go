@@ -21,6 +21,7 @@ func (s *AdminAccountsServer) AdminLoginViaPassword(ctx context.Context, req *pb
 				FirstName:   resp.Admin.FName,
 				LastName:    resp.Admin.LName,
 				PhoneNumber: resp.Admin.PhoneNumber,
+				Designation: resp.Admin.Designation,
 			},
 		}, nil
 	}

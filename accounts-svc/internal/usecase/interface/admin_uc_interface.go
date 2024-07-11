@@ -6,6 +6,7 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
+	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 )
 
 type IAdminUC interface {
@@ -17,14 +18,16 @@ type IAdminUC interface {
 	AdminUpdateProfile(req *request.AdminUpdateProfile) (string, error)
 	AdminUpdatePasswordUsingOldPw(req *request.AdminUpdatePasswordUsingOldPw) (string, error)
 
-	//manage departments
-	AdminAddDept(req request.AdminAddDept) (int32, string, error)
-	AdminGetDepts() (*[]models.Department, string, error)
-
-	//manage offices
-	AdminGetOffices() (*[]models.Office, string, error)
+	AdminGetOffices(*request.OfficeSearchCriteria) (*[]models.Office, string, error)
 
 	//manage accounts
 	AdminGetAdmins(adminID int32, searchCriteria *request.AdminSearchCriteria) (*[]commondto.Admin, string, error)
-	AdminAddSubAdmin(req *request.AdminAddSubAdmin) (int32, string, error)
+}
+
+type IAppointmentUC interface {
+	// AppointOfficer(req *request.AppointOfficer) (int32, string, error)
+	AppointAttender(adminID int32, appointee *requests.Appointee) (int32, string, error)
+	CreateChildOffice(adminID int32, proposedChildOffice *requests.ProposedOffice) (int32, string, error)
+	AppointChildOfficeHead(adminID int32, childOfficeID int32, appointee *requests.Appointee) (int32, string, error)
+	AppointChildOfficeDeputyHead(adminID int32, childOfficeID int32, appointee *requests.Appointee) (int32, string, error)
 }

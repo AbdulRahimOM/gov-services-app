@@ -2,9 +2,12 @@ package server
 
 import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/config"
-	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler"
+	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/acc-handler"
+	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/appointments"
+	ksebhanlder "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/kseb"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/routes"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	ksebpb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -12,7 +15,9 @@ import (
 )
 
 type ServiceClients struct {
-	AccountsClient pb.AdminAccountServiceClient
+	AccountsClient     pb.AdminAccountServiceClient
+	AppointmentsClient pb.AppointmentServiceClient
+	KsebClient         ksebpb.KSEBServiceClient
 }
 
 func InitServiceClients() (*ServiceClients, error) {
@@ -22,12 +27,18 @@ func InitServiceClients() (*ServiceClients, error) {
 	}
 
 	return &ServiceClients{
-		AccountsClient: pb.NewAdminAccountServiceClient(clientConn),
+		AccountsClient:     pb.NewAdminAccountServiceClient(clientConn),
+		AppointmentsClient: pb.NewAppointmentServiceClient(clientConn),
+		KsebClient:         ksebpb.NewKSEBServiceClient(clientConn),
 	}, nil
 }
 
 func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
-	accountHandler := handler.NewAdminAccountHandler(serviceClients.AccountsClient)
+	accountHandler := acchandler.NewAdminAccountHandler(serviceClients.AccountsClient)
+	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient)
 
-	routes.RegisterRoutes(engine.Group("/"), accountHandler)
+	ksebHandler := ksebhanlder.NewAppointmentHandler(serviceClients.KsebClient)
+
+	routes.RegisterRoutes(engine.Group("/"), accountHandler, appointmentHandler)
+	routes.RegisterKSEBRoutes(engine.Group("/kseb"), ksebHandler)
 }

@@ -73,17 +73,6 @@ func (uc UserUseCase) VerifyOtpForSignUp(phone, otp *string) (*response.UserSign
 
 // SettingPwForNewUser
 func (uc UserUseCase) SettingPwForNewUser(userID int32, newPassword *string) (*response.NewUserSetPw, string, error) {
-	// //check if user exists	//no need as userID is taken from jwt token
-	// doUserExists, err := uc.userRepo.CheckIfUserExists(&userID)
-	// if err != nil {
-	// 	log.Printf("at database error: failed to check if user exists: %v", err)
-	// 	return nil, fmt.Errorf("at database error: failed to check if user exists: %v", err)
-	// }
-	// if !doUserExists {
-	// 	log.Printf("user does not exist")
-	// 	return nil, fmt.Errorf("user does not exist")
-	// }
-
 	hashedPassword, err := hashpassword.Hashpassword(*newPassword)
 	if err != nil {
 		return nil, respCode.OtherInternalError, fmt.Errorf("failed to hash password: %v", err)

@@ -1,4 +1,4 @@
-package handler
+package acchandler
 
 import (
 	"context"
@@ -32,9 +32,6 @@ func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) {
 				Address:     resp.Address,
 				PhoneNumber: resp.PhoneNumber,
 				Pincode:     resp.Pincode,
-				DeptID:      resp.DeptId,
-				Designation: resp.Designation,
-				RankID:      resp.RankId,
 			},
 		})
 	} else {

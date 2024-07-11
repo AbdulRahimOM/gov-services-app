@@ -2,15 +2,17 @@ package db
 
 import (
 	"log"
+	"time"
 
+	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
-	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
+	"github.com/AbdulRahimOM/gov-services-app/internal/project/data"
 )
 
-func init() {
-	initSuperAdminIfNotInitialized()
-}
+// func init() {
+
+// }
 
 const (
 	superAdminID          = 1
@@ -64,9 +66,11 @@ func initSuperAdminIfNotInitialized() {
 		LName:       superAdminLastName,
 		Username:    superAdminUsername,
 		HashedPW:    hashedPW,
-		RankID:      superAdminRankID,
-		Designation: superAdminDesignation,
-		DeptID:      superAdminDeptID,
+		OfficeID:    1,
+		Designation: data.Designation_SuperAdmin,
+		CreatedBy:   0,
+		CreatedAt:   time.Now(),
+		IsActive:    true,
 	}
 
 	result := DB.Create(&superAdmin)

@@ -25,7 +25,6 @@ const (
 	AdminAccountService_AdminUpdateProfile_FullMethodName            = "/AdminAccountService/AdminUpdateProfile"
 	AdminAccountService_AdminUpdatePasswordUsingOldPw_FullMethodName = "/AdminAccountService/AdminUpdatePasswordUsingOldPw"
 	AdminAccountService_AdminGetAdmins_FullMethodName                = "/AdminAccountService/AdminGetAdmins"
-	AdminAccountService_AdminAddSubAdmin_FullMethodName              = "/AdminAccountService/AdminAddSubAdmin"
 	AdminAccountService_AdminAddDept_FullMethodName                  = "/AdminAccountService/AdminAddDept"
 	AdminAccountService_AdminGetDepts_FullMethodName                 = "/AdminAccountService/AdminGetDepts"
 	AdminAccountService_AdminAddOffice_FullMethodName                = "/AdminAccountService/AdminAddOffice"
@@ -44,13 +43,12 @@ type AdminAccountServiceClient interface {
 	AdminUpdatePasswordUsingOldPw(ctx context.Context, in *AdminUpdatePasswordUsingOldPwRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// manage account
 	AdminGetAdmins(ctx context.Context, in *AdminGetAdminsRequest, opts ...grpc.CallOption) (*AdminGetAdminsResponse, error)
-	AdminAddSubAdmin(ctx context.Context, in *AdminAddSubAdminRequest, opts ...grpc.CallOption) (*AdminAddSubAdminResponse, error)
 	// manage dept
 	AdminAddDept(ctx context.Context, in *AdminAddDeptRequest, opts ...grpc.CallOption) (*AdminAddDeptResponse, error)
 	AdminGetDepts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AdminGetDeptsResponse, error)
 	// manage offices
 	AdminAddOffice(ctx context.Context, in *AdminAddOfficeRequest, opts ...grpc.CallOption) (*AdminAddOfficeResponse, error)
-	AdminGetOffices(ctx context.Context, in *AdminGetOfficesRequest, opts ...grpc.CallOption) (*AdminGetOfficesResponse, error)
+	AdminGetOffices(ctx context.Context, in *OfficeSearchCriteria, opts ...grpc.CallOption) (*AdminGetOfficesResponse, error)
 }
 
 type adminAccountServiceClient struct {
@@ -106,15 +104,6 @@ func (c *adminAccountServiceClient) AdminGetAdmins(ctx context.Context, in *Admi
 	return out, nil
 }
 
-func (c *adminAccountServiceClient) AdminAddSubAdmin(ctx context.Context, in *AdminAddSubAdminRequest, opts ...grpc.CallOption) (*AdminAddSubAdminResponse, error) {
-	out := new(AdminAddSubAdminResponse)
-	err := c.cc.Invoke(ctx, AdminAccountService_AdminAddSubAdmin_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *adminAccountServiceClient) AdminAddDept(ctx context.Context, in *AdminAddDeptRequest, opts ...grpc.CallOption) (*AdminAddDeptResponse, error) {
 	out := new(AdminAddDeptResponse)
 	err := c.cc.Invoke(ctx, AdminAccountService_AdminAddDept_FullMethodName, in, out, opts...)
@@ -142,7 +131,7 @@ func (c *adminAccountServiceClient) AdminAddOffice(ctx context.Context, in *Admi
 	return out, nil
 }
 
-func (c *adminAccountServiceClient) AdminGetOffices(ctx context.Context, in *AdminGetOfficesRequest, opts ...grpc.CallOption) (*AdminGetOfficesResponse, error) {
+func (c *adminAccountServiceClient) AdminGetOffices(ctx context.Context, in *OfficeSearchCriteria, opts ...grpc.CallOption) (*AdminGetOfficesResponse, error) {
 	out := new(AdminGetOfficesResponse)
 	err := c.cc.Invoke(ctx, AdminAccountService_AdminGetOffices_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -163,13 +152,12 @@ type AdminAccountServiceServer interface {
 	AdminUpdatePasswordUsingOldPw(context.Context, *AdminUpdatePasswordUsingOldPwRequest) (*emptypb.Empty, error)
 	// manage account
 	AdminGetAdmins(context.Context, *AdminGetAdminsRequest) (*AdminGetAdminsResponse, error)
-	AdminAddSubAdmin(context.Context, *AdminAddSubAdminRequest) (*AdminAddSubAdminResponse, error)
 	// manage dept
 	AdminAddDept(context.Context, *AdminAddDeptRequest) (*AdminAddDeptResponse, error)
 	AdminGetDepts(context.Context, *emptypb.Empty) (*AdminGetDeptsResponse, error)
 	// manage offices
 	AdminAddOffice(context.Context, *AdminAddOfficeRequest) (*AdminAddOfficeResponse, error)
-	AdminGetOffices(context.Context, *AdminGetOfficesRequest) (*AdminGetOfficesResponse, error)
+	AdminGetOffices(context.Context, *OfficeSearchCriteria) (*AdminGetOfficesResponse, error)
 	mustEmbedUnimplementedAdminAccountServiceServer()
 }
 
@@ -192,9 +180,6 @@ func (UnimplementedAdminAccountServiceServer) AdminUpdatePasswordUsingOldPw(cont
 func (UnimplementedAdminAccountServiceServer) AdminGetAdmins(context.Context, *AdminGetAdminsRequest) (*AdminGetAdminsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminGetAdmins not implemented")
 }
-func (UnimplementedAdminAccountServiceServer) AdminAddSubAdmin(context.Context, *AdminAddSubAdminRequest) (*AdminAddSubAdminResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AdminAddSubAdmin not implemented")
-}
 func (UnimplementedAdminAccountServiceServer) AdminAddDept(context.Context, *AdminAddDeptRequest) (*AdminAddDeptResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminAddDept not implemented")
 }
@@ -204,7 +189,7 @@ func (UnimplementedAdminAccountServiceServer) AdminGetDepts(context.Context, *em
 func (UnimplementedAdminAccountServiceServer) AdminAddOffice(context.Context, *AdminAddOfficeRequest) (*AdminAddOfficeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminAddOffice not implemented")
 }
-func (UnimplementedAdminAccountServiceServer) AdminGetOffices(context.Context, *AdminGetOfficesRequest) (*AdminGetOfficesResponse, error) {
+func (UnimplementedAdminAccountServiceServer) AdminGetOffices(context.Context, *OfficeSearchCriteria) (*AdminGetOfficesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdminGetOffices not implemented")
 }
 func (UnimplementedAdminAccountServiceServer) mustEmbedUnimplementedAdminAccountServiceServer() {}
@@ -310,24 +295,6 @@ func _AdminAccountService_AdminGetAdmins_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminAccountService_AdminAddSubAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AdminAddSubAdminRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminAccountServiceServer).AdminAddSubAdmin(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AdminAccountService_AdminAddSubAdmin_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminAccountServiceServer).AdminAddSubAdmin(ctx, req.(*AdminAddSubAdminRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _AdminAccountService_AdminAddDept_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AdminAddDeptRequest)
 	if err := dec(in); err != nil {
@@ -383,7 +350,7 @@ func _AdminAccountService_AdminAddOffice_Handler(srv interface{}, ctx context.Co
 }
 
 func _AdminAccountService_AdminGetOffices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AdminGetOfficesRequest)
+	in := new(OfficeSearchCriteria)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -395,7 +362,7 @@ func _AdminAccountService_AdminGetOffices_Handler(srv interface{}, ctx context.C
 		FullMethod: AdminAccountService_AdminGetOffices_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminAccountServiceServer).AdminGetOffices(ctx, req.(*AdminGetOfficesRequest))
+		return srv.(AdminAccountServiceServer).AdminGetOffices(ctx, req.(*OfficeSearchCriteria))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -426,10 +393,6 @@ var AdminAccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AdminGetAdmins",
 			Handler:    _AdminAccountService_AdminGetAdmins_Handler,
-		},
-		{
-			MethodName: "AdminAddSubAdmin",
-			Handler:    _AdminAccountService_AdminAddSubAdmin_Handler,
 		},
 		{
 			MethodName: "AdminAddDept",

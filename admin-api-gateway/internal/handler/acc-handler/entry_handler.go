@@ -1,4 +1,4 @@
-package handler
+package acchandler
 
 import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/request"
@@ -34,9 +34,10 @@ func (u *AdminAccountHandler) AdminLoginViaPassword(c *gin.Context) {
 				FirstName:   resp.AdminDetails.FirstName,
 				LastName:    resp.AdminDetails.LastName,
 				PhoneNumber: resp.AdminDetails.PhoneNumber,
-				DeptID:      resp.AdminDetails.DeptId,
-				RankID:      resp.AdminDetails.RankId,
+				// DeptID:      resp.AdminDetails.DeptId,
+				// RankID:      resp.AdminDetails.RankId,
 				Designation: resp.AdminDetails.Designation,
+
 			},
 			Token: resp.Token,
 		})

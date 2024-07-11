@@ -5,10 +5,7 @@ type AdminAddSubAdmin struct {
 	LastName    string `json:"last_name" binding:"required" validate:"gte=2,lte=20"`
 	Email       string `json:"email" binding:"required" validate:"email"`
 	PhoneNumber string `json:"phone_number" validate:"omitempty,e164,len=13"`
-	DeptID      int32  `json:"dept_id" binding:"required" validate:"min=1,number"`
-	Designation string `json:"designation" binding:"required" validate:"gte=2,lte=50"`
-	RankID      int32  `json:"rank_id" binding:"required" validate:"min=1,number"`
-	OfficeID    int32  `json:"office_id" binding:"required" validate:"min=1,number"`
+	PostID      int32  `json:"post_id" binding:"required" validate:"min=1,number"`
 }
 
 type AdminAddDept struct {

@@ -25,6 +25,8 @@ const (
 
 	//Data
 	AlreadyExists = "DATA-ERR-001"
+	PostOccupied  = "DATA-ERR-002"
+	NameExists = "DATA-ERR-003"
 
 	//Internal
 	DBError                = "INT-ERR-001"
@@ -37,6 +39,11 @@ const (
 	GrpcUnimplementedHandler = "BUG-ERR-002" //Caution: Missing handler in the grpc server
 	BugNoAdminInContext      = "BUG-ERR-003" //Caution: If admin is not set in context by the middleware
 	FailureToGenerate        = "BUG-ERR-004" //Caution: If failed to generate something
+
+	//Appointments
+	NoEnoughRank = "APT-ERR-001"
+	PostAlreadyOccupied = "APT-ERR-002"
+
 )
 
 var errCodeMap = map[string]codes.Code{}
