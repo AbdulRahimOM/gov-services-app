@@ -64,6 +64,11 @@ func init() {
 	errCodeMap[TokenExpired] = codes.PermissionDenied                //ACC-ERR-007
 	errCodeMap[NotEnoughPermissionsInToken] = codes.PermissionDenied //ACC-ERR-008
 
+	//Data
+	errCodeMap[AlreadyExists] = codes.AlreadyExists //DATA-ERR-001
+	errCodeMap[PostOccupied] = codes.AlreadyExists  //DATA-ERR-002
+	errCodeMap[NameExists] = codes.AlreadyExists  //DATA-ERR-003
+
 	//Internal
 	errCodeMap[DBError] = codes.Internal                //INT-ERR-001
 	errCodeMap[OtherInternalError] = codes.Internal     //INT-ERR-002
@@ -74,6 +79,11 @@ func init() {
 	errCodeMap[BugNoUserInContext] = codes.Unimplemented       //BUG-ERR-001
 	errCodeMap[GrpcUnimplementedHandler] = codes.Unimplemented //BUG-ERR-002
 	errCodeMap[BugNoAdminInContext] = codes.Unimplemented      //BUG-ERR-003
+	errCodeMap[FailureToGenerate] = codes.Unimplemented         //BUG-ERR-004
+
+	//Appointments
+	errCodeMap[NoEnoughRank] = codes.PermissionDenied //APT-ERR-001
+	errCodeMap[PostAlreadyOccupied] = codes.AlreadyExists //APT-ERR-002
 }
 
 // GetGRPCCode returns the grpc code for the given error code string of the application

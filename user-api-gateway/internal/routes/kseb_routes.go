@@ -14,6 +14,7 @@ func RegisterKsebRoutes(engine *gin.RouterGroup, ksebHandler *ksebhandler.KsebHa
 	authGroup.Use(middleware.UserAuthCheck)
 	{
 		authGroup.PUT("/add-consumer-number", ksebHandler.AddConsumerNumber)
+		authGroup.GET("/get-my-consumer-numbers", ksebHandler.GetUserConsumerNumbers)
 	}
 
 

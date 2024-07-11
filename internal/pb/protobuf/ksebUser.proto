@@ -5,9 +5,25 @@ import "google/protobuf/empty.proto";
 
 service KSEBUserService {
     rpc AddConsumerNumber(AddConsumerNumberRequest) returns (google.protobuf.Empty){}
+    rpc GetUserConsumerNumbers(GetUserConsumerNumbersRequest) returns (GetUserConsumerNumbersResponse){}
 }
 
 message AddConsumerNumberRequest {
     int32 userId = 1;
     string consumerNumber = 2;
+    string nickName = 3;
+}
+
+message GetUserConsumerNumbersRequest {
+    int32 userId = 1;
+}
+
+message GetUserConsumerNumbersResponse {
+    repeated ConsumerNumber consumerNumbers = 1;
+}
+
+message ConsumerNumber {
+    int32 id = 1;
+    string consumerNumber = 2;
+    string nickName = 3;
 }

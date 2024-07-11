@@ -20,7 +20,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KSEBUserService_AddConsumerNumber_FullMethodName = "/KSEBUserService/AddConsumerNumber"
+	KSEBUserService_AddConsumerNumber_FullMethodName      = "/KSEBUserService/AddConsumerNumber"
+	KSEBUserService_GetUserConsumerNumbers_FullMethodName = "/KSEBUserService/GetUserConsumerNumbers"
 )
 
 // KSEBUserServiceClient is the client API for KSEBUserService service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KSEBUserServiceClient interface {
 	AddConsumerNumber(ctx context.Context, in *AddConsumerNumberRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetUserConsumerNumbers(ctx context.Context, in *GetUserConsumerNumbersRequest, opts ...grpc.CallOption) (*GetUserConsumerNumbersResponse, error)
 }
 
 type kSEBUserServiceClient struct {
@@ -47,11 +49,21 @@ func (c *kSEBUserServiceClient) AddConsumerNumber(ctx context.Context, in *AddCo
 	return out, nil
 }
 
+func (c *kSEBUserServiceClient) GetUserConsumerNumbers(ctx context.Context, in *GetUserConsumerNumbersRequest, opts ...grpc.CallOption) (*GetUserConsumerNumbersResponse, error) {
+	out := new(GetUserConsumerNumbersResponse)
+	err := c.cc.Invoke(ctx, KSEBUserService_GetUserConsumerNumbers_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KSEBUserServiceServer is the server API for KSEBUserService service.
 // All implementations must embed UnimplementedKSEBUserServiceServer
 // for forward compatibility
 type KSEBUserServiceServer interface {
 	AddConsumerNumber(context.Context, *AddConsumerNumberRequest) (*emptypb.Empty, error)
+	GetUserConsumerNumbers(context.Context, *GetUserConsumerNumbersRequest) (*GetUserConsumerNumbersResponse, error)
 	mustEmbedUnimplementedKSEBUserServiceServer()
 }
 
@@ -61,6 +73,9 @@ type UnimplementedKSEBUserServiceServer struct {
 
 func (UnimplementedKSEBUserServiceServer) AddConsumerNumber(context.Context, *AddConsumerNumberRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddConsumerNumber not implemented")
+}
+func (UnimplementedKSEBUserServiceServer) GetUserConsumerNumbers(context.Context, *GetUserConsumerNumbersRequest) (*GetUserConsumerNumbersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserConsumerNumbers not implemented")
 }
 func (UnimplementedKSEBUserServiceServer) mustEmbedUnimplementedKSEBUserServiceServer() {}
 
@@ -93,6 +108,24 @@ func _KSEBUserService_AddConsumerNumber_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KSEBUserService_GetUserConsumerNumbers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserConsumerNumbersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KSEBUserServiceServer).GetUserConsumerNumbers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KSEBUserService_GetUserConsumerNumbers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KSEBUserServiceServer).GetUserConsumerNumbers(ctx, req.(*GetUserConsumerNumbersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // KSEBUserService_ServiceDesc is the grpc.ServiceDesc for KSEBUserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -103,6 +136,10 @@ var KSEBUserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddConsumerNumber",
 			Handler:    _KSEBUserService_AddConsumerNumber_Handler,
+		},
+		{
+			MethodName: "GetUserConsumerNumbers",
+			Handler:    _KSEBUserService_GetUserConsumerNumbers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
