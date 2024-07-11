@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "./pb/generated/ksebpb;ksebpb";
+import "google/protobuf/empty.proto";
+
+service KSEBUserService {
+    rpc AddConsumerNumber(AddConsumerNumberRequest) returns (google.protobuf.Empty){}
+}
+
+message AddConsumerNumberRequest {
+    int32 userId = 1;
+    string consumerNumber = 2;
+}

@@ -25,12 +25,13 @@ func main() {
 		log.Println("Account Service >>>>>> Listening on port: ", config.EnvValues.Port)
 	}
 
-	userAccSvcServer, adminAccSvcServer, adminAppointmentsSvcServer, ksebServer := server.InitializeServer()
+	userAccSvcServer, adminAccSvcServer, adminAppointmentsSvcServer, ksebAdminServer,ksebUserServer := server.InitializeServer()
 	grpcServer := grpc.NewServer()
 	pb.RegisterUserAccountServiceServer(grpcServer, userAccSvcServer)
 	pb.RegisterAdminAccountServiceServer(grpcServer, adminAccSvcServer)
 	pb.RegisterAppointmentServiceServer(grpcServer, adminAppointmentsSvcServer)
-	ksebpb.RegisterKSEBServiceServer(grpcServer, ksebServer)
+	ksebpb.RegisterKSEBAdminServiceServer(grpcServer, ksebAdminServer)
+	ksebpb.RegisterKSEBUserServiceServer(grpcServer, ksebUserServer)
 
 	err = grpcServer.Serve(lis)
 	if err != nil {

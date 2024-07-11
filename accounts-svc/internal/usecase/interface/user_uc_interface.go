@@ -26,3 +26,5 @@ type IUserUC interface {
 	UserUpdatePasswordUsingOldPw(req *request.UserUpdatePasswordUsingOldPw) (string, error)
 }
 
+type IKsebUserUC interface {
+}

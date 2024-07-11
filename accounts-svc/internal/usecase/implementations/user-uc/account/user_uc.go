@@ -1,4 +1,4 @@
-package useruc
+package userAccUC
 
 import (
 	"log"

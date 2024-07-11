@@ -1,9 +1,11 @@
 package server
 
 import (
+	ksebhandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/kseb-handler"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	"github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/config"
-	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler"
+	acchandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/account-handler"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +15,7 @@ import (
 
 type ServiceClients struct {
 	UserAccountsClient pb.UserAccountServiceClient
+	KsebClient         ksebpb.KSEBUserServiceClient
 }
 
 func InitServiceClients() (*ServiceClients, error) {
@@ -23,11 +26,14 @@ func InitServiceClients() (*ServiceClients, error) {
 
 	return &ServiceClients{
 		UserAccountsClient: pb.NewUserAccountServiceClient(clientConn),
+		KsebClient:         ksebpb.NewKSEBUserServiceClient(clientConn),
 	}, nil
 }
 
 func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
-	accountHandler := handler.NewUserAccountHandler(serviceClients.UserAccountsClient)
+	accountHandler := acchandler.NewUserAccountHandler(serviceClients.UserAccountsClient)
+	ksebHandler := ksebhandler.NewKsebHandler(serviceClients.KsebClient)
 
 	routes.RegisterRoutes(engine.Group("/"), accountHandler)
+	routes.RegisterKsebRoutes(engine.Group("/kseb"), ksebHandler)
 }

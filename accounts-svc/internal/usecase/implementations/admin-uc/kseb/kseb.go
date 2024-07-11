@@ -10,20 +10,20 @@ import (
 	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 )
 
-type KsebUseCase struct {
+type KsebAdminUseCase struct {
 	adminRepo repo.IAdminRepo
 	ksebRepo  repo.IKsebRepo
 }
 
-func NewKsebUseCase(adminRepo repo.IAdminRepo, ksebRepo repo.IKsebRepo) usecase.IKsebUC {
-	return &KsebUseCase{
+func NewKsebAdminUseCase(adminRepo repo.IAdminRepo, ksebRepo repo.IKsebRepo) usecase.IKsebAdminUC {
+	return &KsebAdminUseCase{
 		adminRepo: adminRepo,
 		ksebRepo:  ksebRepo,
 	}
 }
 
 // RegisterSectionCode
-func (k *KsebUseCase) RegisterSectionCode(adminID int32, req *requests.KsebRegSectionCode) (int32, string, error) {
+func (k *KsebAdminUseCase) RegisterSectionCode(adminID int32, req *requests.KsebRegSectionCode) (int32, string, error) {
 	//1. check if office exists with the given section office id
 	//2. check if it is section office (by rank(8) and dept id)
 	//get office details

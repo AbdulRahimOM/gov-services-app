@@ -17,7 +17,7 @@ import (
 type ServiceClients struct {
 	AccountsClient     pb.AdminAccountServiceClient
 	AppointmentsClient pb.AppointmentServiceClient
-	KsebClient         ksebpb.KSEBServiceClient
+	KsebClient         ksebpb.KSEBAdminServiceClient
 }
 
 func InitServiceClients() (*ServiceClients, error) {
@@ -29,7 +29,7 @@ func InitServiceClients() (*ServiceClients, error) {
 	return &ServiceClients{
 		AccountsClient:     pb.NewAdminAccountServiceClient(clientConn),
 		AppointmentsClient: pb.NewAppointmentServiceClient(clientConn),
-		KsebClient:         ksebpb.NewKSEBServiceClient(clientConn),
+		KsebClient:         ksebpb.NewKSEBAdminServiceClient(clientConn),
 	}, nil
 }
 

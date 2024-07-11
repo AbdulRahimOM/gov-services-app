@@ -12,10 +12,10 @@ import (
 )
 
 type KSEBHandler struct {
-	ksebClient ksebpb.KSEBServiceClient
+	ksebClient ksebpb.KSEBAdminServiceClient
 }
 
-func NewAppointmentHandler(client ksebpb.KSEBServiceClient) *KSEBHandler {
+func NewAppointmentHandler(client ksebpb.KSEBAdminServiceClient) *KSEBHandler {
 	return &KSEBHandler{
 		ksebClient: client,
 	}

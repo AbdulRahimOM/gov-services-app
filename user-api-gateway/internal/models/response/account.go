@@ -2,7 +2,6 @@ package response
 
 type UserLogin struct {
 	Status string `json:"status"`
-	// Msg      string        `json:"message"`
 	UserData UserBasicData `json:"user"`
 	Token    string        `json:"token"`
 }
@@ -29,18 +28,27 @@ type PreliminaryUserData struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
-// message UserSignUpVerifyOTPResponse {
-//     string message = 1;
-//     string token = 2;
-//     SignedUpUserDetails userDetails = 3;
-// }
-// message SignedUpUserDetails {
-//     int32 id = 1;
-//     string phoneNumber = 4;
-// }
-
 type UserVerifyOTPForPwChangeResponse struct {
 	Status    string `json:"status"`
 	Msg       string `json:"message"`
 	TempToken string `json:"tempToken"`
+}
+
+type GetOTPResponse struct {
+	Status      string `json:"status"`
+	Last4Digits string `json:"last4Digits"`
+}
+
+type UserGetProfileResponse struct {
+	Status  string  `json:"status"`
+	Profile Profile `json:"profile"`
+}
+
+type Profile struct {
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	Email       string `json:"email"`
+	Address     string `json:"address"`
+	Pincode     string `json:"pincode"`
+	PhoneNumber string `json:"phoneNumber"`
 }

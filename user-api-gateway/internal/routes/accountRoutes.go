@@ -1,13 +1,13 @@
 package routes
 
 import (
-	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler"
+	acchandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/account-handler"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(engine *gin.RouterGroup, userAccHandler *handler.UserAccountHandler) {
+func RegisterRoutes(engine *gin.RouterGroup, userAccHandler *acchandler.UserAccountHandler) {
 	engine.Use(middleware.ClearCache)
 
 	//routes for those who are not logged in______________________________________________

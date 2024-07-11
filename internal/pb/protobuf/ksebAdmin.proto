@@ -3,7 +3,7 @@ syntax = "proto3";
 option go_package = "./pb/generated/ksebpb;ksebpb";
 import "google/protobuf/empty.proto";
 
-service KSEBService {
+service KSEBAdminService {
     rpc RegisterSectionCode(RegisterSectionCodeRequest) returns (google.protobuf.Empty) {}
 }
 

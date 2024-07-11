@@ -1,4 +1,4 @@
-package ksebHandler
+package ksebAdminHandler
 
 import (
 	"context"
@@ -10,18 +10,18 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-type KsebServer struct {
-	KsebUseCase ucinterface.IKsebUC
-	ksebpb.UnimplementedKSEBServiceServer
+type KSEBAdminServer struct {
+	KsebUseCase ucinterface.IKsebAdminUC
+	ksebpb.UnimplementedKSEBAdminServiceServer
 }
 
-func NewKsebServer(ksebUseCase ucinterface.IKsebUC) *KsebServer {
-	return &KsebServer{
+func NewKSEBAdminServer(ksebUseCase ucinterface.IKsebAdminUC) *KSEBAdminServer {
+	return &KSEBAdminServer{
 		KsebUseCase: ksebUseCase,
 	}
 }
 
-func (k *KsebServer) RegisterSectionCode(ctx context.Context, req *ksebpb.RegisterSectionCodeRequest) (*emptypb.Empty, error) {
+func (k *KSEBAdminServer) RegisterSectionCode(ctx context.Context, req *ksebpb.RegisterSectionCodeRequest) (*emptypb.Empty, error) {
 	regSectionCodeReq := requests.KsebRegSectionCode{
 		SectionCode: req.SectionCode,
 		OfficeId:    req.OfficeId,
