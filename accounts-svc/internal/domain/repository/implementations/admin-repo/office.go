@@ -9,6 +9,15 @@ import (
 	dberror "github.com/AbdulRahimOM/gov-services-app/internal/std-response/error/db"
 )
 
+func (ur AdminRepository) CheckIfOfficeExists(officeID int32) (bool, error) {
+	var count int64
+	result := ur.DB.Raw("SELECT COUNT(*) FROM offices WHERE id=?", officeID).Scan(&count)
+	if result.Error != nil {
+		return false, fmt.Errorf("@db: failed to check if office exists: %v", result.Error)
+	}
+	return count > 0, nil
+}
+
 func (ur AdminRepository) GetRankOfOffice(officeID int32) (int32, error) {
 	var rank int32
 	result := ur.DB.Raw("SELECT rank FROM offices WHERE id=?", officeID).Scan(&rank)
@@ -51,6 +60,18 @@ func (ur AdminRepository) GetOfficeDetailsByAdminID(adminID int32) (*dto.OfficeD
 		return nil, dberror.ErrRecordNotFound
 	}
 	
+	return &officeDetails, nil
+}
+
+func (ur AdminRepository) GetOfficeDetailsByOfficeID(officeID int32) (*dto.OfficeDetails, error) {
+	var officeDetails dto.OfficeDetails
+	result := ur.DB.Raw("SELECT id, rank, dept_id FROM offices WHERE id=?", officeID).Scan(&officeDetails)
+	if result.Error != nil {
+		return nil, fmt.Errorf("@db: failed to get office details: %v", result.Error)
+	}
+	if result.RowsAffected == 0 {
+		return nil, dberror.ErrRecordNotFound
+	}
 	return &officeDetails, nil
 }
 

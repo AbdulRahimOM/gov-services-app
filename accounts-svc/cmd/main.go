@@ -5,9 +5,10 @@ import (
 	"net"
 
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
+	db "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/infrastructure/db"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
-	db "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/infrastructure/db"
+	ksebpb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
 
 	"google.golang.org/grpc"
 )
@@ -24,11 +25,12 @@ func main() {
 		log.Println("Account Service >>>>>> Listening on port: ", config.EnvValues.Port)
 	}
 
-	userAccSvcServer, adminAccSvcServer, adminAppointmentsSvcServer := server.InitializeServer()
+	userAccSvcServer, adminAccSvcServer, adminAppointmentsSvcServer, ksebServer := server.InitializeServer()
 	grpcServer := grpc.NewServer()
 	pb.RegisterUserAccountServiceServer(grpcServer, userAccSvcServer)
 	pb.RegisterAdminAccountServiceServer(grpcServer, adminAccSvcServer)
 	pb.RegisterAppointmentServiceServer(grpcServer, adminAppointmentsSvcServer)
+	ksebpb.RegisterKSEBServiceServer(grpcServer, ksebServer)
 
 	err = grpcServer.Serve(lis)
 	if err != nil {

@@ -19,6 +19,15 @@ func NewAdminRepository(db *gorm.DB) repointerface.IAdminRepo {
 	return &AdminRepository{DB: db}
 }
 
+func (ur AdminRepository) GetDesignationByAdminID(adminID int32) (string, error) {
+	var designation string
+	result := ur.DB.Raw("SELECT designation FROM admins WHERE id=?", adminID).Scan(&designation)
+	if result.Error != nil {
+		return "", result.Error
+	}
+	return designation, nil
+}
+
 func (ur AdminRepository) CheckIfOfficeNameExists(name *string) (bool, error) {
 	var count int64
 	result := ur.DB.Raw("SELECT COUNT(*) FROM offices WHERE name=?", *name).Scan(&count)

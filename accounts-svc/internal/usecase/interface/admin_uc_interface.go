@@ -31,3 +31,7 @@ type IAppointmentUC interface {
 	AppointChildOfficeHead(adminID int32, childOfficeID int32, appointee *requests.Appointee) (int32, string, error)
 	AppointChildOfficeDeputyHead(adminID int32, childOfficeID int32, appointee *requests.Appointee) (int32, string, error)
 }
+
+type IKsebUC interface {
+	RegisterSectionCode(adminId int32, req *requests.KsebRegSectionCode) (savedRecordId int32, responseCode string, err error)
+}

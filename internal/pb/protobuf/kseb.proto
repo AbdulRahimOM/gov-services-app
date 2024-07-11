@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "./pb/generated/ksebpb;ksebpb";
+import "google/protobuf/empty.proto";
+
+service KSEBService {
+    rpc RegisterSectionCode(RegisterSectionCodeRequest) returns (google.protobuf.Empty) {}
+}
+
+message RegisterSectionCodeRequest {
+    int32 adminId = 1;
+    string sectionCode = 2;
+    int32 officeId = 3;
+}
