@@ -9,3 +9,11 @@ type UserAddConsumerNumber struct {
 	ConsumerNumber string `json:"consumer_number" binding:"required" validate:"len=13,numeric"`
 	NickName       string `json:"nick_name" `
 }
+
+type KSEBComplaint struct {
+	Type           string `json:"type" binding:"required" validate:"oneof=standard custom"`
+	Category       string `json:"category" binding:"required" validate:"oneof=kseb"`
+	Title          string `json:"title" binding:"required" validate:"gte=5,lte=50"`
+	Description    string `json:"description" binding:"required" validate:"gte=10,lte=500"`
+	ConsumerNumber string `json:"consumer_number" binding:"required" validate:"len=13,numeric"`
+}

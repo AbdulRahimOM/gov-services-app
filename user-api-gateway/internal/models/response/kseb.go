@@ -10,3 +10,12 @@ type Connection struct {
 	ConsumerNumber string `json:"consumer_number"`
 	NickName string `json:"name"`
 }
+
+type KSEB_RaiseComplaint struct {
+	Status string `json:"status"`
+	ComplaintDetails ComplaintDetails `json:"complaint_details"`
+}
+
+type ComplaintDetails struct {
+	Id int32 `json:"id"`
+}

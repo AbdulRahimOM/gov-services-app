@@ -4,6 +4,7 @@ import (
 	"context"
 
 	ucinterface "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/interface"
+	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	ksebpb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -45,6 +46,24 @@ func (k *KSEBUserServer) GetUserConsumerNumbers(ctx context.Context, req *ksebpb
 
 		return &ksebpb.GetUserConsumerNumbersResponse{
 			ConsumerNumbers: conns,
+		}, nil
+	}
+}
+
+func (k *KSEBUserServer) RaiseComplaint(ctx context.Context, req *ksebpb.RaiseComplaintRequest) (*ksebpb.RaiseComplaintResponse, error) {
+	complaint:=requests.KSEBComplaint{
+		Type: req.Complaint.Type,
+		Category: req.Complaint.Category,
+		Title: req.Complaint.Title,
+		Description: req.Complaint.Description,
+		ConsumerNumber: req.Complaint.ConsumerNumber,
+	}
+	complaintId,responseCode, err := k.KsebUseCase.RaiseComplaint(req.UserId, &complaint)
+	if err != nil {
+		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
+	} else {
+		return &ksebpb.RaiseComplaintResponse{
+			ComplaintId: complaintId,
 		}, nil
 	}
 }

@@ -2,10 +2,13 @@ package ksebUserUc
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
 	repo "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/interface"
 	usecase "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/interface"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
+	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 )
 
@@ -62,4 +65,24 @@ func (u *KsebUserUseCase) GetUserConsumerNumbers(userID int32) (*[]commondto.Use
 	}
 
 	return consumerNumbers, "", nil
+}
+
+// RaiseComplaint
+func (u *KsebUserUseCase) RaiseComplaint(userID int32, complaint *requests.KSEBComplaint) (int32, string, error) {
+	entry := models.KsebComplaint{
+		UserID:         userID,
+		Type:           complaint.Type,
+		Title:          complaint.Title,
+		Description:    complaint.Description,
+		ConsumerNumber: complaint.ConsumerNumber,
+		Status:         "pending",
+		IsClosed:       false,
+		CreatedAt:      time.Now(),
+	}
+	complaintID, err := u.ksebRepo.RaiseComplaint(userID, &entry)
+	if err != nil {
+		return 0, respcode.DBError, fmt.Errorf("@db error while raising complaint: %v", err)
+	}
+
+	return complaintID, "", nil
 }

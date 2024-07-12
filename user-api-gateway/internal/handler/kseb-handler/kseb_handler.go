@@ -74,3 +74,37 @@ func (k *KsebHandler) GetUserConsumerNumbers(c *gin.Context) {
 		gateway.HandleGrpcStatus(c, err)
 	}
 }
+
+// RaiseComplaint
+func (k *KsebHandler) RaiseComplaint(c *gin.Context) {
+	var req requests.KSEBComplaint
+
+	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
+		return
+	}
+
+	userID, ok := gateway.GetUserIdFromContext(c)
+	if !ok {
+		return
+	}
+
+	resp, err := k.ksebClient.RaiseComplaint(c, &ksebpb.RaiseComplaintRequest{
+		UserId:    userID,
+		Complaint: &ksebpb.Complaint{
+			Type:        req.Type,
+			Category:    req.Category,
+			Title:       req.Title,
+			Description: req.Description,
+		},
+	})
+	if err == nil {
+		c.JSON(200, response.KSEB_RaiseComplaint{
+			Status: mystatus.Success,
+			ComplaintDetails: response.ComplaintDetails{
+				Id: resp.ComplaintId,
+			},
+		})
+	} else {
+		gateway.HandleGrpcStatus(c, err)
+	}
+}
