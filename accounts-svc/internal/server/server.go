@@ -9,7 +9,7 @@ import (
 	appointmentsHandler "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/admin/appointmentsHandler"
 	ksebHandler "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/admin/kseb-handler"
 	ksebUserHandler "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/user/kseb-handler"
-	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/userAccHandler"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/server/user/accHandler"
 	adminuc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc/admin-account"
 	appointmentsuc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc/appointments"
 	ksebuc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc/kseb"
