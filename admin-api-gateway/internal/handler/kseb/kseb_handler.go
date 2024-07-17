@@ -13,14 +13,16 @@ import (
 )
 
 type KSEBHandler struct {
-	accClient pb.KSEBAdminAccServiceClient
+	accClient         pb.KSEBAdminAccServiceClient
 	agencyAdminClient pb.KSEBAgencyAdminServiceClient
+	ksebChatClient    pb.KsebChatServiceClient
 }
 
-func NewKsebHandler(accClient pb.KSEBAdminAccServiceClient, agencyAdminClient pb.KSEBAgencyAdminServiceClient) *KSEBHandler {
+func NewKsebHandler(accClient pb.KSEBAdminAccServiceClient, agencyAdminClient pb.KSEBAgencyAdminServiceClient, ksebChatClient pb.KsebChatServiceClient) *KSEBHandler {
 	return &KSEBHandler{
-		accClient: accClient,
+		accClient:         accClient,
 		agencyAdminClient: agencyAdminClient,
+		ksebChatClient:    ksebChatClient,
 	}
 }
 
@@ -79,7 +81,7 @@ func (kseb *KSEBHandler) AdminGetComplaints(c *gin.Context) {
 				Title:          complaint.Title,
 				Description:    complaint.Description,
 				ConsumerNumber: complaint.ConsumerNumber,
-				AttendederID:   complaint.AttendederID,
+				AttenderID:     complaint.AttenderID,
 				Status:         complaint.Status,
 				CreatedAt:      complaint.CreatedAt,
 				Remarks:        complaint.Remarks,

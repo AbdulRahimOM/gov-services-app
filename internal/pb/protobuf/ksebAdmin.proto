@@ -14,6 +14,12 @@ service KSEBAgencyAdminService {
     rpc GetComplaints(GetComplaintsRequest) returns (GetComplaintsResponse) {}
     rpc OpenComplaint(OpenComplaintRequest) returns (KsebComplaint) {}
     rpc CloseComplaint(CloseComplaintRequest) returns (google.protobuf.Empty) {}
+    rpc CheckIfComplaintAccessibleToAdmin (CheckIfComplaintAccessibleToAdminRequest) returns (google.protobuf.Empty) {}
+}
+
+message CheckIfComplaintAccessibleToAdminRequest {
+    int32 adminId = 1;
+    int32 complaintId = 2;
 }
 
 message CloseComplaintRequest {
@@ -48,7 +54,7 @@ message KsebComplaint {
     string Title = 4;
     string Description = 5;
     string ConsumerNumber = 6;
-    int32 AttendederID = 7;
+    int32 AttenderID = 7;
     string Status = 8;
     string  CreatedAt = 9;
     string Remarks = 10;

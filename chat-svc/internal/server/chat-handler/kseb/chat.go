@@ -10,6 +10,8 @@ import (
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 )
 
+const msgChannSize = 100
+
 type KsebChatServer struct {
 	ChatUseCase ucinterface.IKsebChatUC
 	pb.UnimplementedKsebChatServiceServer
@@ -26,33 +28,39 @@ func NewKsebChatServer(chatUseCase ucinterface.IKsebChatUC) *KsebChatServer {
 	}
 }
 func (s *KsebChatServer) UserChat(req *pb.UserChatRequest, stream pb.KsebChatService_UserChatServer) error {
-	userID := req.GetUserId()
-	msgChan := make(chan *pb.ChatMessage, 100)
+	complaintId := req.GetComplaintId()
 
 	s.mutex.Lock()
-	s.UserChatStreams[userID] = msgChan
+	if _, ok := s.AdminChatStreams[complaintId]; !ok {
+		msgChan := make(chan *pb.ChatMessage, msgChannSize)
+		defer close(msgChan)
+		s.AdminChatStreams[complaintId] = msgChan
+	}
+	if _, ok := s.UserChatStreams[complaintId]; !ok {
+		msgChan := make(chan *pb.ChatMessage, msgChannSize)
+		defer close(msgChan)
+		s.UserChatStreams[complaintId] = msgChan
+	}
 	s.mutex.Unlock()
 
 	defer func() {
 		s.mutex.Lock()
-		delete(s.UserChatStreams, userID)
+		delete(s.UserChatStreams, complaintId)
+		delete(s.AdminChatStreams, complaintId)
 		s.mutex.Unlock()
-		close(msgChan)
 	}()
 
-	// Receive messages from the channel and send them to the client
-	for msg := range msgChan {
-		fmt.Println("msg here: ", msg)
+	for msg := range s.AdminChatStreams[complaintId] {
 		if err := stream.Send(msg); err != nil {
-			log.Printf("Error sending message to user %d: %v", userID, err)
+			log.Printf("Error sending message to user: %v", err)
 			return err
 		}
 	}
 	return nil
 }
-func (s *KsebChatServer) SendMessage(ctx context.Context, req *pb.SendMessageRequest) (*pb.SendMessageResponse, error) {
-	fmt.Println("req: ", req)
+func (s *KsebChatServer) UserSendMessage(ctx context.Context, req *pb.UserSendMessageRequest) (*pb.SendMessageResponse, error) {
 	userID := req.GetUserId()
+	complaintId := req.GetComplaintId()
 	message := req.GetMessage()
 
 	s.mutex.Lock()
@@ -63,30 +71,59 @@ func (s *KsebChatServer) SendMessage(ctx context.Context, req *pb.SendMessageReq
 		Message: message,
 	}
 
-	var sendTo int32
-	switch userID {
-	case 14:
-		sendTo = 15
-	case 15:
-		sendTo = 14
+	s.UserChatStreams[complaintId] <- msg
+
+	return &pb.SendMessageResponse{Success: true}, nil
+}
+
+func (s *KsebChatServer) AdminChat(req *pb.AdminChatRequest, stream pb.KsebChatService_AdminChatServer) error {
+	complaintId := req.GetComplaintId()
+
+	s.mutex.Lock()
+	if _, ok := s.AdminChatStreams[complaintId]; !ok {
+		msgChan := make(chan *pb.ChatMessage, msgChannSize)
+		defer close(msgChan)
+		s.AdminChatStreams[complaintId] = msgChan
+
 	}
-	// Send the message to all connected users
-	for usrId, ch := range s.UserChatStreams {
-		if usrId == sendTo {
-			ch <- msg
+	if _, ok := s.UserChatStreams[complaintId]; !ok {
+		msgChan := make(chan *pb.ChatMessage, msgChannSize)
+		defer close(msgChan)
+		s.UserChatStreams[complaintId] = msgChan
+	}
+	s.mutex.Unlock()
+
+	defer func() {
+		s.mutex.Lock()
+		delete(s.UserChatStreams, complaintId)
+		delete(s.AdminChatStreams, complaintId)
+		s.mutex.Unlock()
+	}()
+
+	for msg := range s.UserChatStreams[complaintId] {
+		if err := stream.Send(msg); err != nil {
+			log.Printf("Error sending message to admin: %v", err)
+			return err
 		}
 	}
+	return nil
+}
 
-	// // Create a reply message with "hello" appended
-	// replyMessage := &pb.ChatMessage{
-	// 	Sender:  "Server",
-	// 	Message: fmt.Sprintf("hello %s", message),
-	// }
+func (s *KsebChatServer) AdminSendMessage(ctx context.Context, req *pb.AdminSendMessageRequest) (*pb.SendMessageResponse, error) {
+	fmt.Println("req: ", req)
+	adminID := req.GetAdminId()
+	complaintId := req.GetComplaintId()
+	message := req.GetMessage()
 
-	// // Send the reply message back to the originating user
-	// if ch, ok := s.UserChatStreams[userID]; ok {
-	// 	ch <- replyMessage
-	// }
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	msg := &pb.ChatMessage{
+		Sender:  fmt.Sprintf("Admin %d", adminID),
+		Message: message,
+	}
+
+	s.AdminChatStreams[complaintId] <- msg
 
 	return &pb.SendMessageResponse{Success: true}, nil
 }

@@ -4,21 +4,34 @@ option go_package = "./pb/generated;pb";
 // import "google/protobuf/empty.proto";
 
 service KsebChatService {
-    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
-    rpc UserChat(UserChatRequest) returns (stream ChatMessage);
-}
+    rpc UserSendMessage(UserSendMessageRequest) returns (SendMessageResponse);
+    rpc AdminSendMessage(AdminSendMessageRequest) returns (SendMessageResponse);
 
+    rpc UserChat(UserChatRequest) returns (stream ChatMessage);
+    rpc AdminChat(AdminChatRequest) returns (stream ChatMessage);
+}
 message ChatMessage {
     string sender = 1;
     string message = 2;
 }
 message UserChatRequest {
     int32 userId = 1;
+    int32 ComplaintId = 2;
+}
+message AdminChatRequest {
+    int32 adminId = 1;
+    int32 ComplaintId = 2;
 }
 
-message SendMessageRequest {
+message UserSendMessageRequest {
     int32 userId = 1;
-    string message = 2;
+    int32 ComplaintId = 2;
+    string message = 3;
+}
+message AdminSendMessageRequest {
+    int32 adminId = 1;
+    int32 ComplaintId = 2;
+    string message = 3;
 }
 
 message SendMessageResponse {

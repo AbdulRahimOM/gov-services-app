@@ -117,7 +117,7 @@ func (kr KsebRepository) AdminGetAllComplaintsByStatus(adminID int32, status str
 
 func (kr KsebRepository) AdminGetAllComplaintsAttendedByHimOrNotOpened(adminID int32) (*[]models.KsebComplaint, error) {
 	var complaints []models.KsebComplaint
-	result := kr.DB.Where("attendeder_id=? OR status='not-opened'", adminID).Find(&complaints)
+	result := kr.DB.Where("attender_id=? OR status='not-opened'", adminID).Find(&complaints)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -126,7 +126,7 @@ func (kr KsebRepository) AdminGetAllComplaintsAttendedByHimOrNotOpened(adminID i
 
 func (kr KsebRepository) AdminGetAllComplaintsAttendedByHimByStatus(adminID int32, status string) (*[]models.KsebComplaint, error) {
 	var complaints []models.KsebComplaint
-	result := kr.DB.Where("attendeder_id=? AND status=?", adminID, status).Find(&complaints)
+	result := kr.DB.Where("attender_id=? AND status=?", adminID, status).Find(&complaints)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -143,7 +143,7 @@ func (kr KsebRepository) GetComplaintByID(complaintID int32) (*models.KsebCompla
 }
 
 func (kr KsebRepository) MarkComplaintAsOpened(complaintID, adminID int32) error {
-	result := kr.DB.Model(&models.KsebComplaint{}).Where("id=?", complaintID).Update("status", "opened").Update("attendeder_id", adminID)
+	result := kr.DB.Model(&models.KsebComplaint{}).Where("id=?", complaintID).Update("status", "opened").Update("attender_id", adminID)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -152,11 +152,20 @@ func (kr KsebRepository) MarkComplaintAsOpened(complaintID, adminID int32) error
 
 func (kr KsebRepository) MarkComplaintAsClosed(complaintID int32, remarks string) error {
 	result := kr.DB.Model(&models.KsebComplaint{}).Where("id=?", complaintID).
-	Update("status", "closed").
-	Update("remarks", remarks).
-	Update("closed_at", time.Now())
+		Update("status", "closed").
+		Update("remarks", remarks).
+		Update("closed_at", time.Now())
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
+}
+
+func (kr KsebRepository) GetAttenderIDOfComplaint(complaintID int32) (int32, error) {
+	var attenderID int32
+	result := kr.DB.Raw("SELECT attender_id FROM kseb_complaints WHERE id=?", complaintID).Scan(&attenderID)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return attenderID, nil
 }

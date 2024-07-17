@@ -13,7 +13,7 @@ type KsebComplaintResponse struct {
 	Title          string `json:"title"`
 	Description    string `json:"description"`
 	ConsumerNumber string `json:"consumerNumber"`
-	AttendederID   int32  `json:"attendederId"`
+	AttenderID     int32  `json:"attenderId"`
 	Status         string `json:"status"`
 	CreatedAt      string `json:"createdAt"`
 	Remarks        string `json:"remarks"`

@@ -110,10 +110,11 @@ var KSEBAdminAccService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	KSEBAgencyAdminService_RegisterSectionCode_FullMethodName = "/KSEBAgencyAdminService/RegisterSectionCode"
-	KSEBAgencyAdminService_GetComplaints_FullMethodName       = "/KSEBAgencyAdminService/GetComplaints"
-	KSEBAgencyAdminService_OpenComplaint_FullMethodName       = "/KSEBAgencyAdminService/OpenComplaint"
-	KSEBAgencyAdminService_CloseComplaint_FullMethodName      = "/KSEBAgencyAdminService/CloseComplaint"
+	KSEBAgencyAdminService_RegisterSectionCode_FullMethodName               = "/KSEBAgencyAdminService/RegisterSectionCode"
+	KSEBAgencyAdminService_GetComplaints_FullMethodName                     = "/KSEBAgencyAdminService/GetComplaints"
+	KSEBAgencyAdminService_OpenComplaint_FullMethodName                     = "/KSEBAgencyAdminService/OpenComplaint"
+	KSEBAgencyAdminService_CloseComplaint_FullMethodName                    = "/KSEBAgencyAdminService/CloseComplaint"
+	KSEBAgencyAdminService_CheckIfComplaintAccessibleToAdmin_FullMethodName = "/KSEBAgencyAdminService/CheckIfComplaintAccessibleToAdmin"
 )
 
 // KSEBAgencyAdminServiceClient is the client API for KSEBAgencyAdminService service.
@@ -125,6 +126,7 @@ type KSEBAgencyAdminServiceClient interface {
 	GetComplaints(ctx context.Context, in *GetComplaintsRequest, opts ...grpc.CallOption) (*GetComplaintsResponse, error)
 	OpenComplaint(ctx context.Context, in *OpenComplaintRequest, opts ...grpc.CallOption) (*KsebComplaint, error)
 	CloseComplaint(ctx context.Context, in *CloseComplaintRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CheckIfComplaintAccessibleToAdmin(ctx context.Context, in *CheckIfComplaintAccessibleToAdminRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type kSEBAgencyAdminServiceClient struct {
@@ -171,6 +173,15 @@ func (c *kSEBAgencyAdminServiceClient) CloseComplaint(ctx context.Context, in *C
 	return out, nil
 }
 
+func (c *kSEBAgencyAdminServiceClient) CheckIfComplaintAccessibleToAdmin(ctx context.Context, in *CheckIfComplaintAccessibleToAdminRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, KSEBAgencyAdminService_CheckIfComplaintAccessibleToAdmin_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KSEBAgencyAdminServiceServer is the server API for KSEBAgencyAdminService service.
 // All implementations must embed UnimplementedKSEBAgencyAdminServiceServer
 // for forward compatibility
@@ -180,6 +191,7 @@ type KSEBAgencyAdminServiceServer interface {
 	GetComplaints(context.Context, *GetComplaintsRequest) (*GetComplaintsResponse, error)
 	OpenComplaint(context.Context, *OpenComplaintRequest) (*KsebComplaint, error)
 	CloseComplaint(context.Context, *CloseComplaintRequest) (*emptypb.Empty, error)
+	CheckIfComplaintAccessibleToAdmin(context.Context, *CheckIfComplaintAccessibleToAdminRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedKSEBAgencyAdminServiceServer()
 }
 
@@ -198,6 +210,9 @@ func (UnimplementedKSEBAgencyAdminServiceServer) OpenComplaint(context.Context, 
 }
 func (UnimplementedKSEBAgencyAdminServiceServer) CloseComplaint(context.Context, *CloseComplaintRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CloseComplaint not implemented")
+}
+func (UnimplementedKSEBAgencyAdminServiceServer) CheckIfComplaintAccessibleToAdmin(context.Context, *CheckIfComplaintAccessibleToAdminRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckIfComplaintAccessibleToAdmin not implemented")
 }
 func (UnimplementedKSEBAgencyAdminServiceServer) mustEmbedUnimplementedKSEBAgencyAdminServiceServer() {
 }
@@ -285,6 +300,24 @@ func _KSEBAgencyAdminService_CloseComplaint_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KSEBAgencyAdminService_CheckIfComplaintAccessibleToAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckIfComplaintAccessibleToAdminRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KSEBAgencyAdminServiceServer).CheckIfComplaintAccessibleToAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KSEBAgencyAdminService_CheckIfComplaintAccessibleToAdmin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KSEBAgencyAdminServiceServer).CheckIfComplaintAccessibleToAdmin(ctx, req.(*CheckIfComplaintAccessibleToAdminRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // KSEBAgencyAdminService_ServiceDesc is the grpc.ServiceDesc for KSEBAgencyAdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -307,6 +340,10 @@ var KSEBAgencyAdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CloseComplaint",
 			Handler:    _KSEBAgencyAdminService_CloseComplaint_Handler,
+		},
+		{
+			MethodName: "CheckIfComplaintAccessibleToAdmin",
+			Handler:    _KSEBAgencyAdminService_CheckIfComplaintAccessibleToAdmin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

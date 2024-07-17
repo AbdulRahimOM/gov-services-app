@@ -10,13 +10,13 @@ import (
 )
 
 type KsebHandler struct {
-	ksebClient pb.KSEBAgencyUserServiceClient
+	agencyUserClient pb.KSEBAgencyUserServiceClient
 	ksebChatClient pb.KsebChatServiceClient
 }
 
 func NewKsebHandler(ksebClient pb.KSEBAgencyUserServiceClient, chatClient pb.KsebChatServiceClient) *KsebHandler {
 	return &KsebHandler{
-		ksebClient: ksebClient,
+		agencyUserClient: ksebClient,
 		ksebChatClient: chatClient,
 	}
 }
@@ -34,7 +34,7 @@ func (k *KsebHandler) AddConsumerNumber(c *gin.Context) {
 		return
 	}
 
-	_, err := k.ksebClient.AddConsumerNumber(c, &pb.AddConsumerNumberRequest{
+	_, err := k.agencyUserClient.AddConsumerNumber(c, &pb.AddConsumerNumberRequest{
 		UserId:         userID,
 		ConsumerNumber: req.ConsumerNumber,
 		NickName:       req.NickName,
@@ -56,7 +56,7 @@ func (k *KsebHandler) GetUserConsumerNumbers(c *gin.Context) {
 		return
 	}
 
-	resp, err := k.ksebClient.GetUserConsumerNumbers(c, &pb.GetUserConsumerNumbersRequest{
+	resp, err := k.agencyUserClient.GetUserConsumerNumbers(c, &pb.GetUserConsumerNumbersRequest{
 		UserId: userID,
 	})
 	if err == nil {
@@ -90,7 +90,7 @@ func (k *KsebHandler) RaiseComplaint(c *gin.Context) {
 		return
 	}
 
-	resp, err := k.ksebClient.RaiseComplaint(c, &pb.RaiseComplaintRequest{
+	resp, err := k.agencyUserClient.RaiseComplaint(c, &pb.RaiseComplaintRequest{
 		UserId: userID,
 		Complaint: &pb.Complaint{
 			Type:        req.Type,

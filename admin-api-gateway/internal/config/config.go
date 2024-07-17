@@ -10,6 +10,7 @@ var EnvValues struct {
 	Port            string `mapstructure:"PORT"`
 	AccountsSvcUrl  string `mapstructure:"AUTH_SVC_URL"`
 	AgenciesSvcUrl  string `mapstructure:"AGENCIES_SVC_URL"`
+	ChatSvcUrl      string `mapstructure:"CHAT_SVC_URL"`
 }
 
 func init() {

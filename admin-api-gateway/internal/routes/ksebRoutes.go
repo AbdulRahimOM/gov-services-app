@@ -20,7 +20,6 @@ func RegisterKSEBAccRoutes(engine *gin.RouterGroup, ksebHandler *ksebhanlder.KSE
 		authGroup.POST("/close-complaint", ksebHandler.AdminCloseComplaint)
 
 		//chat
-		// authGroup.POST("/chat/send-message", ksebHandler.SendMessage)
-		// authGroup.GET("/chat", ksebHandler.Chat)
+		authGroup.GET("/chat/:complaintId", ksebHandler.AdminChat)
 	}
 }

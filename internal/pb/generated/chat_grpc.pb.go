@@ -19,16 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KsebChatService_SendMessage_FullMethodName = "/KsebChatService/SendMessage"
-	KsebChatService_UserChat_FullMethodName    = "/KsebChatService/UserChat"
+	KsebChatService_UserSendMessage_FullMethodName  = "/KsebChatService/UserSendMessage"
+	KsebChatService_AdminSendMessage_FullMethodName = "/KsebChatService/AdminSendMessage"
+	KsebChatService_UserChat_FullMethodName         = "/KsebChatService/UserChat"
+	KsebChatService_AdminChat_FullMethodName        = "/KsebChatService/AdminChat"
 )
 
 // KsebChatServiceClient is the client API for KsebChatService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KsebChatServiceClient interface {
-	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
+	UserSendMessage(ctx context.Context, in *UserSendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
+	AdminSendMessage(ctx context.Context, in *AdminSendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
 	UserChat(ctx context.Context, in *UserChatRequest, opts ...grpc.CallOption) (KsebChatService_UserChatClient, error)
+	AdminChat(ctx context.Context, in *AdminChatRequest, opts ...grpc.CallOption) (KsebChatService_AdminChatClient, error)
 }
 
 type ksebChatServiceClient struct {
@@ -39,9 +43,18 @@ func NewKsebChatServiceClient(cc grpc.ClientConnInterface) KsebChatServiceClient
 	return &ksebChatServiceClient{cc}
 }
 
-func (c *ksebChatServiceClient) SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error) {
+func (c *ksebChatServiceClient) UserSendMessage(ctx context.Context, in *UserSendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error) {
 	out := new(SendMessageResponse)
-	err := c.cc.Invoke(ctx, KsebChatService_SendMessage_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, KsebChatService_UserSendMessage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ksebChatServiceClient) AdminSendMessage(ctx context.Context, in *AdminSendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error) {
+	out := new(SendMessageResponse)
+	err := c.cc.Invoke(ctx, KsebChatService_AdminSendMessage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,12 +93,46 @@ func (x *ksebChatServiceUserChatClient) Recv() (*ChatMessage, error) {
 	return m, nil
 }
 
+func (c *ksebChatServiceClient) AdminChat(ctx context.Context, in *AdminChatRequest, opts ...grpc.CallOption) (KsebChatService_AdminChatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &KsebChatService_ServiceDesc.Streams[1], KsebChatService_AdminChat_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &ksebChatServiceAdminChatClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type KsebChatService_AdminChatClient interface {
+	Recv() (*ChatMessage, error)
+	grpc.ClientStream
+}
+
+type ksebChatServiceAdminChatClient struct {
+	grpc.ClientStream
+}
+
+func (x *ksebChatServiceAdminChatClient) Recv() (*ChatMessage, error) {
+	m := new(ChatMessage)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // KsebChatServiceServer is the server API for KsebChatService service.
 // All implementations must embed UnimplementedKsebChatServiceServer
 // for forward compatibility
 type KsebChatServiceServer interface {
-	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
+	UserSendMessage(context.Context, *UserSendMessageRequest) (*SendMessageResponse, error)
+	AdminSendMessage(context.Context, *AdminSendMessageRequest) (*SendMessageResponse, error)
 	UserChat(*UserChatRequest, KsebChatService_UserChatServer) error
+	AdminChat(*AdminChatRequest, KsebChatService_AdminChatServer) error
 	mustEmbedUnimplementedKsebChatServiceServer()
 }
 
@@ -93,11 +140,17 @@ type KsebChatServiceServer interface {
 type UnimplementedKsebChatServiceServer struct {
 }
 
-func (UnimplementedKsebChatServiceServer) SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+func (UnimplementedKsebChatServiceServer) UserSendMessage(context.Context, *UserSendMessageRequest) (*SendMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserSendMessage not implemented")
+}
+func (UnimplementedKsebChatServiceServer) AdminSendMessage(context.Context, *AdminSendMessageRequest) (*SendMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AdminSendMessage not implemented")
 }
 func (UnimplementedKsebChatServiceServer) UserChat(*UserChatRequest, KsebChatService_UserChatServer) error {
 	return status.Errorf(codes.Unimplemented, "method UserChat not implemented")
+}
+func (UnimplementedKsebChatServiceServer) AdminChat(*AdminChatRequest, KsebChatService_AdminChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method AdminChat not implemented")
 }
 func (UnimplementedKsebChatServiceServer) mustEmbedUnimplementedKsebChatServiceServer() {}
 
@@ -112,20 +165,38 @@ func RegisterKsebChatServiceServer(s grpc.ServiceRegistrar, srv KsebChatServiceS
 	s.RegisterService(&KsebChatService_ServiceDesc, srv)
 }
 
-func _KsebChatService_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendMessageRequest)
+func _KsebChatService_UserSendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserSendMessageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KsebChatServiceServer).SendMessage(ctx, in)
+		return srv.(KsebChatServiceServer).UserSendMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: KsebChatService_SendMessage_FullMethodName,
+		FullMethod: KsebChatService_UserSendMessage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KsebChatServiceServer).SendMessage(ctx, req.(*SendMessageRequest))
+		return srv.(KsebChatServiceServer).UserSendMessage(ctx, req.(*UserSendMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KsebChatService_AdminSendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminSendMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KsebChatServiceServer).AdminSendMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KsebChatService_AdminSendMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KsebChatServiceServer).AdminSendMessage(ctx, req.(*AdminSendMessageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -151,6 +222,27 @@ func (x *ksebChatServiceUserChatServer) Send(m *ChatMessage) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _KsebChatService_AdminChat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(AdminChatRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(KsebChatServiceServer).AdminChat(m, &ksebChatServiceAdminChatServer{stream})
+}
+
+type KsebChatService_AdminChatServer interface {
+	Send(*ChatMessage) error
+	grpc.ServerStream
+}
+
+type ksebChatServiceAdminChatServer struct {
+	grpc.ServerStream
+}
+
+func (x *ksebChatServiceAdminChatServer) Send(m *ChatMessage) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // KsebChatService_ServiceDesc is the grpc.ServiceDesc for KsebChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -159,14 +251,23 @@ var KsebChatService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*KsebChatServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendMessage",
-			Handler:    _KsebChatService_SendMessage_Handler,
+			MethodName: "UserSendMessage",
+			Handler:    _KsebChatService_UserSendMessage_Handler,
+		},
+		{
+			MethodName: "AdminSendMessage",
+			Handler:    _KsebChatService_AdminSendMessage_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "UserChat",
 			Handler:       _KsebChatService_UserChat_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "AdminChat",
+			Handler:       _KsebChatService_AdminChat_Handler,
 			ServerStreams: true,
 		},
 	},

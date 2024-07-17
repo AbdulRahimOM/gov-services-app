@@ -21,6 +21,7 @@ type IKsebRepo interface {
 	AdminGetAllComplaintsByStatus(adminID int32, status string) (*[]models.KsebComplaint, error)
 	AdminGetAllComplaintsAttendedByHimOrNotOpened(adminID int32) (*[]models.KsebComplaint, error)
 	AdminGetAllComplaintsAttendedByHimByStatus(adminID int32, status string) (*[]models.KsebComplaint, error)
+	GetAttenderIDOfComplaint(complaintID int32) (int32, error)
 
 	GetComplaintByID(complaintID int32) (*models.KsebComplaint, error)
 	MarkComplaintAsOpened(complaintID, adminID int32) error

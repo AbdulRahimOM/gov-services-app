@@ -12,6 +12,7 @@ type IKsebAgencyAdminUC interface {
 	GetComplaints(adminId int32, searchCriteria *request.KsebComplaintSearchCriteria) (*[]models.KsebComplaint, string, error)
 	OpenComplaint(adminId, complaintId int32) (*models.KsebComplaint,string, error)
 	CloseComplaint(adminId, complaintId int32, remarks string) (string, error)
+	CheckIfComplaintBeAccessibleToAdmin(adminId, complaintId int32) (bool, string, error)
 }
 
 type IKsebAgencyUserUC interface {

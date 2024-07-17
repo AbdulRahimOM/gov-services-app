@@ -97,7 +97,7 @@ func (k *KSEBAgencyAdminUseCase) OpenComplaint(adminID, complaintID int32) (*mod
 		return nil, respcode.KSEB_ComplaintAlreadyOpened, fmt.Errorf("complaint is already opened")
 	}
 
-	err = k.ksebRepo.MarkComplaintAsOpened(complaintID,adminID)
+	err = k.ksebRepo.MarkComplaintAsOpened(complaintID, adminID)
 	if err != nil {
 		return nil, respcode.DBError, fmt.Errorf("@db: failed to update complaint-status to 'opened'. Error: %v", err)
 	}
@@ -122,4 +122,18 @@ func (k *KSEBAgencyAdminUseCase) CloseComplaint(adminID, complaintID int32, rema
 	}
 
 	return "", nil
+}
+
+// CheckIfComplaintBeAccessibleToAdmin
+func (k *KSEBAgencyAdminUseCase) CheckIfComplaintBeAccessibleToAdmin(adminID, complaintID int32) (bool, string, error) {
+	attenderId, err := k.ksebRepo.GetAttenderIDOfComplaint(complaintID)
+	if err != nil {
+		return false, respcode.DBError, fmt.Errorf("@db: failed to get complaint: %v", err)
+	}
+
+	if attenderId != adminID {
+		return false, respcode.KSEB_ComplaintNotAccessibleToAdmin, fmt.Errorf("complaint is not accessible to you")
+	}
+
+	return true, "", nil
 }

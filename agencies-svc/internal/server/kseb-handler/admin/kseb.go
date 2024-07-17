@@ -56,7 +56,7 @@ func (k *KSEBAgencyAdminServer) GetComplaints(ctx context.Context, req *pb.GetCo
 				Title:          v.Title,
 				Description:    v.Description,
 				ConsumerNumber: v.ConsumerNumber,
-				AttendederID:   v.AttendederID,
+				AttenderID:     v.AttenderID,
 				Status:         v.Status,
 				CreatedAt:      v.CreatedAt.Format(time.RFC3339),
 				Remarks:        v.Remarks,
@@ -81,7 +81,7 @@ func (k *KSEBAgencyAdminServer) OpenComplaint(ctx context.Context, req *pb.OpenC
 			Title:          complaint.Title,
 			Description:    complaint.Description,
 			ConsumerNumber: complaint.ConsumerNumber,
-			AttendederID:   complaint.AttendederID,
+			AttenderID:     complaint.AttenderID,
 			Status:         complaint.Status,
 			CreatedAt:      complaint.CreatedAt.Format(time.RFC3339),
 			Remarks:        complaint.Remarks,
@@ -92,6 +92,15 @@ func (k *KSEBAgencyAdminServer) OpenComplaint(ctx context.Context, req *pb.OpenC
 
 func (k *KSEBAgencyAdminServer) CloseComplaint(ctx context.Context, req *pb.CloseComplaintRequest) (*emptypb.Empty, error) {
 	responseCode, err := k.KsebUseCase.CloseComplaint(req.AdminId, req.ComplaintId, req.Remarks)
+	if err != nil {
+		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
+	} else {
+		return nil, nil
+	}
+}
+
+func (k *KSEBAgencyAdminServer) CheckIfComplaintAccessibleToAdmin(ctx context.Context, req *pb.CheckIfComplaintAccessibleToAdminRequest) (*emptypb.Empty, error) {
+	_, responseCode, err := k.KsebUseCase.CheckIfComplaintBeAccessibleToAdmin(req.AdminId, req.ComplaintId)
 	if err != nil {
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	} else {
