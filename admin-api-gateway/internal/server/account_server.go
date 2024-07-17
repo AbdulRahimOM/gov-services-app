@@ -47,7 +47,7 @@ func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
 	accountHandler := acchandler.NewAdminAccountHandler(serviceClients.AccountsClient)
 	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient)
 
-	ksebAccHandler := ksebhanlder.NewAppointmentHandler(serviceClients.KsebAccClient)
+	ksebAccHandler := ksebhanlder.NewKsebHandler(serviceClients.KsebAccClient, serviceClients.KSEBAgencyAdminClient)
 
 	routes.RegisterRoutes(engine.Group("/"), accountHandler, appointmentHandler)
 	routes.RegisterKSEBAccRoutes(engine.Group("/kseb"), ksebAccHandler)

@@ -16,5 +16,13 @@ type IKsebRepo interface {
 
 	//complaint
 	RaiseComplaint(userID int32, ksebComplaint *models.KsebComplaint) (int32, error)
-	GetUserIdByComplaintId( complaintID int32) (userId int32, err error)
+	GetUserIdByComplaintId(complaintID int32) (userId int32, err error)
+	AdminGetAllComplaints() (*[]models.KsebComplaint, error)
+	AdminGetAllComplaintsByStatus(adminID int32, status string) (*[]models.KsebComplaint, error)
+	AdminGetAllComplaintsAttendedByHimOrNotOpened(adminID int32) (*[]models.KsebComplaint, error)
+	AdminGetAllComplaintsAttendedByHimByStatus(adminID int32, status string) (*[]models.KsebComplaint, error)
+
+	GetComplaintByID(complaintID int32) (*models.KsebComplaint, error)
+	MarkComplaintAsOpened(complaintID, adminID int32) error
+	MarkComplaintAsClosed(complaintID int32, remarks string) error
 }

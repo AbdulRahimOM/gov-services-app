@@ -111,6 +111,9 @@ var KSEBAdminAccService_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	KSEBAgencyAdminService_RegisterSectionCode_FullMethodName = "/KSEBAgencyAdminService/RegisterSectionCode"
+	KSEBAgencyAdminService_GetComplaints_FullMethodName       = "/KSEBAgencyAdminService/GetComplaints"
+	KSEBAgencyAdminService_OpenComplaint_FullMethodName       = "/KSEBAgencyAdminService/OpenComplaint"
+	KSEBAgencyAdminService_CloseComplaint_FullMethodName      = "/KSEBAgencyAdminService/CloseComplaint"
 )
 
 // KSEBAgencyAdminServiceClient is the client API for KSEBAgencyAdminService service.
@@ -119,6 +122,9 @@ const (
 type KSEBAgencyAdminServiceClient interface {
 	// admin
 	RegisterSectionCode(ctx context.Context, in *RegisterSectionCodeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetComplaints(ctx context.Context, in *GetComplaintsRequest, opts ...grpc.CallOption) (*GetComplaintsResponse, error)
+	OpenComplaint(ctx context.Context, in *OpenComplaintRequest, opts ...grpc.CallOption) (*KsebComplaint, error)
+	CloseComplaint(ctx context.Context, in *CloseComplaintRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type kSEBAgencyAdminServiceClient struct {
@@ -138,12 +144,42 @@ func (c *kSEBAgencyAdminServiceClient) RegisterSectionCode(ctx context.Context, 
 	return out, nil
 }
 
+func (c *kSEBAgencyAdminServiceClient) GetComplaints(ctx context.Context, in *GetComplaintsRequest, opts ...grpc.CallOption) (*GetComplaintsResponse, error) {
+	out := new(GetComplaintsResponse)
+	err := c.cc.Invoke(ctx, KSEBAgencyAdminService_GetComplaints_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kSEBAgencyAdminServiceClient) OpenComplaint(ctx context.Context, in *OpenComplaintRequest, opts ...grpc.CallOption) (*KsebComplaint, error) {
+	out := new(KsebComplaint)
+	err := c.cc.Invoke(ctx, KSEBAgencyAdminService_OpenComplaint_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kSEBAgencyAdminServiceClient) CloseComplaint(ctx context.Context, in *CloseComplaintRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, KSEBAgencyAdminService_CloseComplaint_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KSEBAgencyAdminServiceServer is the server API for KSEBAgencyAdminService service.
 // All implementations must embed UnimplementedKSEBAgencyAdminServiceServer
 // for forward compatibility
 type KSEBAgencyAdminServiceServer interface {
 	// admin
 	RegisterSectionCode(context.Context, *RegisterSectionCodeRequest) (*emptypb.Empty, error)
+	GetComplaints(context.Context, *GetComplaintsRequest) (*GetComplaintsResponse, error)
+	OpenComplaint(context.Context, *OpenComplaintRequest) (*KsebComplaint, error)
+	CloseComplaint(context.Context, *CloseComplaintRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedKSEBAgencyAdminServiceServer()
 }
 
@@ -153,6 +189,15 @@ type UnimplementedKSEBAgencyAdminServiceServer struct {
 
 func (UnimplementedKSEBAgencyAdminServiceServer) RegisterSectionCode(context.Context, *RegisterSectionCodeRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterSectionCode not implemented")
+}
+func (UnimplementedKSEBAgencyAdminServiceServer) GetComplaints(context.Context, *GetComplaintsRequest) (*GetComplaintsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetComplaints not implemented")
+}
+func (UnimplementedKSEBAgencyAdminServiceServer) OpenComplaint(context.Context, *OpenComplaintRequest) (*KsebComplaint, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OpenComplaint not implemented")
+}
+func (UnimplementedKSEBAgencyAdminServiceServer) CloseComplaint(context.Context, *CloseComplaintRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CloseComplaint not implemented")
 }
 func (UnimplementedKSEBAgencyAdminServiceServer) mustEmbedUnimplementedKSEBAgencyAdminServiceServer() {
 }
@@ -186,6 +231,60 @@ func _KSEBAgencyAdminService_RegisterSectionCode_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KSEBAgencyAdminService_GetComplaints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetComplaintsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KSEBAgencyAdminServiceServer).GetComplaints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KSEBAgencyAdminService_GetComplaints_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KSEBAgencyAdminServiceServer).GetComplaints(ctx, req.(*GetComplaintsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KSEBAgencyAdminService_OpenComplaint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OpenComplaintRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KSEBAgencyAdminServiceServer).OpenComplaint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KSEBAgencyAdminService_OpenComplaint_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KSEBAgencyAdminServiceServer).OpenComplaint(ctx, req.(*OpenComplaintRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KSEBAgencyAdminService_CloseComplaint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CloseComplaintRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KSEBAgencyAdminServiceServer).CloseComplaint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KSEBAgencyAdminService_CloseComplaint_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KSEBAgencyAdminServiceServer).CloseComplaint(ctx, req.(*CloseComplaintRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // KSEBAgencyAdminService_ServiceDesc is the grpc.ServiceDesc for KSEBAgencyAdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -196,6 +295,18 @@ var KSEBAgencyAdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterSectionCode",
 			Handler:    _KSEBAgencyAdminService_RegisterSectionCode_Handler,
+		},
+		{
+			MethodName: "GetComplaints",
+			Handler:    _KSEBAgencyAdminService_GetComplaints_Handler,
+		},
+		{
+			MethodName: "OpenComplaint",
+			Handler:    _KSEBAgencyAdminService_OpenComplaint_Handler,
+		},
+		{
+			MethodName: "CloseComplaint",
+			Handler:    _KSEBAgencyAdminService_CloseComplaint_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

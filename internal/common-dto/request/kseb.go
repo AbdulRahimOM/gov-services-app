@@ -21,3 +21,8 @@ type KSEBComplaint struct {
 type SendMessage struct {
 	Message string `json:"message" binding:"required" validate:"gte=1,lte=500"`
 }
+
+type KsebCloseComplaint struct {
+	ComplaintId int32  `json:"complaint_id" binding:"required"`
+	Remarks     string `json:"remarks" binding:"required" validate:"gte=1,lte=500"`
+}

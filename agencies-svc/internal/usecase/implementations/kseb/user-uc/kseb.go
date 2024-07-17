@@ -86,8 +86,7 @@ func (u *KsebUserUseCase) RaiseComplaint(userID int32, complaint *requests.KSEBC
 		Title:          complaint.Title,
 		Description:    complaint.Description,
 		ConsumerNumber: complaint.ConsumerNumber,
-		Status:         "pending",
-		IsClosed:       false,
+		Status:         "not opened",
 		CreatedAt:      time.Now(),
 	}
 	complaintID, err := u.ksebRepo.RaiseComplaint(userID, &entry)

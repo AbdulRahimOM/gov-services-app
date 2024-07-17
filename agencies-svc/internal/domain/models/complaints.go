@@ -11,9 +11,8 @@ type KsebComplaint struct {
 	Description    string `json:"description" gorm:"not null"`
 	ConsumerNumber string `json:"consumer_number" gorm:"default:''"`
 	AttendederID   int32  `json:"attendeder_id" gorm:"default:0"`
-	Status         string `json:"status" gorm:"default:'pending'"`
+	Status         string `json:"status" gorm:"default:'not-opened'"`
 	CreatedAt	  time.Time `json:"created_at" gorm:"autoCreateTime"`
 	Remarks		string `json:"remarks" gorm:"default:''"`
-	IsClosed	bool `json:"is_closed" gorm:"default:false"`
 	ClosedAt time.Time `json:"closed_at" gorm:"default:null"`
 }

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option go_package = "./pb/generated;pb";
 import "google/protobuf/empty.proto";
+// import "google/protobuf/timestamp.proto";
 
 service KSEBAdminAccService {
     rpc RegisterSectionCode(RegisterSectionCodeRequest) returns (google.protobuf.Empty) {}
@@ -10,6 +11,48 @@ service KSEBAdminAccService {
 service KSEBAgencyAdminService {
     // admin
     rpc RegisterSectionCode(RegisterSectionCodeRequest) returns (google.protobuf.Empty) {}
+    rpc GetComplaints(GetComplaintsRequest) returns (GetComplaintsResponse) {}
+    rpc OpenComplaint(OpenComplaintRequest) returns (KsebComplaint) {}
+    rpc CloseComplaint(CloseComplaintRequest) returns (google.protobuf.Empty) {}
+}
+
+message CloseComplaintRequest {
+    int32 adminId = 1;
+    int32 complaintId = 2;
+    string remarks = 3;
+}
+
+message OpenComplaintRequest {
+    int32 adminId = 1;
+    int32 complaintId = 2;
+}
+
+message GetComplaintsRequest {
+    int32 adminId = 1;
+    ksebComplaintSearchCriteria searchCriteria = 2;
+}
+
+message ksebComplaintSearchCriteria {
+    string status = 1;
+    string attenderScope = 2;
+}
+
+message GetComplaintsResponse {
+    repeated KsebComplaint complaints = 1;
+}
+
+message KsebComplaint {
+    int32 ID = 1;
+    int32 UserID = 2;
+    string Type = 3;
+    string Title = 4;
+    string Description = 5;
+    string ConsumerNumber = 6;
+    int32 AttendederID = 7;
+    string Status = 8;
+    string  CreatedAt = 9;
+    string Remarks = 10;
+    string  ClosedAt = 12;
 }
 
 message RegisterSectionCodeRequest {

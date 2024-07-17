@@ -15,6 +15,8 @@ const (
 
 	//Complaint related
 	KSEB_ComplaintNotBelongsToUser = "KSEB-CRE-001"
+	KSEB_ComplaintAlreadyOpened    = "KSEB-CRE-002"
+	KSEB_ComplaintNotOpened        = "KSEB-CRE-003"
 )
 
 // KSEB response codes
@@ -30,4 +32,6 @@ func init() {
 
 	//Complaint related
 	errCodeMap[KSEB_ComplaintNotBelongsToUser] = codes.PermissionDenied //KSEB-CRE-001
+	errCodeMap[KSEB_ComplaintAlreadyOpened] = codes.FailedPrecondition  //KSEB-CRE-002
+	errCodeMap[KSEB_ComplaintNotOpened] = codes.FailedPrecondition      //KSEB-CRE-003
 }

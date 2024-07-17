@@ -97,6 +97,7 @@ func (k *KsebHandler) RaiseComplaint(c *gin.Context) {
 			Category:    req.Category,
 			Title:       req.Title,
 			Description: req.Description,
+			ConsumerNumber: req.ConsumerNumber,
 		},
 	})
 	if err == nil {

@@ -1,6 +1,8 @@
 package ksebrepo
 
 import (
+	"time"
+
 	"github.com/AbdulRahimOM/gov-services-app/agencies-svc/internal/domain/models"
 	repointerface "github.com/AbdulRahimOM/gov-services-app/agencies-svc/internal/domain/repository/interface"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
@@ -93,4 +95,68 @@ func (kr KsebRepository) RaiseComplaint(userID int32, ksebComplaint *models.Kseb
 		return 0, result.Error
 	}
 	return ksebComplaint.ID, nil
+}
+
+func (kr KsebRepository) AdminGetAllComplaints() (*[]models.KsebComplaint, error) {
+	var complaints []models.KsebComplaint
+	result := kr.DB.Find(&complaints)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &complaints, nil
+}
+
+func (kr KsebRepository) AdminGetAllComplaintsByStatus(adminID int32, status string) (*[]models.KsebComplaint, error) {
+	var complaints []models.KsebComplaint
+	result := kr.DB.Where("status=?", status).Find(&complaints)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &complaints, nil
+}
+
+func (kr KsebRepository) AdminGetAllComplaintsAttendedByHimOrNotOpened(adminID int32) (*[]models.KsebComplaint, error) {
+	var complaints []models.KsebComplaint
+	result := kr.DB.Where("attendeder_id=? OR status='not-opened'", adminID).Find(&complaints)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &complaints, nil
+}
+
+func (kr KsebRepository) AdminGetAllComplaintsAttendedByHimByStatus(adminID int32, status string) (*[]models.KsebComplaint, error) {
+	var complaints []models.KsebComplaint
+	result := kr.DB.Where("attendeder_id=? AND status=?", adminID, status).Find(&complaints)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &complaints, nil
+}
+
+func (kr KsebRepository) GetComplaintByID(complaintID int32) (*models.KsebComplaint, error) {
+	var complaint models.KsebComplaint
+	result := kr.DB.Where("id=?", complaintID).First(&complaint)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &complaint, nil
+}
+
+func (kr KsebRepository) MarkComplaintAsOpened(complaintID, adminID int32) error {
+	result := kr.DB.Model(&models.KsebComplaint{}).Where("id=?", complaintID).Update("status", "opened").Update("attendeder_id", adminID)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (kr KsebRepository) MarkComplaintAsClosed(complaintID int32, remarks string) error {
+	result := kr.DB.Model(&models.KsebComplaint{}).Where("id=?", complaintID).
+	Update("status", "closed").
+	Update("remarks", remarks).
+	Update("closed_at", time.Now())
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

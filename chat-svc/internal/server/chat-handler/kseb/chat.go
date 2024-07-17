@@ -13,14 +13,16 @@ import (
 type KsebChatServer struct {
 	ChatUseCase ucinterface.IKsebChatUC
 	pb.UnimplementedKsebChatServiceServer
-	KsebChatStreams map[int32]chan *pb.ChatMessage
-	mutex           sync.Mutex
+	UserChatStreams  map[int32]chan *pb.ChatMessage
+	AdminChatStreams map[int32]chan *pb.ChatMessage
+	mutex            sync.Mutex
 }
 
 func NewKsebChatServer(chatUseCase ucinterface.IKsebChatUC) *KsebChatServer {
 	return &KsebChatServer{
-		ChatUseCase:     chatUseCase,
-		KsebChatStreams: make(map[int32]chan *pb.ChatMessage),
+		ChatUseCase:      chatUseCase,
+		UserChatStreams:  make(map[int32]chan *pb.ChatMessage),
+		AdminChatStreams: make(map[int32]chan *pb.ChatMessage),
 	}
 }
 func (s *KsebChatServer) UserChat(req *pb.UserChatRequest, stream pb.KsebChatService_UserChatServer) error {
@@ -28,12 +30,12 @@ func (s *KsebChatServer) UserChat(req *pb.UserChatRequest, stream pb.KsebChatSer
 	msgChan := make(chan *pb.ChatMessage, 100)
 
 	s.mutex.Lock()
-	s.KsebChatStreams[userID] = msgChan
+	s.UserChatStreams[userID] = msgChan
 	s.mutex.Unlock()
 
 	defer func() {
 		s.mutex.Lock()
-		delete(s.KsebChatStreams, userID)
+		delete(s.UserChatStreams, userID)
 		s.mutex.Unlock()
 		close(msgChan)
 	}()
@@ -69,7 +71,7 @@ func (s *KsebChatServer) SendMessage(ctx context.Context, req *pb.SendMessageReq
 		sendTo = 14
 	}
 	// Send the message to all connected users
-	for usrId, ch := range s.KsebChatStreams {
+	for usrId, ch := range s.UserChatStreams {
 		if usrId == sendTo {
 			ch <- msg
 		}
@@ -82,7 +84,7 @@ func (s *KsebChatServer) SendMessage(ctx context.Context, req *pb.SendMessageReq
 	// }
 
 	// // Send the reply message back to the originating user
-	// if ch, ok := s.KsebChatStreams[userID]; ok {
+	// if ch, ok := s.UserChatStreams[userID]; ok {
 	// 	ch <- replyMessage
 	// }
 

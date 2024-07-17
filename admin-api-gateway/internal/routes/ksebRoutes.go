@@ -15,6 +15,9 @@ func RegisterKSEBAccRoutes(engine *gin.RouterGroup, ksebHandler *ksebhanlder.KSE
 	authGroup.Use(middleware.AdminAuthCheck)
 	{
 		authGroup.PUT("/register-section-code", ksebHandler.KSEBRegisterSectionCode)
+		authGroup.GET("/get-complaints", ksebHandler.AdminGetComplaints)
+		authGroup.GET("/open-complaint/:complaintId", ksebHandler.AdminOpenComplaint)
+		authGroup.POST("/close-complaint", ksebHandler.AdminCloseComplaint)
 
 		//chat
 		// authGroup.POST("/chat/send-message", ksebHandler.SendMessage)
