@@ -3,19 +3,21 @@ package ksebhandler
 import (
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
-	ksebpb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
 	"github.com/gin-gonic/gin"
 )
 
 type KsebHandler struct {
-	ksebClient ksebpb.KSEBUserServiceClient
+	ksebClient pb.KSEBAgencyUserServiceClient
+	ksebChatClient pb.KsebChatServiceClient
 }
 
-func NewKsebHandler(client ksebpb.KSEBUserServiceClient) *KsebHandler {
+func NewKsebHandler(ksebClient pb.KSEBAgencyUserServiceClient, chatClient pb.KsebChatServiceClient) *KsebHandler {
 	return &KsebHandler{
-		ksebClient: client,
+		ksebClient: ksebClient,
+		ksebChatClient: chatClient,
 	}
 }
 
@@ -32,7 +34,7 @@ func (k *KsebHandler) AddConsumerNumber(c *gin.Context) {
 		return
 	}
 
-	_, err := k.ksebClient.AddConsumerNumber(c, &ksebpb.AddConsumerNumberRequest{
+	_, err := k.ksebClient.AddConsumerNumber(c, &pb.AddConsumerNumberRequest{
 		UserId:         userID,
 		ConsumerNumber: req.ConsumerNumber,
 		NickName:       req.NickName,
@@ -54,7 +56,7 @@ func (k *KsebHandler) GetUserConsumerNumbers(c *gin.Context) {
 		return
 	}
 
-	resp, err := k.ksebClient.GetUserConsumerNumbers(c, &ksebpb.GetUserConsumerNumbersRequest{
+	resp, err := k.ksebClient.GetUserConsumerNumbers(c, &pb.GetUserConsumerNumbersRequest{
 		UserId: userID,
 	})
 	if err == nil {
@@ -88,9 +90,9 @@ func (k *KsebHandler) RaiseComplaint(c *gin.Context) {
 		return
 	}
 
-	resp, err := k.ksebClient.RaiseComplaint(c, &ksebpb.RaiseComplaintRequest{
-		UserId:    userID,
-		Complaint: &ksebpb.Complaint{
+	resp, err := k.ksebClient.RaiseComplaint(c, &pb.RaiseComplaintRequest{
+		UserId: userID,
+		Complaint: &pb.Complaint{
 			Type:        req.Type,
 			Category:    req.Category,
 			Title:       req.Title,

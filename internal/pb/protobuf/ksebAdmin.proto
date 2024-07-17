@@ -1,9 +1,14 @@
 syntax = "proto3";
 
-option go_package = "./pb/generated/ksebpb;ksebpb";
+option go_package = "./pb/generated;pb";
 import "google/protobuf/empty.proto";
 
-service KSEBAdminService {
+service KSEBAdminAccService {
+    rpc RegisterSectionCode(RegisterSectionCodeRequest) returns (google.protobuf.Empty) {}
+}
+
+service KSEBAgencyAdminService {
+    // admin
     rpc RegisterSectionCode(RegisterSectionCodeRequest) returns (google.protobuf.Empty) {}
 }
 

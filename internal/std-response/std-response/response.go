@@ -23,23 +23,6 @@ func GetGrpcStatus(respCode string, errMsg string) error {
 	return status.Error(respcode.GetGRPCCode(response.ResponseCode), string(data))
 }
 
-// // ParseGrpcStatus parses the error message and returns the response code, error message and error if failed to parse
-// func ParseGrpcStatus(err error) (string, string, error) {
-// 	fmt.Println("err:2: ", err)
-// 	st, ok := status.FromError(err)
-// 	fmt.Println("@@2 ok: ", ok)
-// 	if !ok {
-// 		return "", "", fmt.Errorf("#error is not a status error")
-// 	}
-// 	response := &ErrResponse{}
-
-// 	if unmarshallErr := json.Unmarshal([]byte(st.Message()), response); unmarshallErr != nil {
-// 		fmt.Println("Failed to unmarshall error message: ", unmarshallErr)
-// 		return "", "", unmarshallErr
-// 	}
-
-// 	return response.ResponseCode, response.Error, nil
-// }
 
 // ParseGrpcStatus parses the error message and returns the response code, error message and error if failed to parse
 func ParseGrpcStatus(st *status.Status) (string, string, error) {

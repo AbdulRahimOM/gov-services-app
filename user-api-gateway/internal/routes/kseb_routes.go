@@ -17,7 +17,9 @@ func RegisterKsebRoutes(engine *gin.RouterGroup, ksebHandler *ksebhandler.KsebHa
 		authGroup.GET("/get-my-consumer-numbers", ksebHandler.GetUserConsumerNumbers)
 
 		authGroup.POST("/raise-complaint", ksebHandler.RaiseComplaint)
-	}
 
+		// authGroup.POST("/chat/send-message", ksebHandler.SendMessage)
+		authGroup.GET("/chat/:complaintId", ksebHandler.UserChat)
+	}
 
 }

@@ -12,18 +12,16 @@ import (
 
 type KsebAdminUseCase struct {
 	adminRepo repo.IAdminRepo
-	ksebRepo  repo.IKsebRepo
 }
 
-func NewKsebAdminUseCase(adminRepo repo.IAdminRepo, ksebRepo repo.IKsebRepo) usecase.IKsebAdminUC {
+func NewKsebAdminUseCase(adminRepo repo.IAdminRepo) usecase.IKsebAdminUC {
 	return &KsebAdminUseCase{
 		adminRepo: adminRepo,
-		ksebRepo:  ksebRepo,
 	}
 }
 
 // RegisterSectionCode
-func (k *KsebAdminUseCase) RegisterSectionCode(adminID int32, req *requests.KsebRegSectionCode) (int32, string, error) {
+func (k *KsebAdminUseCase) CheckIfAdminCanRegisterSectionCode(adminID int32, req *requests.KsebRegSectionCode) (int32, string, error) {
 	//1. check if office exists with the given section office id
 	//2. check if it is section office (by rank(8) and dept id)
 	//get office details
@@ -36,15 +34,6 @@ func (k *KsebAdminUseCase) RegisterSectionCode(adminID int32, req *requests.Kseb
 	}
 	if sectionOffice.DeptID != data.DeptID_KSEB {
 		return 0, respcode.KSEB_SectionOfficeNotValid, fmt.Errorf("invalid section office id")
-	}
-
-	//check if section code already exists
-	exists,err:=k.ksebRepo.CheckIfSectionCodeExists(req.SectionCode)
-	if err != nil {
-		return 0, respcode.DBError, fmt.Errorf("@db: failed to check if section code exists: %v", err)
-	}
-	if exists {
-		return 0, respcode.KSEB_SectionCodeExists, fmt.Errorf("section code already registered")
 	}
 
 	//check if admin belongs to sub division office
@@ -79,9 +68,5 @@ func (k *KsebAdminUseCase) RegisterSectionCode(adminID int32, req *requests.Kseb
 		return 0, respcode.Unauthorized, fmt.Errorf("admin not authorized to register section code. Admin should be head or deputy head")
 	}
 
-	regId, err := k.ksebRepo.RegisterSectionCode(req)
-	if err != nil {
-		return 0, respcode.DBError, fmt.Errorf("@db: failed to register section code: %v", err)
-	}
-	return regId, "", nil
+	return 0, "", nil
 }

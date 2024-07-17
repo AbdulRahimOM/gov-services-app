@@ -39,17 +39,5 @@ func migrateTables() {
 		log.Fatal("Couldn't migrate models.Office. Error:", err)
 	}
 
-	if err := DB.AutoMigrate(&models.KsebSectionCode{}); err != nil {
-		log.Fatal("Couldn't migrate models.KsebSectionCode. Error:", err)
-	}
-
-	if err := DB.AutoMigrate(&models.UserKsebConsumerNumber{}); err != nil {
-		log.Fatal("Couldn't migrate models.KsebConsumerNumber. Error:", err)
-	}
-
-	if err := DB.AutoMigrate(&models.KsebComplaint{}); err != nil {
-		log.Fatal("Couldn't migrate models.KsebComplaint. Error:", err)
-	}
-
 	fmt.Println("Migrated tables successfully")
 }

@@ -4,8 +4,6 @@ import (
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
-	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
-	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 )
 
 type IUserUC interface {
@@ -29,9 +27,4 @@ type IUserUC interface {
 }
 
 type IKsebUserUC interface {
-	AddConsumerNumber(userID int32, consumerNumber, nickName string) (string, error)
-	GetUserConsumerNumbers(userID int32) (*[]commondto.UserConsumerNumber, string, error)
-
-	//complaint
-	RaiseComplaint(userID int32, complaint *requests.KSEBComplaint) (int32,string, error)
 }

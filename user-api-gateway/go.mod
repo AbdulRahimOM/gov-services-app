@@ -5,16 +5,16 @@ go 1.22.2
 require (
 	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0
 	github.com/gin-gonic/gin v1.10.0
+	github.com/gorilla/websocket v1.5.3
 	github.com/spf13/viper v1.19.0
 	google.golang.org/grpc v1.64.0
 )
 
-replace (
-	github.com/AbdulRahimOM/gov-services-app/internal => ../internal
-)
+replace github.com/AbdulRahimOM/gov-services-app/internal => ../internal
 
 require (
 	github.com/AbdulRahimOM/go-utils v0.0.0-20240625005829-7d8214cf7d50 // indirect
+	github.com/AbdulRahimOM/go-utils/mymath v0.0.0-20240710141430-3e08a5bcd862 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect

@@ -17,3 +17,7 @@ type KSEBComplaint struct {
 	Description    string `json:"description" binding:"required" validate:"gte=10,lte=500"`
 	ConsumerNumber string `json:"consumer_number" binding:"required" validate:"len=13,numeric"`
 }
+
+type SendMessage struct {
+	Message string `json:"message" binding:"required" validate:"gte=1,lte=500"`
+}

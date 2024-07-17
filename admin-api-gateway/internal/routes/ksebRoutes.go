@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterKSEBRoutes(engine *gin.RouterGroup, ksebHandler *ksebhanlder.KSEBHandler) {
+func RegisterKSEBAccRoutes(engine *gin.RouterGroup, ksebHandler *ksebhanlder.KSEBHandler) {
 	engine.Use(middleware.ClearCache)
 
 	//admin routes
@@ -15,5 +15,9 @@ func RegisterKSEBRoutes(engine *gin.RouterGroup, ksebHandler *ksebhanlder.KSEBHa
 	authGroup.Use(middleware.AdminAuthCheck)
 	{
 		authGroup.PUT("/register-section-code", ksebHandler.KSEBRegisterSectionCode)
+
+		//chat
+		// authGroup.POST("/chat/send-message", ksebHandler.SendMessage)
+		// authGroup.GET("/chat", ksebHandler.Chat)
 	}
 }

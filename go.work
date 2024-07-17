@@ -5,4 +5,6 @@ use (
     ./user-api-gateway
     ./internal
     ./admin-api-gateway
+    ./agencies-svc
+    ./chat-svc
 )

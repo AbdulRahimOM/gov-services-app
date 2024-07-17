@@ -12,6 +12,7 @@ const (
 	ValidationError    = "GEN-ERR-002"
 	CorruptRequest     = "GEN-ERR-003"
 	InvalidQueryParams = "GEN-ERR-004"
+	InvalidUrlParams   = "GEN-ERR-005"
 
 	//Account Credentials
 	PhoneNumberNotRegistered     = "ACC-ERR-001"

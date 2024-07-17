@@ -33,5 +33,5 @@ type IAppointmentUC interface {
 }
 
 type IKsebAdminUC interface {
-	RegisterSectionCode(adminId int32, req *requests.KsebRegSectionCode) (savedRecordId int32, responseCode string, err error)
+	CheckIfAdminCanRegisterSectionCode(adminId int32, req *requests.KsebRegSectionCode) (savedRecordId int32, responseCode string, err error)
 }

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "./pb/generated;pb";
+// import "google/protobuf/empty.proto";
+
+service KsebChatService {
+    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+    rpc UserChat(UserChatRequest) returns (stream ChatMessage);
+}
+
+message ChatMessage {
+    string sender = 1;
+    string message = 2;
+}
+message UserChatRequest {
+    int32 userId = 1;
+}
+
+message SendMessageRequest {
+    int32 userId = 1;
+    string message = 2;
+}
+
+message SendMessageResponse {
+    bool success = 1;
+}

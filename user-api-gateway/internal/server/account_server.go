@@ -1,11 +1,10 @@
 package server
 
 import (
-	ksebhandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/kseb-handler"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
-	"github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/config"
 	acchandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/account-handler"
+	ksebhandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/kseb-handler"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -14,26 +13,50 @@ import (
 )
 
 type ServiceClients struct {
+	//services in account-svc
 	UserAccountsClient pb.UserAccountServiceClient
-	KsebClient         ksebpb.KSEBUserServiceClient
+	//KsebAccClient         pb.KSEBUserAccServiceClient
+
+	//services in agency-svc
+	KSEBAgencyUserClient pb.KSEBAgencyUserServiceClient
+
+	// services in chat-svc
+	KsebChatClient pb.KsebChatServiceClient
 }
 
 func InitServiceClients() (*ServiceClients, error) {
-	clientConn, err := grpc.NewClient(config.EnvValues.AccountsSvcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	accountsSvcClientConn, err := grpc.NewClient(config.EnvValues.AccountsSvcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	agencySvcClientConn, err := grpc.NewClient(config.EnvValues.AgenciesSvcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	chatSvcClientConn, err := grpc.NewClient(config.EnvValues.ChatSvcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
 
 	return &ServiceClients{
-		UserAccountsClient: pb.NewUserAccountServiceClient(clientConn),
-		KsebClient:         ksebpb.NewKSEBUserServiceClient(clientConn),
+		UserAccountsClient: pb.NewUserAccountServiceClient(accountsSvcClientConn),
+		// KsebAccClient:         pb.NewKSEBAgencyUserServiceClient(accountsSvcClientConn),
+		KSEBAgencyUserClient: pb.NewKSEBAgencyUserServiceClient(agencySvcClientConn),
+		KsebChatClient:           pb.NewKsebChatServiceClient(chatSvcClientConn),
 	}, nil
 }
 
 func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
 	accountHandler := acchandler.NewUserAccountHandler(serviceClients.UserAccountsClient)
-	ksebHandler := ksebhandler.NewKsebHandler(serviceClients.KsebClient)
+	// ksebAccHandler := ksebhandler.NewKsebHandler(serviceClients.KsebAccClient)
+
+	ksebAgencyUserHandler := ksebhandler.NewKsebHandler(
+		serviceClients.KSEBAgencyUserClient,
+		serviceClients.KsebChatClient,
+	)
 
 	routes.RegisterRoutes(engine.Group("/"), accountHandler)
-	routes.RegisterKsebRoutes(engine.Group("/kseb"), ksebHandler)
+	routes.RegisterKsebRoutes(engine.Group("/kseb"), ksebAgencyUserHandler)
 }

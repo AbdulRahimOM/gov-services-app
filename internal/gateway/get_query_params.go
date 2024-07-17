@@ -40,11 +40,21 @@ func HandleGetQueryParamsInt32(c *gin.Context, key string) (int32, bool) {
 	return val, true
 }
 
-// func HandleGetQueryParamsString(c *gin.Context, key string) (string, bool) {
-// 	str := c.DefaultQuery(key, "")
-// 	if str == "" {
-// 		return "", true
-// 	}
+func HandleGetUrlParamsInt32(c *gin.Context, key string) (int32, bool) {
+	str := c.Param(key)
+	if str == "" {
+		return 0, true
+	}
 
-// 	return str, true
-// }
+	val, err := mymath.StringToInt32(str)
+	if err != nil {
+		c.JSON(400, stdresponse.SRE{
+			Status:       mystatus.Failed,
+			ResponseCode: respcode.InvalidUrlParams,
+			Error:        fmt.Sprintf("Invalid %s: %s", key, str),
+		})
+		return 0, false
+	}
+
+	return val, true
+}

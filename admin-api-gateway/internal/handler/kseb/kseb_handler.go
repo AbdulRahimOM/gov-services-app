@@ -6,16 +6,16 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
-	ksebpb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated/ksebpb"
+	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	"github.com/gin-gonic/gin"
 )
 
 type KSEBHandler struct {
-	ksebClient ksebpb.KSEBAdminServiceClient
+	ksebClient pb.KSEBAdminAccServiceClient
 }
 
-func NewAppointmentHandler(client ksebpb.KSEBAdminServiceClient) *KSEBHandler {
+func NewAppointmentHandler(client pb.KSEBAdminAccServiceClient) *KSEBHandler {
 	return &KSEBHandler{
 		ksebClient: client,
 	}
@@ -33,7 +33,7 @@ func (h *KSEBHandler) KSEBRegisterSectionCode(c *gin.Context) {
 		return
 	}
 
-	_, err := h.ksebClient.RegisterSectionCode(context.Background(), &ksebpb.RegisterSectionCodeRequest{
+	_, err := h.ksebClient.RegisterSectionCode(context.Background(), &pb.RegisterSectionCodeRequest{
 		AdminId:     adminId,
 		SectionCode: req.SectionCode,
 		OfficeId:    req.OfficeId,
