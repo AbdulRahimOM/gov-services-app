@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/AbdulRahimOM/gov-services-app/chat-svc/internal/domain/models"
 	"github.com/AbdulRahimOM/gov-services-app/chat-svc/internal/config"
 
 	"gorm.io/driver/postgres"
@@ -26,6 +27,10 @@ func connectToDB() {
 	}
 }
 func migrateTables() {
+	err := DB.AutoMigrate(&models.ChatMessage{})
+	if err != nil {
+		log.Fatal("Couldn't migrate tables. Error:", err)
+	}
 
 	fmt.Println("Migrated tables successfully")
 }

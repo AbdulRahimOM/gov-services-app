@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"time"
 
+	"github.com/AbdulRahimOM/gov-services-app/chat-svc/internal/domain/models"
 	ucinterface "github.com/AbdulRahimOM/gov-services-app/chat-svc/internal/usecase/interface"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	"gorm.io/gorm"
 )
 
 const msgChannSize = 100
@@ -18,13 +21,15 @@ type KsebChatServer struct {
 	UserChatStreams  map[int32]chan *pb.ChatMessage
 	AdminChatStreams map[int32]chan *pb.ChatMessage
 	mutex            sync.Mutex
+	db               *gorm.DB
 }
 
-func NewKsebChatServer(chatUseCase ucinterface.IKsebChatUC) *KsebChatServer {
+func NewKsebChatServer(chatUseCase ucinterface.IKsebChatUC,db *gorm.DB) *KsebChatServer {
 	return &KsebChatServer{
 		ChatUseCase:      chatUseCase,
 		UserChatStreams:  make(map[int32]chan *pb.ChatMessage),
 		AdminChatStreams: make(map[int32]chan *pb.ChatMessage),
+		db: 			 db,
 	}
 }
 func (s *KsebChatServer) UserChat(req *pb.UserChatRequest, stream pb.KsebChatService_UserChatServer) error {
@@ -72,6 +77,15 @@ func (s *KsebChatServer) UserSendMessage(ctx context.Context, req *pb.UserSendMe
 	}
 
 	s.UserChatStreams[complaintId] <- msg
+
+	msgModel := &models.ChatMessage{
+		ComplaintId: complaintId,
+		SenderId:    userID,
+		SenderType:  "user",
+		Content:     message,
+		CreatedAt:   time.Now(),
+	}
+	s.SaveChatToDB(msgModel)
 
 	return &pb.SendMessageResponse{Success: true}, nil
 }
@@ -125,5 +139,22 @@ func (s *KsebChatServer) AdminSendMessage(ctx context.Context, req *pb.AdminSend
 
 	s.AdminChatStreams[complaintId] <- msg
 
+	msgModel := &models.ChatMessage{
+		ComplaintId: complaintId,
+		SenderId:    adminID,
+		SenderType:  "admin",
+		Content:     message,
+		CreatedAt:   time.Now(),
+	}
+	s.SaveChatToDB(msgModel)
+
 	return &pb.SendMessageResponse{Success: true}, nil
+}
+
+func (s *KsebChatServer) SaveChatToDB(entry *models.ChatMessage) error {
+	result := s.db.Create(entry)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

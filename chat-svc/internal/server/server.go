@@ -17,7 +17,7 @@ func InitializeServer() *Servers {
 	chatRepository := chatrepo.NewChatRepository(db.DB)
 
 	KsebChatUseCase := ksebUc.NewKsebChatUseCase(chatRepository)
-	KsebChatServer := ksebHandler.NewKsebChatServer(KsebChatUseCase)
+	KsebChatServer := ksebHandler.NewKsebChatServer(KsebChatUseCase,db.DB)
 
 
 	return &Servers{
