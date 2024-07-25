@@ -3,29 +3,25 @@ package middleware
 import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-// RankCheck
-func CheckRank(minRank int) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		rank:= c.GetInt("rank")
-		if rank<=0 {
-			c.JSON(401, response.SRE{
+func CheckRank(minRank int) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		rank := c.Locals("rank").(int)
+		if rank <= 0 {
+			return c.Status(401).JSON(response.SRE{
 				Status:       "failed",
 				ResponseCode: respCode.Unauthorized,
 				Error:        "Invalid rank",
 			})
-			c.Abort()
-			return
-		}else if rank<minRank{
-			c.JSON(401, response.SRE{
+		} else if rank < minRank {
+			return c.Status(401).JSON(response.SRE{
 				Status:       "failed",
 				ResponseCode: respCode.Unauthorized,
 				Error:        "Insufficient rank",
 			})
-			c.Abort()
-			return
 		}
+		return c.Next()
 	}
 }

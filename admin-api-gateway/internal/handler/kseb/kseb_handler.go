@@ -6,10 +6,10 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 type KSEBHandler struct {
@@ -27,41 +27,40 @@ func NewKsebHandler(accClient pb.KSEBAdminAccServiceClient, agencyAdminClient pb
 }
 
 // KSEBRegisterSectionCode
-func (kseb *KSEBHandler) KSEBRegisterSectionCode(c *gin.Context) {
+func (kseb *KSEBHandler) KSEBRegisterSectionCode(c *fiber.Ctx) error {
 	var req requests.KsebRegSectionCode
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+		return err
 	}
 
-	adminId, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminId, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
-	_, err := kseb.accClient.RegisterSectionCode(context.Background(), &pb.RegisterSectionCodeRequest{
+	_, err = kseb.accClient.RegisterSectionCode(context.Background(), &pb.RegisterSectionCodeRequest{
 		AdminId:     adminId,
 		SectionCode: req.SectionCode,
 		OfficeId:    req.OfficeId,
 	})
 
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 
 }
 
-// KSEBGetComplaints
-func (kseb *KSEBHandler) AdminGetComplaints(c *gin.Context) {
-	status := c.DefaultQuery("status", "all")       //all, opened, closed, not-opened
-	attenderScope := c.DefaultQuery("scope", "all") //all, me-only
+func (kseb *KSEBHandler) AdminGetComplaints(c *fiber.Ctx) error {
+	status := c.Query("status", "all")       //all, opened, closed, not-opened
+	attenderScope := c.Query("scope", "all") //all, me-only
 
-	adminId, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminId, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
 	resp, err := kseb.agencyAdminClient.GetComplaints(context.Background(), &pb.GetComplaintsRequest{
@@ -88,64 +87,63 @@ func (kseb *KSEBHandler) AdminGetComplaints(c *gin.Context) {
 				ClosedAt:       complaint.ClosedAt,
 			}
 		}
-		c.JSON(200, response.GetKsebComplaints{
+		return c.Status(200).JSON(response.GetKsebComplaints{
 			Status:     mystatus.Success,
 			Complaints: complaints,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
+
 }
 
-// AdminOpenComplaint
-func (kseb *KSEBHandler) AdminOpenComplaint(c *gin.Context) {
-	complaintId, ok := gateway.HandleGetUrlParamsInt32(c, "complaintId")
-	if !ok {
-		return
+func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
+	complaintId, err := gateway.HandleGetUrlParamsInt32Fiber(c, "complaintId")
+	if err != nil {
+		return err
 	}
 
-	adminId, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminId, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
-	_, err := kseb.agencyAdminClient.OpenComplaint(context.Background(), &pb.OpenComplaintRequest{
+	_, err = kseb.agencyAdminClient.OpenComplaint(context.Background(), &pb.OpenComplaintRequest{
 		AdminId:     adminId,
 		ComplaintId: complaintId,
 	})
 
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// AdminCloseComplaint
-func (kseb *KSEBHandler) AdminCloseComplaint(c *gin.Context) {
+func (kseb *KSEBHandler) AdminCloseComplaint(c *fiber.Ctx) error {
 	var req requests.KsebCloseComplaint
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+		return err
 	}
 
-	adminId, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminId, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
-	_, err := kseb.agencyAdminClient.CloseComplaint(context.Background(), &pb.CloseComplaintRequest{
+	_, err = kseb.agencyAdminClient.CloseComplaint(context.Background(), &pb.CloseComplaintRequest{
 		AdminId:     adminId,
 		ComplaintId: req.ComplaintId,
 		Remarks:     req.Remarks,
 	})
 
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }

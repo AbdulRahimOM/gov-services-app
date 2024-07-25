@@ -5,24 +5,23 @@ import (
 
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/request"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-// AdminGetProfile
-func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) {
-	adminID, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+func (u *AdminAccountHandler) AdminGetProfile(c *fiber.Ctx) error {
+	adminID, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
 	resp, err := u.accountsClient.AdminGetProfile(context.Background(), &pb.AdminGetProfileRequest{
 		AdminId: adminID,
 	})
 	if err == nil {
-		c.JSON(200, response.AdminGetProfileResponse{
+		return c.Status(200).JSON(response.AdminGetProfileResponse{
 			Status: mystatus.Success,
 			Profile: response.Profile{
 				FirstName:   resp.FirstName,
@@ -35,64 +34,62 @@ func (u *AdminAccountHandler) AdminGetProfile(c *gin.Context) {
 			},
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// UpdatePassword
-func (u *AdminAccountHandler) AdminUpdatePasswordUsingOldPw(c *gin.Context) {
+func (u *AdminAccountHandler) AdminUpdatePasswordUsingOldPw(c *fiber.Ctx) error {
 	var req request.AdminUpdatePasswordUsingOldPw
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+		return err
 	}
 
-	adminID, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminID, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
-	_, err := u.accountsClient.AdminUpdatePasswordUsingOldPw(context.Background(), &pb.AdminUpdatePasswordUsingOldPwRequest{
+	_, err = u.accountsClient.AdminUpdatePasswordUsingOldPw(c.Context(), &pb.AdminUpdatePasswordUsingOldPwRequest{
 		AdminId:     adminID,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
 	})
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// AdminUpdateProfile
-func (u *AdminAccountHandler) AdminUpdateProfile(c *gin.Context) {
+func (u *AdminAccountHandler) AdminUpdateProfile(c *fiber.Ctx) error {
 	var req request.AdminUpdateProfile
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+		return err
 	}
 
-	adminID, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminID, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
-	_, err := u.accountsClient.AdminUpdateProfile(context.Background(), &pb.AdminUpdateProfileRequest{
-		AdminId:   adminID,
-		FirstName: req.FirstName,
-		LastName:  req.LastName,
-		Email:     req.Email,
-		Address:   req.Address,
-		Pincode:   req.Pincode,
+	_, err = u.accountsClient.AdminUpdateProfile(context.Background(), &pb.AdminUpdateProfileRequest{
+		AdminId:     adminID,
+		FirstName:   req.FirstName,
+		LastName:    req.LastName,
+		Email:       req.Email,
+		Address:     req.Address,
+		Pincode:     req.Pincode,
 		PhoneNumber: req.PhoneNumber,
 	})
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }

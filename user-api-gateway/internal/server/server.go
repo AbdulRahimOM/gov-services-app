@@ -6,8 +6,8 @@ import (
 	acchandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/account-handler"
 	ksebhandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/kseb-handler"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/routes"
+	"github.com/gofiber/fiber/v2"
 
-	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -44,11 +44,11 @@ func InitServiceClients() (*ServiceClients, error) {
 		UserAccountsClient: pb.NewUserAccountServiceClient(accountsSvcClientConn),
 		// KsebAccClient:         pb.NewKSEBAgencyUserServiceClient(accountsSvcClientConn),
 		KSEBAgencyUserClient: pb.NewKSEBAgencyUserServiceClient(agencySvcClientConn),
-		KsebChatClient:           pb.NewKsebChatServiceClient(chatSvcClientConn),
+		KsebChatClient:       pb.NewKsebChatServiceClient(chatSvcClientConn),
 	}, nil
 }
 
-func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
+func InitRoutes(serviceClients *ServiceClients, api *fiber.App) {
 	accountHandler := acchandler.NewUserAccountHandler(serviceClients.UserAccountsClient)
 	// ksebAccHandler := ksebhandler.NewKsebHandler(serviceClients.KsebAccClient)
 
@@ -57,6 +57,6 @@ func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
 		serviceClients.KsebChatClient,
 	)
 
-	routes.RegisterRoutes(engine.Group("/"), accountHandler)
-	routes.RegisterKsebRoutes(engine.Group("/kseb"), ksebAgencyUserHandler)
+	routes.RegisterRoutes(api.Group("/"), accountHandler)
+	routes.RegisterKsebRoutes(api.Group("/kseb"), ksebAgencyUserHandler)
 }

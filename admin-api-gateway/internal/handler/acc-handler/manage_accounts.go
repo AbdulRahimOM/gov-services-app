@@ -3,44 +3,42 @@ package acchandler
 import (
 	response "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
+func (h *AdminAccountHandler) AdminGetAdmins(c *fiber.Ctx) error {
 
-
-// AdminGetAdmins
-func (h *AdminAccountHandler) AdminGetAdmins(c *gin.Context) {
-
-	adminID, ok := gateway.GetAdminIdFromContext(c)
-	if !ok {
-		return
+	adminID, err := gateway.GetAdminIdFromContextFiber(c)
+	if err != nil {
+		return err
 	}
 
 	searchCriteria := pb.AdminSearchCriteria{
-		FirstName:   c.DefaultQuery("fName", ""),
-		LastName:    c.DefaultQuery("lName", ""),
-		Email:       c.DefaultQuery("email", ""),
-		PhoneNumber: c.DefaultQuery("phoneNumber", ""),
-		Designation: c.DefaultQuery("designation", ""),
+		FirstName:   c.Query("fName"),
+		LastName:    c.Query("lName"),
+		Email:       c.Query("email"),
+		PhoneNumber: c.Query("phoneNumber"),
+		Designation: c.Query("designation"),
 	}
 
-	searchCriteria.OfficeId, ok = gateway.HandleGetQueryParamsInt32(c, "officeId")
-	if !ok {
-		return
+	searchCriteria.OfficeId, err = gateway.HandleGetQueryParamsInt32Fiber(c, "officeId")
+	if err != nil {
+		return err
 	}
-	// searchCriteria.RankId, ok = gateway.HandleGetQueryParamsInt32(c, "rankId")
-	// if !ok {
-	// 	return
+
+	// searchCriteria.RankId, err = gateway.HandleGetQueryParamsInt32Fiber(c, "rankId")
+	// if err != nil {
+	// 	return err
 	// }
-	// searchCriteria.PostId, ok = gateway.HandleGetQueryParamsInt32(c, "postId")
-	// if !ok {
-	// 	return
+	// searchCriteria.PostId, err = gateway.HandleGetQueryParamsInt32Fiber(c, "postId")
+	// if err != nil {
+	// 	return err
 	// }
 
-	resp, err := h.accountsClient.AdminGetAdmins(c, &pb.AdminGetAdminsRequest{
+	resp, err := h.accountsClient.AdminGetAdmins(c.Context(), &pb.AdminGetAdminsRequest{
 		AdminId:        adminID,
 		SearchCriteria: &searchCriteria,
 	})
@@ -56,15 +54,15 @@ func (h *AdminAccountHandler) AdminGetAdmins(c *gin.Context) {
 				Address:     admin.Address,
 				Pincode:     admin.Pincode,
 				PhoneNumber: admin.PhoneNumber,
-				OfficeId:   admin.OfficeId,
+				OfficeId:    admin.OfficeId,
 				Designation: admin.Designation,
 			})
 		}
-		c.JSON(200, response.AdminGetAdminsResponse{
+		return c.Status(200).JSON(response.AdminGetAdminsResponse{
 			Status: mystatus.Success,
 			Admins: admins,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }

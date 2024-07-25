@@ -1,14 +1,14 @@
 package middleware
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
 	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 var jwtVerifier *jwttoken.TokenVerifier
@@ -20,43 +20,36 @@ func init() {
 		log.Fatalf("Failed to create token verifier: %v", err)
 	}
 }
-func AdminAuthCheck(c *gin.Context) {
-	tokenString := strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer ")
+
+func AdminAuthCheck(c *fiber.Ctx) error {
+	fmt.Println("====AdminAuthCheck====")
+	tokenString := strings.TrimPrefix(c.Get("Authorization"), "Bearer ")
 	isTokenValid, accInfo, addlInfo, err := jwtVerifier.ValidateToken(tokenString)
 	if !isTokenValid {
-		c.JSON(401, response.SRE{
+		return c.Status(401).JSON(response.SRE{
 			Status:       "failed",
 			ResponseCode: respCode.Unauthenticated,
 			Error:        err.Error(),
 		})
-		c.Abort()
-		return
 	}
 
 	switch accInfo.Role {
 	case "admin":
-		c.Set("role", accInfo.Role)
-		c.Set("adminID", accInfo.Id)
+		c.Locals("role", accInfo.Role)
+		c.Locals("adminID", accInfo.Id)
 	case "password-not-set-admin":
-		c.Redirect(302, "/admin/profile/set-password")
+		return c.Redirect("/admin/profile/set-password")
 	default:
-		c.JSON(401, response.SRE{
+		return c.Status(401).JSON(response.SRE{
 			Status:       "failed",
 			ResponseCode: respCode.Unauthorized,
 			Error:        "Invalid role. Should be admin, but is " + accInfo.Role,
 		})
-		c.Abort()
-		return
 	}
 
 	if addlInfo != nil {
-		addlInfo.SetContext(c)
+		addlInfo.SetContextFiber(c)
 	}
 
-	c.Next()
-}
-
-// SuperAdminCheck
-func SuperAdminCheck (c *gin.Context){
-	
+	return c.Next()
 }

@@ -5,61 +5,50 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
+	"strconv"
 
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
+	"github.com/gofiber/websocket/v2"
 	"github.com/segmentio/kafka-go"
 )
 
-// UserChat
-func (k *KsebHandler) UserChat(c *gin.Context) {
-	complaintId, ok := gateway.HandleGetUrlParamsInt32(c, "complaintId")
+func (k *KsebHandler) UserChatWebsocket(conn *websocket.Conn) {
+	defer conn.Close()
+	complaintId := conn.Params("complaintId")
+
+	userID, ok := gateway.GetUserIdFromWebsocketConn(conn)
 	if !ok {
+		conn.WriteMessage(websocket.TextMessage, []byte("Unauthorized"))
 		return
 	}
+	fmt.Println("userID", userID)
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
+	// Convert complaintId to int32
+	complaintIdInt, err := strconv.Atoi(complaintId)
+	if err != nil {
+		conn.WriteMessage(websocket.TextMessage, []byte("Invalid complaintId"))
 		return
 	}
+	complaintIdInt32 := int32(complaintIdInt)
 
-	_, err := k.agencyUserClient.CheckIfComplaintBelongsToUser(c, &pb.CheckIfComplaintBelongsToUserRequest{
+	_, err = k.agencyUserClient.CheckIfComplaintBelongsToUser(context.Background(), &pb.CheckIfComplaintBelongsToUserRequest{
 		UserId:      userID,
-		ComplaintId: complaintId,
+		ComplaintId: complaintIdInt32,
 	})
 	if err != nil {
-		gateway.HandleGrpcStatus(c, err)
+		log.Printf("gRPC error: %v", err)
+		conn.WriteMessage(websocket.TextMessage, []byte("Error: Could not verify complaint ownership"))
 		return
 	}
 
-	handleWebSocket(c.Writer, c.Request, k.ksebChatClient, userID, complaintId)
-}
-
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true // Allow all origins
-	},
-}
-
-func handleWebSocket(w http.ResponseWriter, r *http.Request, chatClient pb.KsebChatServiceClient, userID int32, complaintId int32) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Printf("Failed to upgrade connection: %v", err)
-		return
-	}
-	defer conn.Close()
-
-	stream, err := chatClient.UserChat(context.Background(), &pb.UserChatRequest{
+	stream, err := k.ksebChatClient.UserChat(context.Background(), &pb.UserChatRequest{
 		UserId:      userID,
-		ComplaintId: complaintId,
+		ComplaintId: complaintIdInt32,
 	})
 	if err == nil {
 		// Handle incoming messages from WebSocket clients
-		// Read messages from WebSocket client and send to gRPC server
 		go func() {
 			for {
 				_, message, err := conn.ReadMessage()
@@ -68,9 +57,9 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request, chatClient pb.KsebC
 					break
 				}
 
-				_, err = chatClient.UserSendMessage(context.Background(), &pb.UserSendMessageRequest{
+				_, err = k.ksebChatClient.UserSendMessage(context.Background(), &pb.UserSendMessageRequest{
 					UserId:      userID,
-					ComplaintId: complaintId,
+					ComplaintId: complaintIdInt32,
 					Message:     string(message),
 				})
 				if err != nil {
@@ -86,12 +75,27 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request, chatClient pb.KsebC
 		log.Printf("Failed to create gRPC stream: %v", err)
 
 		// handler incoming messages from WebSocket clients and send to Kafka (instead of gRPC)
-		go websocketToKafka(conn, userID, complaintId)
+		go websocketToKafka(conn, userID, complaintIdInt32)
 	}
 
 	// Handle incoming messages from Kafka
 	kafkaReader(context.Background(), conn)
+}
 
+func grpcReader(stream pb.KsebChatService_UserChatClient, conn *websocket.Conn) {
+	for {
+		// Receive messages from gRPC stream
+		msg, err := stream.Recv()
+		if err != nil {
+			log.Printf("Receive error from gRPC: %v", err)
+			break
+		}
+
+		if err := conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("%s: %s", msg.Sender, msg.Message))); err != nil {
+			log.Printf("Write error to WebSocket: %v", err)
+			continue
+		}
+	}
 }
 
 func websocketToKafka(conn *websocket.Conn, userID int32, complaintId int32) {
@@ -115,9 +119,9 @@ func websocketToKafka(conn *websocket.Conn, userID int32, complaintId int32) {
 
 		chatMessage := commondto.ChatMessage{
 			ComplaintId: complaintId,
-			SenderId: userID,
-			SenderType: "user",
-			Content:  string(message),
+			SenderId:    userID,
+			SenderType:  "user",
+			Content:     string(message),
 		}
 		msgBytes, err := json.Marshal(chatMessage)
 		if err != nil {
@@ -138,24 +142,7 @@ func websocketToKafka(conn *websocket.Conn, userID int32, complaintId int32) {
 	}
 }
 
-
-func grpcReader(stream pb.KsebChatService_UserChatClient, conn *websocket.Conn) {
-	for {
-		// Receive messages from gRPC stream
-		msg, err := stream.Recv()
-		if err != nil {
-			log.Printf("Receive error from gRPC: %v", err)
-			break
-		}
-
-		if err := conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("%s: %s", msg.Sender, msg.Message))); err != nil {
-			log.Printf("Write error to WebSocket: %v", err)
-			// continue
-		}
-	}
-}
-
-func kafkaReader(ctx context.Context, conn *websocket.Conn) { // Read messages from Kafka and send to WebSocket client
+func kafkaReader(ctx context.Context, conn *websocket.Conn) {
 	reader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:   []string{"localhost:9092"},
 		Topic:     "admin-messages",

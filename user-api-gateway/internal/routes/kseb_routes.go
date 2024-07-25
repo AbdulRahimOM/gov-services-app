@@ -1,25 +1,29 @@
 package routes
 
 import (
+	"time"
+
 	ksebhandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/kseb-handler"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/middleware"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
-func RegisterKsebRoutes(engine *gin.RouterGroup, ksebHandler *ksebhandler.KsebHandler) {
-	engine.Use(middleware.ClearCache)
+func RegisterKsebRoutes(api fiber.Router, ksebHandler *ksebhandler.KsebHandler) {
+	api.Use(middleware.ClearCache)
 
-	authGroup := engine.Group("/user")
+	authGroup := api.Group("/user")
 	authGroup.Use(middleware.UserAuthCheck)
 	{
-		authGroup.PUT("/add-consumer-number", ksebHandler.AddConsumerNumber)
-		authGroup.GET("/get-my-consumer-numbers", ksebHandler.GetUserConsumerNumbers)
+		authGroup.Put("/add-consumer-number", ksebHandler.AddConsumerNumber)
+		authGroup.Get("/get-my-consumer-numbers", ksebHandler.GetUserConsumerNumbers)
 
-		authGroup.POST("/raise-complaint", ksebHandler.RaiseComplaint)
+		authGroup.Post("/raise-complaint", ksebHandler.RaiseComplaint)
 
-		// authGroup.POST("/chat/send-message", ksebHandler.SendMessage)
-		authGroup.GET("/chat/:complaintId", ksebHandler.UserChat)
+		//chat
+		authGroup.Get("/chat/:complaintId/websocket", websocket.New(ksebHandler.UserChatWebsocket, websocket.Config{
+			HandshakeTimeout: 10 * time.Second,
+		}))
 	}
 
 }

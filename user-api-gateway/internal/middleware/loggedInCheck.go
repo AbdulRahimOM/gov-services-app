@@ -1,7 +1,9 @@
 package middleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
-func NotLoggedInCheck(c *gin.Context) {
-
+func NotLoggedInCheck(c *fiber.Ctx) error {
+	return c.Next()
 }

@@ -7,8 +7,8 @@ import (
 	ksebhanlder "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/kseb"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/routes"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	"github.com/gofiber/fiber/v2"
 
-	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -55,12 +55,12 @@ func InitServiceClients() (*ServiceClients, error) {
 	}, nil
 }
 
-func InitRoutes(serviceClients *ServiceClients, engine *gin.Engine) {
+func InitRoutes(serviceClients *ServiceClients, api *fiber.App) {
 	accountHandler := acchandler.NewAdminAccountHandler(serviceClients.AccountsClient)
 	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient)
 
 	ksebAccHandler := ksebhanlder.NewKsebHandler(serviceClients.KsebAccClient, serviceClients.KSEBAgencyAdminClient, serviceClients.KsebChatClient)
 
-	routes.RegisterRoutes(engine.Group("/"), accountHandler, appointmentHandler)
-	routes.RegisterKSEBAccRoutes(engine.Group("/kseb"), ksebAccHandler)
+	routes.RegisterRoutes(api.Group("/"), accountHandler, appointmentHandler)
+	routes.RegisterKSEBAccRoutes(api.Group("/kseb"), ksebAccHandler)
 }

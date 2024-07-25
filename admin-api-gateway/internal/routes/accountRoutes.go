@@ -1,49 +1,48 @@
 package routes
 
 import (
-	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/acc-handler"
+	acchandler "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/acc-handler"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/appointments"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/middleware"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterRoutes(engine *gin.RouterGroup, adminAccHandler *acchandler.AdminAccountHandler, appointmentHandler *appointments.AppointmentHandler) {
-	engine.Use(middleware.ClearCache)
+func RegisterRoutes(api fiber.Router, adminAccHandler *acchandler.AdminAccountHandler, appointmentHandler *appointments.AppointmentHandler) {
+	api.Use(middleware.ClearCache)
 
 	//routes for those who are not logged in______________________________________________
-	strangersGroup := engine.Group("/admin")
+	strangersGroup := api.Group("/admin")
 	strangersGroup.Use(middleware.NotLoggedInCheck)
 	{
-		strangersGroup.GET("/login", adminAccHandler.Ping)                                  //done
-		strangersGroup.POST("/login-using-password", adminAccHandler.AdminLoginViaPassword) //done
+		strangersGroup.Get("/login", adminAccHandler.Ping)                                  //done
+		strangersGroup.Post("/login-using-password", adminAccHandler.AdminLoginViaPassword) //done
 	}
 
 	//routes for those who are logged in-------------------------------------------------
-	authGroup := engine.Group("/admin")
+	authGroup := api.Group("/admin")
 	authGroup.Use(middleware.AdminAuthCheck)
 	{
 		profileGroup := authGroup.Group("/profile")
 		{
-			profileGroup.GET("/view", adminAccHandler.AdminGetProfile)                                        //done
-			profileGroup.GET("/edit-page", adminAccHandler.AdminGetProfile)                                   //done
-			profileGroup.POST("/update", adminAccHandler.AdminUpdateProfile)                                  //done
-			profileGroup.POST("/update-password/using-old-pw", adminAccHandler.AdminUpdatePasswordUsingOldPw) //done
+			profileGroup.Get("/view", adminAccHandler.AdminGetProfile)                                        //done
+			profileGroup.Get("/edit-page", adminAccHandler.AdminGetProfile)                                   //done
+			profileGroup.Post("/update", adminAccHandler.AdminUpdateProfile)                                  //done
+			profileGroup.Post("/update-password/using-old-pw", adminAccHandler.AdminUpdatePasswordUsingOldPw) //done
 		}
 
-		authGroup.GET("/manage-admins/view", adminAccHandler.AdminGetAdmins) //done
-		
-		offices:= authGroup.Group("/offices")	//...................../admin/offices
+		authGroup.Get("/manage-admins/view", adminAccHandler.AdminGetAdmins) //done
+
+		offices := authGroup.Group("/offices") //...................../admin/offices
 		{
-			offices.GET("/view", adminAccHandler.AdminGetOffices) 
-			offices.PUT("/new-child-office", appointmentHandler.CreateChildOffice)
+			offices.Get("/view", adminAccHandler.AdminGetOffices)
+			offices.Put("/new-child-office", appointmentHandler.CreateChildOffice)
 		}
 
-		appointments := authGroup.Group("/appoint")	//...................../admin/appoint
+		appointments := authGroup.Group("/appoint") //...................../admin/appoint
 		{
-			appointments.PUT("/attender", appointmentHandler.AppointAttender) //appoint other attenders of an office
-			appointments.PUT("/child-office-head", appointmentHandler.AppointChildOfficeHead)
-			appointments.PUT("/child-office-deputy-head", appointmentHandler.AppointChildOfficeDeputyHead)
+			appointments.Put("/attender", appointmentHandler.AppointAttender) //appoint other attenders of an office
+			appointments.Put("/child-office-head", appointmentHandler.AppointChildOfficeHead)
+			appointments.Put("/child-office-deputy-head", appointmentHandler.AppointChildOfficeDeputyHead)
 		}
 	}
 

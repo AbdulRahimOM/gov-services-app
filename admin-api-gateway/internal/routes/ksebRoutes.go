@@ -1,25 +1,31 @@
 package routes
 
 import (
+	"time"
+
 	ksebhanlder "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/kseb"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/middleware"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
-func RegisterKSEBAccRoutes(engine *gin.RouterGroup, ksebHandler *ksebhanlder.KSEBHandler) {
-	engine.Use(middleware.ClearCache)
+func RegisterKSEBAccRoutes(api fiber.Router, ksebHandler *ksebhanlder.KSEBHandler) {
+	api.Use(middleware.ClearCache)
 
 	//admin routes
-	authGroup := engine.Group("/admin")
+	authGroup := api.Group("/admin")
 	authGroup.Use(middleware.AdminAuthCheck)
 	{
-		authGroup.PUT("/register-section-code", ksebHandler.KSEBRegisterSectionCode)
-		authGroup.GET("/get-complaints", ksebHandler.AdminGetComplaints)
-		authGroup.GET("/open-complaint/:complaintId", ksebHandler.AdminOpenComplaint)
-		authGroup.POST("/close-complaint", ksebHandler.AdminCloseComplaint)
+		authGroup.Put("/register-section-code", ksebHandler.KSEBRegisterSectionCode)
+		authGroup.Get("/get-complaints", ksebHandler.AdminGetComplaints)
+		authGroup.Get("/open-complaint/:complaintId", ksebHandler.AdminOpenComplaint)
+		authGroup.Post("/close-complaint", ksebHandler.AdminCloseComplaint)
 
 		//chat
-		authGroup.GET("/chat/:complaintId", ksebHandler.AdminChat)
+		authGroup.Get("/chat/:complaintId/ws", websocket.New(ksebHandler.AdminChatWebsocket, websocket.Config{
+			HandshakeTimeout: 10 * time.Second,
+		}))
+
 	}
+
 }

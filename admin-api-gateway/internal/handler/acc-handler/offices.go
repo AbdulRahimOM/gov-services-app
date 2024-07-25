@@ -3,36 +3,35 @@ package acchandler
 import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-// AdminGetOffices
-func (h *AdminAccountHandler) AdminGetOffices(c *gin.Context) {
+func (h *AdminAccountHandler) AdminGetOffices(c *fiber.Ctx) error {
 	searchCriteria := pb.OfficeSearchCriteria{
-		Name:    c.DefaultQuery("name", ""),
-		Address: c.DefaultQuery("address", ""),
+		Name:    c.Query("name"),
+		Address: c.Query("address"),
 	}
-	var ok bool
-	searchCriteria.Id, ok = gateway.HandleGetQueryParamsInt32(c, "id")
-	if !ok {
-		return
+	var err error
+	searchCriteria.Id, err = gateway.HandleGetQueryParamsInt32Fiber(c, "id")
+	if err != nil {
+		return err
 	}
-	searchCriteria.DeptID, ok = gateway.HandleGetQueryParamsInt32(c, "deptId")
-	if !ok {
-		return
+	searchCriteria.DeptID, err = gateway.HandleGetQueryParamsInt32Fiber(c, "deptId")
+	if err != nil {
+		return err
 	}
-	searchCriteria.Rank, ok = gateway.HandleGetQueryParamsInt32(c, "rank")
-	if !ok {
-		return
+	searchCriteria.Rank, err = gateway.HandleGetQueryParamsInt32Fiber(c, "rank")
+	if err != nil {
+		return err
 	}
-	searchCriteria.SuperiorOfficeID, ok = gateway.HandleGetQueryParamsInt32(c, "superiorOfficeId")
-	if !ok {
-		return
+	searchCriteria.SuperiorOfficeID, err = gateway.HandleGetQueryParamsInt32Fiber(c, "superiorOfficeId")
+	if err != nil {
+		return err
 	}
-	resp, err := h.accountsClient.AdminGetOffices(c, &searchCriteria)
+	resp, err := h.accountsClient.AdminGetOffices(c.Context(), &searchCriteria)
 
 	if err == nil {
 		var offices []*commondto.Office
@@ -46,11 +45,11 @@ func (h *AdminAccountHandler) AdminGetOffices(c *gin.Context) {
 				SuperiorOfficeID: office.SuperiorOfficeId,
 			})
 		}
-		c.JSON(200, response.AdminGetOffices{
+		return c.Status(200).JSON(response.AdminGetOffices{
 			Status:  mystatus.Success,
 			Offices: offices,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }

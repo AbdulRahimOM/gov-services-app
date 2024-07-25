@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v5"
 )
 
@@ -20,17 +21,18 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-
 type AddlInfoType interface {
 	isCustomClaimType()
 	getWithLabel() additionalInfoWithLabel
 	getFromInfoMap(infoMap map[string]interface{}) (*ExtraPurposeInfo, error)
-	SetContext(c *gin.Context)
+	SetContextGin(c *gin.Context)
+	SetContextFiber(c *fiber.Ctx)
 }
 type additionalInfoWithLabel struct {
 	Label string
 	Info  interface{}
 }
+
 func getCustomClaim(accInfo AccountInfo, addlInfo AddlInfoType, expiryTime time.Duration) *CustomClaims {
 	claims := &CustomClaims{
 		AccountInfo: accInfo,
@@ -96,6 +98,6 @@ func getAddlInfo(addlInfo map[string]interface{}) AddlInfoType {
 		}
 		return extraPurposeInfo
 	default:
-		panic("Invalid label")	//unimplemented labels will panic	//code should be updated to handle new labels
+		panic("Invalid label") //unimplemented labels will panic	//code should be updated to handle new labels
 	}
 }

@@ -2,61 +2,59 @@ package ksebhandler
 
 import (
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 type KsebHandler struct {
 	agencyUserClient pb.KSEBAgencyUserServiceClient
-	ksebChatClient pb.KsebChatServiceClient
+	ksebChatClient   pb.KsebChatServiceClient
 }
 
 func NewKsebHandler(ksebClient pb.KSEBAgencyUserServiceClient, chatClient pb.KsebChatServiceClient) *KsebHandler {
 	return &KsebHandler{
 		agencyUserClient: ksebClient,
-		ksebChatClient: chatClient,
+		ksebChatClient:   chatClient,
 	}
 }
 
-// AddConsumerNumber
-func (k *KsebHandler) AddConsumerNumber(c *gin.Context) {
+func (k *KsebHandler) AddConsumerNumber(c *fiber.Ctx) error {
 	var req requests.UserAddConsumerNumber
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	_, err := k.agencyUserClient.AddConsumerNumber(c, &pb.AddConsumerNumberRequest{
+	_, err := k.agencyUserClient.AddConsumerNumber(c.Context(), &pb.AddConsumerNumberRequest{
 		UserId:         userID,
 		ConsumerNumber: req.ConsumerNumber,
 		NickName:       req.NickName,
 	})
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 			Msg:    "Consumer number added successfully",
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// GetUserConsumerNumbers
-func (k *KsebHandler) GetUserConsumerNumbers(c *gin.Context) {
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+func (k *KsebHandler) GetUserConsumerNumbers(c *fiber.Ctx) error {
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	resp, err := k.agencyUserClient.GetUserConsumerNumbers(c, &pb.GetUserConsumerNumbersRequest{
+	resp, err := k.agencyUserClient.GetUserConsumerNumbers(c.Context(), &pb.GetUserConsumerNumbersRequest{
 		UserId: userID,
 	})
 	if err == nil {
@@ -68,46 +66,45 @@ func (k *KsebHandler) GetUserConsumerNumbers(c *gin.Context) {
 				NickName:       consumerNumber.NickName,
 			}
 		}
-		c.JSON(200, response.GetConnections{
+		return c.Status(200).JSON(response.GetConnections{
 			Status:      mystatus.Success,
 			Connections: connections,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// RaiseComplaint
-func (k *KsebHandler) RaiseComplaint(c *gin.Context) {
+func (k *KsebHandler) RaiseComplaint(c *fiber.Ctx) error {
 	var req requests.KSEBComplaint
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	resp, err := k.agencyUserClient.RaiseComplaint(c, &pb.RaiseComplaintRequest{
+	resp, err := k.agencyUserClient.RaiseComplaint(c.Context(), &pb.RaiseComplaintRequest{
 		UserId: userID,
 		Complaint: &pb.Complaint{
-			Type:        req.Type,
-			Category:    req.Category,
-			Title:       req.Title,
-			Description: req.Description,
+			Type:           req.Type,
+			Category:       req.Category,
+			Title:          req.Title,
+			Description:    req.Description,
 			ConsumerNumber: req.ConsumerNumber,
 		},
 	})
 	if err == nil {
-		c.JSON(200, response.KSEB_RaiseComplaint{
+		return c.Status(200).JSON(response.KSEB_RaiseComplaint{
 			Status: mystatus.Success,
 			ComplaintDetails: response.ComplaintDetails{
 				Id: resp.ComplaintId,
 			},
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }

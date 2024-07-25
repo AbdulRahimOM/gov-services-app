@@ -1,109 +1,102 @@
 package acchandler
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/AbdulRahimOM/gov-services-app/internal/gateway"
+	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 	"github.com/AbdulRahimOM/gov-services-app/internal/tag"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/request"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-
-// UserGetOTPForPwChange
-func (u *UserAccountHandler) UserGetOTPForPwChange(c *gin.Context) { //done
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+func (u *UserAccountHandler) UserGetOTPForPwChange(c *fiber.Ctx) error {
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	resp, err := u.accountsClient.UserGetOTPForPwChange(context.Background(), &pb.UserGetOTPForPwChangeRequest{
+	resp, err := u.accountsClient.UserGetOTPForPwChange(c.Context(), &pb.UserGetOTPForPwChangeRequest{
 		UserId: userID,
 	})
 	if err == nil {
-		c.JSON(200, response.GetOTPResponse{
+		return c.Status(200).JSON(response.GetOTPResponse{
 			Status:      mystatus.Success,
 			Last4Digits: resp.Last4Digits,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
-
 }
 
-// UserVerifyOTPForPwChange
-func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *gin.Context) { //done
-
+func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *fiber.Ctx) error {
 	var req request.UserVerifyOTPForPwChange
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	resp, err := u.accountsClient.UserVerifyOTPForPwChange(context.Background(), &pb.UserVerifyOTPForPwChangeRequest{
+	resp, err := u.accountsClient.UserVerifyOTPForPwChange(c.Context(), &pb.UserVerifyOTPForPwChangeRequest{
 		UserId: userID,
 		Otp:    req.Otp,
 	})
 	if err == nil {
-		c.JSON(200, response.UserVerifyOTPForPwChangeResponse{
+		return c.Status(200).JSON(response.UserVerifyOTPForPwChangeResponse{
 			Status:    mystatus.Success,
 			Msg:       "OTP verified",
 			TempToken: resp.TempToken,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-func (u *UserAccountHandler) SignedUpUserSettingPw(c *gin.Context) { //done
+func (u *UserAccountHandler) SignedUpUserSettingPw(c *fiber.Ctx) error {
 	var req request.SettingNewPassword
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	resp, err := u.accountsClient.SignedUpUserSettingPw(context.Background(), &pb.SignedUpUserSettingPwRequest{
+	resp, err := u.accountsClient.SignedUpUserSettingPw(c.Context(), &pb.SignedUpUserSettingPwRequest{
 		UserId:      userID,
 		NewPassword: req.NewPassword,
 	})
 	if err == nil {
-		c.JSON(200, response.UpdateToken{
+		return c.Status(200).JSON(response.UpdateToken{
 			Status: mystatus.Success,
 			Token:  resp.Token,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// UserUpdateProfile
-func (u *UserAccountHandler) UserUpdateProfile(c *gin.Context) { //done
+func (u *UserAccountHandler) UserUpdateProfile(c *fiber.Ctx) error {
 	var req request.UserUpdateProfile
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	_, err := u.accountsClient.UserUpdateProfile(context.Background(), &pb.UserUpdateProfileRequest{
+	_, err := u.accountsClient.UserUpdateProfile(c.Context(), &pb.UserUpdateProfileRequest{
 		UserId:    userID,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
@@ -112,26 +105,25 @@ func (u *UserAccountHandler) UserUpdateProfile(c *gin.Context) { //done
 		Pincode:   req.Pincode,
 	})
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// UserGetProfile
-func (u *UserAccountHandler) UserGetProfile(c *gin.Context) { //done
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+func (u *UserAccountHandler) UserGetProfile(c *fiber.Ctx) error {
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	resp, err := u.accountsClient.UserGetProfile(context.Background(), &pb.UserGetProfileRequest{
+	resp, err := u.accountsClient.UserGetProfile(c.Context(), &pb.UserGetProfileRequest{
 		UserId: userID,
 	})
 	if err == nil {
-		c.JSON(200, response.UserGetProfileResponse{
+		return c.Status(200).JSON(response.UserGetProfileResponse{
 			Status: mystatus.Success,
 			Profile: response.Profile{
 				FirstName:   resp.FirstName,
@@ -143,78 +135,74 @@ func (u *UserAccountHandler) UserGetProfile(c *gin.Context) { //done
 			},
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// UpdatePassword
-func (u *UserAccountHandler) UserUpdatePasswordUsingOldPw(c *gin.Context) {
+func (u *UserAccountHandler) UserUpdatePasswordUsingOldPw(c *fiber.Ctx) error {
 	var req request.UserUpdatePasswordUsingOldPw
 
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	_, err := u.accountsClient.UserUpdatePasswordUsingOldPw(context.Background(), &pb.UserUpdatePasswordUsingOldPwRequest{
+	_, err := u.accountsClient.UserUpdatePasswordUsingOldPw(c.Context(), &pb.UserUpdatePasswordUsingOldPwRequest{
 		UserId:      userID,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
 	})
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }
 
-// UserSetNewPwAfterVerifyingOTP
-func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *gin.Context) {
-	purpose := c.GetString(tag.CtxPurpose)
-	purposeStatus := c.GetString(tag.CtxPurposeStatus)
+func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *fiber.Ctx) error {
+	purpose := c.Locals(tag.CtxPurpose).(string)
+	purposeStatus := c.Locals(tag.CtxPurposeStatus).(string)
 	if purpose == "" || purpose != tag.PwChange {
-		c.JSON(400, response.SRE{
+		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
 			Error:        "no '" + tag.PwChange + "' purpose in token",
 			ResponseCode: respCode.NotEnoughPermissionsInToken,
 		})
-		return
 	}
 	if purposeStatus == "expired" {
-		c.JSON(400, response.SRE{
+		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
 			Error:        "Purpose '" + tag.PwChange + "' expired in token",
 			ResponseCode: respCode.NotEnoughPermissionsInToken,
 		})
-		return
 	}
 
 	var req request.SettingNewPassword
-	if ok := gateway.BindAndValidateRequest(c, &req); !ok {
-		return
+	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
+		return errResponse
 	}
 
-	userID, ok := gateway.GetUserIdFromContext(c)
-	if !ok {
-		return
+	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
+	if errResponse != nil {
+		return errResponse
 	}
 
-	_, err := u.accountsClient.UserSetNewPwAfterVerifyingOTP(context.Background(), &pb.UserSetNewPwAfterVerifyingOTPRequest{
+	_, err := u.accountsClient.UserSetNewPwAfterVerifyingOTP(c.Context(), &pb.UserSetNewPwAfterVerifyingOTPRequest{
 		UserId:      userID,
 		NewPassword: req.NewPassword,
 	})
 	if err == nil {
-		c.JSON(200, response.SM{
+		return c.Status(200).JSON(response.SM{
 			Status: mystatus.Success,
 		})
 	} else {
 		fmt.Println("error retuurned from grpc server in setting new password: ", err)
-		gateway.HandleGrpcStatus(c, err)
+		return gateway.HandleGrpcStatusFiber(c, err)
 	}
 }

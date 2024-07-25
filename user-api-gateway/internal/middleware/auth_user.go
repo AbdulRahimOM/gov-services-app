@@ -1,14 +1,14 @@
 package middleware
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
 	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 var jwtVerifier *jwttoken.TokenVerifier
@@ -20,67 +20,59 @@ func init() {
 		log.Fatalf("Failed to create token verifier: %v", err)
 	}
 }
-func UserAuthCheck(c *gin.Context) {
-	tokenString := strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer ")
+
+func UserAuthCheck(c *fiber.Ctx) error {
+	fmt.Println("====UserAuthCheck====")
+	tokenString := strings.TrimPrefix(c.Get("Authorization"), "Bearer ")
 	isTokenValid, accInfo, addlInfo, err := jwtVerifier.ValidateToken(tokenString)
 	if !isTokenValid {
-		c.JSON(401, response.SRE{
+		return c.Status(401).JSON(response.SRE{
 			Status:       "failed",
 			ResponseCode: respCode.Unauthenticated,
 			Error:        err.Error(),
 		})
-		c.Abort()
-		return
 	}
-
 	switch accInfo.Role {
 	case "user":
-		c.Set("role", accInfo.Role)
-		c.Set("userID", accInfo.Id)
+		c.Locals("role", accInfo.Role)
+		c.Locals("userID", accInfo.Id)
 	case "password-not-set-user":
-		c.Redirect(302, "/user/profile/set-password")
+		return c.Redirect("/user/profile/set-password")
 	default:
-		c.JSON(401, response.SRE{
+		return c.Status(401).JSON(response.SRE{
 			Status:       "failed",
 			ResponseCode: respCode.Unauthorized,
 			Error:        "Invalid role. Should be user, but is " + accInfo.Role,
 		})
-		c.Abort()
-		return
 	}
 
 	if addlInfo != nil {
-		addlInfo.SetContext(c)
+		addlInfo.SetContextFiber(c)
 	}
 
-	c.Next()
+	return c.Next()
 }
 
-func NewUserCheck(c *gin.Context) {
-	tokenString := strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer ")
+func NewUserCheck(c *fiber.Ctx) error {
+	tokenString := strings.TrimPrefix(c.Get("Authorization"), "Bearer ")
 	isTokenValid, accInfo, _, err := jwtVerifier.ValidateToken(tokenString)
 	if !isTokenValid {
-		c.JSON(401, response.SRE{
+		return c.Status(401).JSON(response.SRE{
 			Status:       "failed",
 			ResponseCode: respCode.Unauthenticated,
 			Error:        err.Error(),
 		})
-		c.Abort()
-		return
 	}
 	switch accInfo.Role {
 	case "password-not-set-user":
-		c.Set("role", accInfo.Role)
-		c.Set("userID", accInfo.Id)
-		c.Next()
+		c.Locals("role", accInfo.Role)
+		c.Locals("userID", accInfo.Id)
+		return c.Next()
 	default:
-		c.JSON(401, response.SRE{
+		return c.Status(401).JSON(response.SRE{
 			Status:       "failed",
 			ResponseCode: respCode.Unauthorized,
 			Error:        "Invalid role. Should be 'password-not-set-user', but is " + accInfo.Role,
 		})
-		c.Abort()
-		return
 	}
-
 }
