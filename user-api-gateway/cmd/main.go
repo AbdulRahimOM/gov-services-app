@@ -7,12 +7,14 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/server"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/template/html/v2"
 )
 
 func main() {
-
-	app := fiber.New()
+	engine := html.New("./views", ".html")
+	app := fiber.New(fiber.Config{Views: engine})
 	app.Use(logger.New())
+	app.Static("/", "./assets")
 	serviceClients, err := server.InitServiceClients()
 	if err != nil {
 		log.Fatal("error occured while initializing service clients, error:", err)
@@ -20,10 +22,6 @@ func main() {
 
 	server.InitRoutes(serviceClients, app)
 
-	// err = engine.Run(config.EnvValues.Port)
-	// if err != nil {
-	// 	log.Fatal("error occured while running the server, error:", err)
-	// }
 	err = app.Listen(config.EnvValues.Port)
 	if err != nil {
 		log.Fatal("error occured while running the server, error:", err)

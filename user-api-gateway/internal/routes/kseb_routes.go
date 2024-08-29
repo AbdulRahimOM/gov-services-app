@@ -26,4 +26,13 @@ func RegisterKsebRoutes(api fiber.Router, ksebHandler *ksebhandler.KsebHandler) 
 		}))
 	}
 
+	authGroup2 := api.Group("/ouser")
+	{
+		authGroup2.Get("/welcome", ksebHandler.Welcome)
+		authGroup2.Get("/videocall/room/:complaintId", ksebHandler.VideoCallRoom)
+		authGroup2.Get("/videocall/room/:complaintId/websocket", websocket.New(ksebHandler.RoomWebsocket, websocket.Config{
+			HandshakeTimeout: 10 * time.Second,
+		}))
+	}
+
 }

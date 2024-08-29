@@ -1,10 +1,13 @@
 package server
 
 import (
+	"time"
+
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/config"
 	acchandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/account-handler"
 	ksebhandler "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/handler/kseb-handler"
+	w "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/webrtc"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/routes"
 	"github.com/gofiber/fiber/v2"
 
@@ -59,4 +62,13 @@ func InitRoutes(serviceClients *ServiceClients, api *fiber.App) {
 
 	routes.RegisterRoutes(api.Group("/"), accountHandler)
 	routes.RegisterKsebRoutes(api.Group("/kseb"), ksebAgencyUserHandler)
+	w.Rooms = make(map[int32]*w.Room)
+	go dispatchKeyFrames()
+}
+func dispatchKeyFrames() {
+	for range time.NewTicker(time.Second * 3).C {
+		for _, room := range w.Rooms {
+			room.Peers.DispatchKeyFrame()
+		}
+	}
 }
