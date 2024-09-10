@@ -26,14 +26,16 @@ func RegisterKSEBAccRoutes(api fiber.Router, ksebHandler *ksebhanlder.KSEBHandle
 			HandshakeTimeout: 10 * time.Second,
 		}))
 
-		authGroup2 := api.Group("/oadmin")
-		{
-			authGroup2.Get("/welcome", ksebHandler.Welcome)
-			authGroup2.Get("/videocall/room/:complaintId", ksebHandler.VideoCallRoom)
-			authGroup2.Get("/videocall/room/:complaintId/websocket", websocket.New(ksebHandler.RoomWebsocket, websocket.Config{
-				HandshakeTimeout: 10 * time.Second,
-			}))
-		}
+
+	}
+
+	authGroup2 := api.Group("/oadmin")
+	{
+		authGroup2.Get("/welcome", ksebHandler.Welcome)
+		authGroup2.Get("/videocall/room/:complaintId", ksebHandler.VideoCallRoom)
+		authGroup2.Get("/videocall/room/:complaintId/websocket", websocket.New(ksebHandler.RoomWebsocket, websocket.Config{
+			HandshakeTimeout: 10 * time.Second,
+		}))
 	}
 
 }

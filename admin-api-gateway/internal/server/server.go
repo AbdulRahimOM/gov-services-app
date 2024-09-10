@@ -7,8 +7,8 @@ import (
 	acchandler "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/acc-handler"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/appointments"
 	ksebhanlder "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/kseb"
-	w "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/webrtc"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/routes"
+	w "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/webrtc"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	"github.com/gofiber/fiber/v2"
 

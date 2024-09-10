@@ -35,7 +35,7 @@ func (k *KsebHandler) VideoCallRoom(c *fiber.Ctx) error {
 	fmt.Println("---2")
 	return c.Status(http.StatusOK).Render("peer", fiber.Map{
 		"Content":           "peer",
-		"RoomWebsocketAddr": fmt.Sprintf("%s://%s/kseb/ouser/videocall/room/%d/websocket", ws, "127.0.0.1:4000", complaintId),
+		"RoomWebsocketAddr": fmt.Sprintf("%s://%s/kseb/ouser/videocall/room/%d/websocket", ws, c.Hostname(), complaintId),
 		"RoomLink":          fmt.Sprintf("%s://%s/kseb/ouser/videocall/room/%d", c.Protocol(), c.Hostname(), complaintId),
 		"Type":              "room",
 	}, "layouts/main")
