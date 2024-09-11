@@ -29,6 +29,9 @@ func HandleGetQueryParamsInt32Fiber(c *fiber.Ctx, key string) (int32, error) {
 
 	val, err := mymath.StringToInt32(str)
 	if err != nil {
+
+		gatewayLogger.WithField("method", "HandleGetQueryParamsInt32Fiber").Debug(fmt.Sprintf("Invalid query param %s: %s", key, str))
+
 		return 0, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.InvalidQueryParams,
@@ -47,6 +50,7 @@ func HandleGetUrlParamsInt32Fiber(c *fiber.Ctx, key string) (int32, error) {
 
 	val, err := mymath.StringToInt32(str)
 	if err != nil {
+		gatewayLogger.WithField("method", "HandleGetUrlParamsInt32Fiber").Errorf("Invalid %s: %s", key, str)
 		return 0, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.InvalidUrlParams,

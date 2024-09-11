@@ -9,8 +9,10 @@ import (
 )
 
 func GetUserIdFromContextFiber(c *fiber.Ctx) (int32, error) {
+	userLogger.WithField("method", "GetUserIdFromContextFiber")
 	userID := c.Locals("userID")
 	if userID == nil {
+		userLogger.Debug("user ID not found in context")
 		return 0, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoUserInContext,
@@ -19,6 +21,7 @@ func GetUserIdFromContextFiber(c *fiber.Ctx) (int32, error) {
 	}
 	userIDInt, ok := userID.(int32)
 	if !ok {
+		userLogger.Debug("userID in context is not int32")
 		return 0, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoUserInContext,
@@ -30,8 +33,11 @@ func GetUserIdFromContextFiber(c *fiber.Ctx) (int32, error) {
 }
 
 func GetAdminIdFromContextFiber(c *fiber.Ctx) (int32, error) {
+	adminLogger.WithField("method", "GetAdminIdFromContext")
+
 	adminID := c.Locals("adminID")
 	if adminID == nil {
+		adminLogger.Debug("admin ID not found in context")
 		return 0, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoAdminInContext,
@@ -40,6 +46,7 @@ func GetAdminIdFromContextFiber(c *fiber.Ctx) (int32, error) {
 	}
 	adminIDInt, ok := adminID.(int32)
 	if !ok {
+		adminLogger.Debug("adminID in context is not int32")
 		return 0, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoAdminInContext,

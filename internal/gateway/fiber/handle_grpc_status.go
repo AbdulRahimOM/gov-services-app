@@ -1,8 +1,6 @@
 package gateway
 
 import (
-	"log"
-
 	statuscode "github.com/AbdulRahimOM/go-utils/statuscode"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	respCode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
@@ -11,9 +9,11 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func HandleGrpcStatusFiber(c *fiber.Ctx, err error)error {
+func HandleGrpcStatusFiber(c *fiber.Ctx, err error) error {
+	gatewayLogger.WithField("method", "HandleGrpcStatusFiber")
 	s, ok := status.FromError(err)
 	if ok {
+		gatewayLogger.Info("grpc error: ", s.Message(), " response code: ", s.Code())
 		responseCode, errorMsg, _ := stdresponse.ParseGrpcStatus(s)
 		return c.Status(statuscode.ConvertGrpcToHTTP(s.Code())).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
@@ -21,7 +21,7 @@ func HandleGrpcStatusFiber(c *fiber.Ctx, err error)error {
 			Error:        errorMsg,
 		})
 	} else {
-		log.Println("ok is false while parsing grpc error. Error: ", err)
+		gatewayLogger.Error("ok is false while parsing grpc error. Error: ", err)
 		return c.Status(500).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respCode.GrpcCommunicationError,

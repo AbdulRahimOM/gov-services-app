@@ -1,7 +1,6 @@
 package gateway
 
 import (
-	"log"
 	"net/http"
 
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
@@ -12,8 +11,9 @@ import (
 )
 
 func BindAndValidateRequestFiber(c *fiber.Ctx, req interface{}) error {
+	gatewayLogger.WithField("method", "BindAndValidateRequestFiber")
 	if err := c.BodyParser(req); err != nil {
-		log.Println("error in parsing request to req struct: ", err)
+		gatewayLogger.Info("error in parsing request to req struct")
 		return c.Status(http.StatusBadRequest).JSON(stdresponse.SRE{
 			Status:       mystatus.ValidationError,
 			ResponseCode: respCode.BindingError,
@@ -22,7 +22,7 @@ func BindAndValidateRequestFiber(c *fiber.Ctx, req interface{}) error {
 	}
 
 	if err := validation.ValidateRequestDetailed(req); err != nil {
-		log.Println("error in validating request: ", err)
+		gatewayLogger.Info("error in validating request. Error: ", err)
 		return c.Status(http.StatusBadRequest).JSON(stdresponse.SMValidationErrors{
 			Status:       mystatus.ValidationError,
 			ResponseCode: respCode.ValidationError,
