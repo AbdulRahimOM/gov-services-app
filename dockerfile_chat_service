@@ -1,0 +1,16 @@
+FROM golang:1.22-alpine AS firstStage
+
+WORKDIR /govservice/
+COPY ./ ./
+
+WORKDIR /govservice/agencies-svc
+RUN apk --no-cache add git ca-certificates
+RUN go mod download
+RUN go build -o ./cmd/binary ./cmd/main.go
+
+FROM scratch
+COPY --from=firstStage /govservice/agencies-svc/cmd/binary /
+COPY --from=firstStage /govservice/agencies-svc/internal/config/config.env /internal/config/config.env
+COPY --from=firstStage /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+EXPOSE 50053
+CMD [ "/binary" ]

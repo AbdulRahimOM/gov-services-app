@@ -1,0 +1,21 @@
+FROM golang:1.22-alpine AS firstStage
+
+WORKDIR /govservice/
+COPY ./ ./
+
+WORKDIR /govservice/accounts-svc
+RUN apk --no-cache add git ca-certificates
+RUN go mod download
+RUN go build -o ./cmd/binary ./cmd/main.go
+
+FROM alpine:latest
+COPY --from=firstStage /govservice/accounts-svc/cmd/binary /
+COPY --from=firstStage /govservice/accounts-svc/internal/config/config.env /internal/config/config.env
+COPY --from=firstStage /govservice/accounts-svc/internal/config/private.key /internal/config/private.key
+COPY --from=firstStage /govservice/accounts-svc/internal/config/superAdminCreds.sh /internal/config/superAdminCreds.sh
+COPY --from=firstStage /govservice/accounts-svc/entrypoint.sh /entrypoint.sh
+COPY --from=firstStage /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+RUN chmod +x /internal/config/superAdminCreds.sh
+RUN chmod +x /entrypoint.sh
+EXPOSE 4000
+ENTRYPOINT ["/entrypoint.sh"]

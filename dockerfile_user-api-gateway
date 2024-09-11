@@ -1,0 +1,18 @@
+FROM golang:1.22-alpine AS firstStage
+
+WORKDIR /govservice/
+COPY ./ ./
+# RUN apk --no-cache add git ca-certificates
+
+WORKDIR /govservice/user-api-gateway
+RUN go mod download
+RUN go build -o ./cmd/binary ./cmd/main.go
+
+FROM alpine:latest
+COPY --from=firstStage /govservice/user-api-gateway/cmd/binary /
+COPY --from=firstStage /govservice/user-api-gateway/internal/config/config.env /internal/config/config.env
+COPY --from=firstStage /govservice/user-api-gateway/internal/config/public.key /internal/config/public.key
+COPY --from=firstStage /govservice/user-api-gateway/assets /assets
+COPY --from=firstStage /govservice/user-api-gateway/views /views
+EXPOSE 4000
+CMD [ "/binary" ]
