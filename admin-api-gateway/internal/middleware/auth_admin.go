@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -22,7 +21,6 @@ func init() {
 }
 
 func AdminAuthCheck(c *fiber.Ctx) error {
-	fmt.Println("====AdminAuthCheck====")
 	tokenString := strings.TrimPrefix(c.Get("Authorization"), "Bearer ")
 	isTokenValid, accInfo, addlInfo, err := jwtVerifier.ValidateToken(tokenString)
 	if !isTokenValid {
