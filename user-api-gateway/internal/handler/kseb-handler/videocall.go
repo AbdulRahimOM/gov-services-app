@@ -14,25 +14,19 @@ import (
 	w "github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/webrtc"
 )
 
-func (k *KsebHandler) Welcome(c *fiber.Ctx) error {
-	return c.Render("welcome", nil, "layouts/main")
-}
-
 // VideoCallRoom
 func (k *KsebHandler) VideoCallRoom(c *fiber.Ctx) error {
-	fmt.Println("Room function called")
 	complaintId, err := gateway.HandleGetUrlParamsInt32Fiber(c, "complaintId")
 	if err != nil {
 		return err
 	}
-	fmt.Println("---1")
+
 	ws := "ws"
 	if os.Getenv("ENVIRONMENT") == "PRODUCTION" {
 		ws = "wss"
 	}
 
 	_ = createOrGetRoom(complaintId)
-	fmt.Println("---2")
 	return c.Status(http.StatusOK).Render("peer", fiber.Map{
 		"Content":           "peer",
 		"RoomWebsocketAddr": fmt.Sprintf("%s://%s/kseb/ouser/videocall/room/%d/websocket", ws, c.Hostname(), complaintId),

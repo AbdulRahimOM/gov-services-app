@@ -2,7 +2,6 @@ package webrtc
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"sync"
 
@@ -110,7 +109,7 @@ func RoomConn(c *websocket.Conn, p *Peers) {
 
 		switch message.Event {
 		case "candidate":
-			fmt.Println("candidate event!!!!!!!!!!!!!!")
+			// fmt.Println("candidate event!!!!!!!!!!!!!!")
 			candidate := webrtc.ICECandidateInit{}
 			if err := json.Unmarshal([]byte(message.Data), &candidate); err != nil {
 				log.Println(err)
@@ -122,7 +121,7 @@ func RoomConn(c *websocket.Conn, p *Peers) {
 				return
 			}
 		case "answer":
-			fmt.Println("answer event!!!!!!!!!!!!!!")
+			// fmt.Println("answer event!!!!!!!!!!!!!!")
 			answer := webrtc.SessionDescription{}
 			if err := json.Unmarshal([]byte(message.Data), &answer); err != nil {
 				log.Println(err)

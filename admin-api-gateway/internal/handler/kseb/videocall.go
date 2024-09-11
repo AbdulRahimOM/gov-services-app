@@ -10,17 +10,13 @@ import (
 	"github.com/gofiber/websocket/v2"
 	"github.com/pion/webrtc/v3"
 
+	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/config"
 	w "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/webrtc"
 	"github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 )
 
-func (kseb *KSEBHandler) Welcome(c *fiber.Ctx) error {
-	return c.Render("welcome", nil, "layouts/main")
-}
-
 // VideoCallRoom
 func (kseb *KSEBHandler) VideoCallRoom(c *fiber.Ctx) error {
-	fmt.Println("Room function called")
 	complaintId, err := gateway.HandleGetUrlParamsInt32Fiber(c, "complaintId")
 	if err != nil {
 		return err
@@ -30,12 +26,11 @@ func (kseb *KSEBHandler) VideoCallRoom(c *fiber.Ctx) error {
 	if os.Getenv("ENVIRONMENT") == "PRODUCTION" {
 		ws = "wss"
 	}
-	fmt.Println("c.Hostname(): ", c.Hostname())
 
 	_ = createOrGetRoom(complaintId)
 	return c.Status(http.StatusOK).Render("peer", fiber.Map{
 		"Content":           "peer",
-		"RoomWebsocketAddr": fmt.Sprintf("%s://%s/kseb/oadmin/videocall/room/%d/websocket", ws, c.Hostname(), complaintId),
+		"RoomWebsocketAddr": fmt.Sprintf("%s://%s/kseb/ouser/videocall/room/%d/websocket", ws, config.EnvValues.UserHost, complaintId),
 		"RoomLink":          fmt.Sprintf("%s://%s/kseb/oadmin/videocall/room/%d", c.Protocol(), c.Hostname(), complaintId),
 		"Type":              "room",
 	}, "layouts/main")
