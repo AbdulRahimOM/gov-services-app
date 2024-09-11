@@ -58,7 +58,7 @@ func InitServiceClients() (*ServiceClients, error) {
 	}, nil
 }
 
-func InitRoutes(serviceClients *ServiceClients, api *fiber.App) {
+func InitRoutes(serviceClients *ServiceClients, api fiber.Router) {
 	accountHandler := acchandler.NewAdminAccountHandler(serviceClients.AccountsClient)
 	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient)
 

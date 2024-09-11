@@ -51,7 +51,7 @@ func InitServiceClients() (*ServiceClients, error) {
 	}, nil
 }
 
-func InitRoutes(serviceClients *ServiceClients, api *fiber.App) {
+func InitRoutes(serviceClients *ServiceClients, api fiber.Router) {
 	accountHandler := acchandler.NewUserAccountHandler(serviceClients.UserAccountsClient)
 	// ksebAccHandler := ksebhandler.NewKsebHandler(serviceClients.KsebAccClient)
 

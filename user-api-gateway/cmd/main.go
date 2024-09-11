@@ -15,7 +15,7 @@ import (
 func main() {
 	engine := html.New("./views", ".html")
 	app := fiber.New(fiber.Config{Views: engine})
-	app.Use(middleware.CustomLogger)
+	// app.Use(middleware.CustomLogger)
 	app.Static("/", "./assets")
 	app.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
 	serviceClients, err := server.InitServiceClients()
@@ -23,7 +23,7 @@ func main() {
 		log.Fatal("error occured while initializing service clients, error:", err)
 	}
 
-	server.InitRoutes(serviceClients, app)
+	server.InitRoutes(serviceClients, app.Use(middleware.CustomLogger))
 
 	err = app.Listen(config.EnvValues.Port)
 	if err != nil {
