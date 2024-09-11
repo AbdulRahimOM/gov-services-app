@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gov-service-agencies-svc
+  namespace: gov-service
+spec:
+  selector:
+    matchLabels:
+      app: agencies_service
+  template:
+    metadata:
+      labels:
+        app: agencies_service
+    spec:
+      containers:
+        - image: abdulrahimom/govservice-agencies-svc-amd:v1.0.3
+          name: agencies-svc-container
+          ports:
+            - containerPort: 50053
+          resources:
+            limits:
+              memory: 212Mi
+              cpu: ".2"
+            requests:
+              memory: 150Mi
+              cpu: "0.1"
+          env:
+            - name: DB_HOST
+              value: "postgres"
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done;']
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agencies-services
+  namespace: gov-service
+spec: 
+  type: ClusterIP
+  ports:
+    - port: 50053
+      targetPort: 50053
+  selector:
+    app: agencies_service

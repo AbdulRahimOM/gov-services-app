@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gov-service-accounts-svc
+  namespace: gov-service
+spec:
+  selector:
+    matchLabels:
+      app: accounts_service
+  template:
+    metadata:
+      labels:
+        app: accounts_service
+    spec:
+      containers:
+        - image: abdulrahimom/govservice-accounts-svc-amd:v1.0.3
+          name: accounts-svc-container
+          ports:
+            - containerPort: 50051
+          resources:
+            limits:
+              memory: 212Mi
+            requests:
+              memory: 150Mi
+              cpu: "0.1"
+          env:
+            - name: SUPER_ADMIN_USERNAME
+              value: "chiefadmin"
+            - name: SUPER_ADMIN_PASSWORD
+              value: "ghfgfghfjghgghjgyjfgt"
+            - name: AGENCIES_SVC_URL
+              value: "agencies-services.gov-service.svc.cluster.local:50053"
+            - name: DB_HOST
+              value: "postgres"
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done;']
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounts-services
+  namespace: gov-service
+spec: 
+  type: ClusterIP
+  ports:
+    - port: 50051
+      targetPort: 50051
+  selector:
+    app: accounts_service

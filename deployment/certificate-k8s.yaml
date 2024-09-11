@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gov-service-certificate
+  namespace: gov-service
+spec:
+  dnsNames:
+    - k8s.gov-service.abdulrahim.tech
+  secretName: gov-service-new-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer

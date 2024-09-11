@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-deployment
+  namespace: gov-service
+  labels:
+    db: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      database: postgres
+  template:
+    metadata:
+      name: postgres-pod
+      labels:
+        database: postgres
+    spec:
+      containers:
+        - name: gov-service-postgres-container
+          image: postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "1234"
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: secretcollection
+              #     key: postgresPassword  
+          volumeMounts:
+          - name: storagespace
+            mountPath: /var/lib/postgresql/data
+            subPath: postgres
+          readinessProbe:
+            exec:
+              command:
+                - "pg_isready"
+                - "-U"
+                - "postgres"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - "pg_isready"
+                - "-U"
+                - "postgres"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+  volumeClaimTemplates:
+    - metadata:
+        name: storagespace
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Mi                                                                    
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: gov-service
+spec:
+  type: ClusterIP
+  selector:
+    database: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
