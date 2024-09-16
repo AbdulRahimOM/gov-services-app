@@ -10,11 +10,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func BindAndValidateRequestFiber(c *fiber.Ctx, req interface{}) error {
+func BindAndValidateRequestFiber(c *fiber.Ctx, req interface{}) (bool, error) {
 	gatewayLogger.WithField("method", "BindAndValidateRequestFiber")
 	if err := c.BodyParser(req); err != nil {
 		gatewayLogger.Info("error in parsing request to req struct")
-		return c.Status(http.StatusBadRequest).JSON(stdresponse.SRE{
+		return false, c.Status(http.StatusBadRequest).JSON(stdresponse.SRE{
 			Status:       mystatus.ValidationError,
 			ResponseCode: respCode.BindingError,
 			Error:        err.Error(),
@@ -23,11 +23,12 @@ func BindAndValidateRequestFiber(c *fiber.Ctx, req interface{}) error {
 
 	if err := validation.ValidateRequestDetailed(req); err != nil {
 		gatewayLogger.Info("error in validating request. Error: ", err)
-		return c.Status(http.StatusBadRequest).JSON(stdresponse.SMValidationErrors{
+
+		return false, c.Status(http.StatusBadRequest).JSON(stdresponse.SMValidationErrors{
 			Status:       mystatus.ValidationError,
 			ResponseCode: respCode.ValidationError,
 			Errors:       err,
 		})
 	}
-	return nil
+	return true, nil
 }

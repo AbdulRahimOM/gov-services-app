@@ -11,8 +11,8 @@ import (
 
 func (h *AdminAccountHandler) AdminGetAdmins(c *fiber.Ctx) error {
 
-	adminID, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminID, ok,err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -24,8 +24,8 @@ func (h *AdminAccountHandler) AdminGetAdmins(c *fiber.Ctx) error {
 		Designation: c.Query("designation"),
 	}
 
-	searchCriteria.OfficeId, err = gateway.HandleGetQueryParamsInt32Fiber(c, "officeId")
-	if err != nil {
+	searchCriteria.OfficeId, ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "officeId")
+	if !ok {
 		return err
 	}
 

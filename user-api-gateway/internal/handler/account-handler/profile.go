@@ -14,9 +14,9 @@ import (
 )
 
 func (u *UserAccountHandler) UserGetOTPForPwChange(c *fiber.Ctx) error {
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
 	resp, err := u.accountsClient.UserGetOTPForPwChange(c.Context(), &pb.UserGetOTPForPwChangeRequest{
@@ -34,13 +34,13 @@ func (u *UserAccountHandler) UserGetOTPForPwChange(c *fiber.Ctx) error {
 
 func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *fiber.Ctx) error {
 	var req request.UserVerifyOTPForPwChange
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
 	resp, err := u.accountsClient.UserVerifyOTPForPwChange(c.Context(), &pb.UserVerifyOTPForPwChangeRequest{
@@ -61,13 +61,13 @@ func (u *UserAccountHandler) UserVerifyOTPForPwChange(c *fiber.Ctx) error {
 func (u *UserAccountHandler) SignedUpUserSettingPw(c *fiber.Ctx) error {
 	var req request.SettingNewPassword
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
 	resp, err := u.accountsClient.SignedUpUserSettingPw(c.Context(), &pb.SignedUpUserSettingPwRequest{
@@ -87,16 +87,16 @@ func (u *UserAccountHandler) SignedUpUserSettingPw(c *fiber.Ctx) error {
 func (u *UserAccountHandler) UserUpdateProfile(c *fiber.Ctx) error {
 	var req request.UserUpdateProfile
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
-	_, err := u.accountsClient.UserUpdateProfile(c.Context(), &pb.UserUpdateProfileRequest{
+	_, err = u.accountsClient.UserUpdateProfile(c.Context(), &pb.UserUpdateProfileRequest{
 		UserId:    userID,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
@@ -114,9 +114,9 @@ func (u *UserAccountHandler) UserUpdateProfile(c *fiber.Ctx) error {
 }
 
 func (u *UserAccountHandler) UserGetProfile(c *fiber.Ctx) error {
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
 	resp, err := u.accountsClient.UserGetProfile(c.Context(), &pb.UserGetProfileRequest{
@@ -142,16 +142,16 @@ func (u *UserAccountHandler) UserGetProfile(c *fiber.Ctx) error {
 func (u *UserAccountHandler) UserUpdatePasswordUsingOldPw(c *fiber.Ctx) error {
 	var req request.UserUpdatePasswordUsingOldPw
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
-	_, err := u.accountsClient.UserUpdatePasswordUsingOldPw(c.Context(), &pb.UserUpdatePasswordUsingOldPwRequest{
+	_, err = u.accountsClient.UserUpdatePasswordUsingOldPw(c.Context(), &pb.UserUpdatePasswordUsingOldPwRequest{
 		UserId:      userID,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
@@ -184,16 +184,16 @@ func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *fiber.Ctx) error {
 	}
 
 	var req request.SettingNewPassword
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
-	_, err := u.accountsClient.UserSetNewPwAfterVerifyingOTP(c.Context(), &pb.UserSetNewPwAfterVerifyingOTPRequest{
+	_, err = u.accountsClient.UserSetNewPwAfterVerifyingOTP(c.Context(), &pb.UserSetNewPwAfterVerifyingOTPRequest{
 		UserId:      userID,
 		NewPassword: req.NewPassword,
 	})

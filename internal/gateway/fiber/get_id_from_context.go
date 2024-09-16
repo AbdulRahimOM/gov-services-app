@@ -8,12 +8,12 @@ import (
 	"github.com/gofiber/websocket/v2"
 )
 
-func GetUserIdFromContextFiber(c *fiber.Ctx) (int32, error) {
+func GetUserIdFromContextFiber(c *fiber.Ctx) (int32,bool, error) {
 	userLogger.WithField("method", "GetUserIdFromContextFiber")
 	userID := c.Locals("userID")
 	if userID == nil {
 		userLogger.Debug("user ID not found in context")
-		return 0, c.Status(400).JSON(stdresponse.SRE{
+		return 0, false,c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoUserInContext,
 			Error:        "user ID not found in context",
@@ -22,23 +22,23 @@ func GetUserIdFromContextFiber(c *fiber.Ctx) (int32, error) {
 	userIDInt, ok := userID.(int32)
 	if !ok {
 		userLogger.Debug("userID in context is not int32")
-		return 0, c.Status(400).JSON(stdresponse.SRE{
+		return 0, false,c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoUserInContext,
 			Error:        "user ID not found in context",
 		})
 	}
 
-	return userIDInt, nil
+	return userIDInt, true,nil
 }
 
-func GetAdminIdFromContextFiber(c *fiber.Ctx) (int32, error) {
+func GetAdminIdFromContextFiber(c *fiber.Ctx) (int32, bool,error) {
 	adminLogger.WithField("method", "GetAdminIdFromContext")
 
 	adminID := c.Locals("adminID")
 	if adminID == nil {
 		adminLogger.Debug("admin ID not found in context")
-		return 0, c.Status(400).JSON(stdresponse.SRE{
+		return 0,false, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoAdminInContext,
 			Error:        "admin ID not found in context",
@@ -47,14 +47,14 @@ func GetAdminIdFromContextFiber(c *fiber.Ctx) (int32, error) {
 	adminIDInt, ok := adminID.(int32)
 	if !ok {
 		adminLogger.Debug("adminID in context is not int32")
-		return 0, c.Status(400).JSON(stdresponse.SRE{
+		return 0,false, c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.BugNoAdminInContext,
 			Error:        "admin ID not found in context",
 		})
 	}
 
-	return adminIDInt, nil
+	return adminIDInt,true, nil
 }
 func GetUserIdFromWebsocketConn(c *websocket.Conn) (int32, bool) {
 	userID := c.Locals("userID")

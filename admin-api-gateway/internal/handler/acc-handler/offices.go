@@ -15,20 +15,17 @@ func (h *AdminAccountHandler) AdminGetOffices(c *fiber.Ctx) error {
 		Address: c.Query("address"),
 	}
 	var err error
-	searchCriteria.Id, err = gateway.HandleGetQueryParamsInt32Fiber(c, "id")
-	if err != nil {
+	var ok bool
+	if searchCriteria.Id,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "id");!ok{
 		return err
 	}
-	searchCriteria.DeptID, err = gateway.HandleGetQueryParamsInt32Fiber(c, "deptId")
-	if err != nil {
+	if searchCriteria.DeptID,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "deptId");!ok{
 		return err
 	}
-	searchCriteria.Rank, err = gateway.HandleGetQueryParamsInt32Fiber(c, "rank")
-	if err != nil {
+	if searchCriteria.Rank,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "rank");!ok{
 		return err
 	}
-	searchCriteria.SuperiorOfficeID, err = gateway.HandleGetQueryParamsInt32Fiber(c, "superiorOfficeId")
-	if err != nil {
+	if searchCriteria.SuperiorOfficeID,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "superiorOfficeId");!ok{
 		return err
 	}
 	resp, err := h.accountsClient.AdminGetOffices(c.Context(), &searchCriteria)

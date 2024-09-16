@@ -24,16 +24,16 @@ func NewKsebHandler(ksebClient pb.KSEBAgencyUserServiceClient, chatClient pb.Kse
 func (k *KsebHandler) AddConsumerNumber(c *fiber.Ctx) error {
 	var req requests.UserAddConsumerNumber
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
-	_, err := k.agencyUserClient.AddConsumerNumber(c.Context(), &pb.AddConsumerNumberRequest{
+	_, err = k.agencyUserClient.AddConsumerNumber(c.Context(), &pb.AddConsumerNumberRequest{
 		UserId:         userID,
 		ConsumerNumber: req.ConsumerNumber,
 		NickName:       req.NickName,
@@ -49,9 +49,9 @@ func (k *KsebHandler) AddConsumerNumber(c *fiber.Ctx) error {
 }
 
 func (k *KsebHandler) GetUserConsumerNumbers(c *fiber.Ctx) error {
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
 	resp, err := k.agencyUserClient.GetUserConsumerNumbers(c.Context(), &pb.GetUserConsumerNumbersRequest{
@@ -78,13 +78,13 @@ func (k *KsebHandler) GetUserConsumerNumbers(c *fiber.Ctx) error {
 func (k *KsebHandler) RaiseComplaint(c *fiber.Ctx) error {
 	var req requests.KSEBComplaint
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
-	userID, errResponse := gateway.GetUserIdFromContextFiber(c)
-	if errResponse != nil {
-		return errResponse
+	userID, ok, err := gateway.GetUserIdFromContextFiber(c)
+	if !ok {
+		return err
 	}
 
 	resp, err := k.agencyUserClient.RaiseComplaint(c.Context(), &pb.RaiseComplaintRequest{

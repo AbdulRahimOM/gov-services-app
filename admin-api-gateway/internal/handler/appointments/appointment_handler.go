@@ -23,12 +23,12 @@ func NewAppointmentHandler(client pb.AppointmentServiceClient) *AppointmentHandl
 
 func (h *AppointmentHandler) AppointAttender(c *fiber.Ctx) error {
 	var req requests.Appointee
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -55,12 +55,12 @@ func (h *AppointmentHandler) AppointAttender(c *fiber.Ctx) error {
 
 func (h *AppointmentHandler) CreateChildOffice(c *fiber.Ctx) error {
 	var req requests.ProposedOffice
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -84,12 +84,12 @@ func (h *AppointmentHandler) CreateChildOffice(c *fiber.Ctx) error {
 
 func (h *AppointmentHandler) AppointChildOfficeHead(c *fiber.Ctx) error {
 	var req requests.AppointChildOfficeHead
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -117,12 +117,12 @@ func (h *AppointmentHandler) AppointChildOfficeHead(c *fiber.Ctx) error {
 
 func (h *AppointmentHandler) AppointChildOfficeDeputyHead(c *fiber.Ctx) error {
 	var req requests.AppointChildOfficeDeputyHead
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 

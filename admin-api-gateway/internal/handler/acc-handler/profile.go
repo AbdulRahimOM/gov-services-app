@@ -12,8 +12,8 @@ import (
 )
 
 func (u *AdminAccountHandler) AdminGetProfile(c *fiber.Ctx) error {
-	adminID, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminID, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -41,12 +41,12 @@ func (u *AdminAccountHandler) AdminGetProfile(c *fiber.Ctx) error {
 func (u *AdminAccountHandler) AdminUpdatePasswordUsingOldPw(c *fiber.Ctx) error {
 	var req request.AdminUpdatePasswordUsingOldPw
 
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminID, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminID, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -67,12 +67,12 @@ func (u *AdminAccountHandler) AdminUpdatePasswordUsingOldPw(c *fiber.Ctx) error 
 func (u *AdminAccountHandler) AdminUpdateProfile(c *fiber.Ctx) error {
 	var req request.AdminUpdateProfile
 
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminID, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminID, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 

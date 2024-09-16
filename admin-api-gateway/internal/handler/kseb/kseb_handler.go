@@ -29,12 +29,12 @@ func NewKsebHandler(accClient pb.KSEBAdminAccServiceClient, agencyAdminClient pb
 // KSEBRegisterSectionCode
 func (kseb *KSEBHandler) KSEBRegisterSectionCode(c *fiber.Ctx) error {
 	var req requests.KsebRegSectionCode
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -58,8 +58,8 @@ func (kseb *KSEBHandler) AdminGetComplaints(c *fiber.Ctx) error {
 	status := c.Query("status", "all")       //all, opened, closed, not-opened
 	attenderScope := c.Query("scope", "all") //all, me-only
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -103,8 +103,8 @@ func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 
@@ -124,12 +124,12 @@ func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
 
 func (kseb *KSEBHandler) AdminCloseComplaint(c *fiber.Ctx) error {
 	var req requests.KsebCloseComplaint
-	if err := gateway.BindAndValidateRequestFiber(c, &req); err != nil {
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
 
-	adminId, err := gateway.GetAdminIdFromContextFiber(c)
-	if err != nil {
+	adminId, ok, err := gateway.GetAdminIdFromContextFiber(c)
+	if !ok {
 		return err
 	}
 

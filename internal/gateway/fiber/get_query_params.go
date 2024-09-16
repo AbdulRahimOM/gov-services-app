@@ -21,10 +21,10 @@ If the parameter is found and valid, it returns the converted value and true.
 
 If the parameter is found but invalid, it returns {0, false} and sends a JSON error response to the client.
 */
-func HandleGetQueryParamsInt32Fiber(c *fiber.Ctx, key string) (int32, error) {
+func HandleGetQueryParamsInt32Fiber(c *fiber.Ctx, key string) (int32,bool, error) {
 	str := c.Query(key)
 	if str == "" {
-		return 0, nil
+		return 0,true, nil
 	}
 
 	val, err := mymath.StringToInt32(str)
@@ -32,14 +32,14 @@ func HandleGetQueryParamsInt32Fiber(c *fiber.Ctx, key string) (int32, error) {
 
 		gatewayLogger.WithField("method", "HandleGetQueryParamsInt32Fiber").Debug(fmt.Sprintf("Invalid query param %s: %s", key, str))
 
-		return 0, c.Status(400).JSON(stdresponse.SRE{
+		return 0,false,c.Status(400).JSON(stdresponse.SRE{
 			Status:       mystatus.Failed,
 			ResponseCode: respcode.InvalidQueryParams,
 			Error:        fmt.Sprintf("Invalid %s: %s", key, str),
 		})
 	}
 
-	return val, nil
+	return val,true, nil
 }
 
 func HandleGetUrlParamsInt32Fiber(c *fiber.Ctx, key string) (int32, error) {

@@ -18,8 +18,8 @@ func (u *UserAccountHandler) Ping(c *fiber.Ctx) error {
 func (u *UserAccountHandler) RequestOTPForLogin(c *fiber.Ctx) error {
 	var req request.UserLoginGetOTP
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
 	_, err := u.accountsClient.UserLoginGetOTP(c.Context(), &pb.UserLoginGetOTPRequest{
@@ -38,8 +38,8 @@ func (u *UserAccountHandler) RequestOTPForLogin(c *fiber.Ctx) error {
 func (u *UserAccountHandler) UserLoginVerifyOTP(c *fiber.Ctx) error {
 	var req request.UserLoginVerifyOTP
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
 	resp, err := u.accountsClient.UserLoginVerifyOTP(c.Context(), &pb.UserLoginVerifyOTPRequest{
@@ -66,8 +66,8 @@ func (u *UserAccountHandler) UserLoginVerifyOTP(c *fiber.Ctx) error {
 func (u *UserAccountHandler) RequestOTPForSignUp(c *fiber.Ctx) error {
 	var req request.GetOTPForSignup
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
 	_, err := u.accountsClient.UserSignUpGetOTP(c.Context(), &pb.UserSignUpGetOTPRequest{
@@ -86,8 +86,8 @@ func (u *UserAccountHandler) RequestOTPForSignUp(c *fiber.Ctx) error {
 func (u *UserAccountHandler) SubmitOTPForSignUp(c *fiber.Ctx) error {
 	var req request.UserSignpViaOTP
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 
 	resp, err := u.accountsClient.UserSignUpVerifyOTP(c.Context(), &pb.UserSignUpVerifyOTPRequest{
@@ -112,8 +112,8 @@ func (u *UserAccountHandler) SubmitOTPForSignUp(c *fiber.Ctx) error {
 func (u *UserAccountHandler) UserLoginViaPassword(c *fiber.Ctx) error {
 	var req request.UserLoginViaPassword
 
-	if errResponse := gateway.BindAndValidateRequestFiber(c, &req); errResponse != nil {
-		return errResponse
+	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
+		return err
 	}
 	resp, err := u.accountsClient.UserLoginViaPassword(c.Context(), &pb.UserLoginViaPasswordRequest{
 		PhoneNumber: req.PhoneNumber,
