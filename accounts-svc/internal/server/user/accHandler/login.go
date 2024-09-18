@@ -2,7 +2,6 @@ package userAccHandler
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"strings"
 
@@ -13,7 +12,6 @@ import (
 
 // UserLoginGetOTP
 func (s *UserAccountsServer) UserLoginGetOTP(ctx context.Context, req *pb.UserLoginGetOTPRequest) (*pb.UserLoginGetOTPResponse, error) {
-	fmt.Println("UserLoginGetOTP")
 	//checking if code is india code
 	if !strings.HasPrefix(req.PhoneNumber, "+91") {
 		log.Println("Phone number must start with +91")

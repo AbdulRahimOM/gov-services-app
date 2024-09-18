@@ -3,10 +3,11 @@ package ksebUserHandler
 import (
 	"context"
 
+	ucinterface "github.com/AbdulRahimOM/gov-services-app/agencies-svc/internal/usecase/interface"
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
-	ucinterface "github.com/AbdulRahimOM/gov-services-app/agencies-svc/internal/usecase/interface"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -14,13 +15,14 @@ type KSEBAgencyUserServer struct {
 	KsebUseCase ucinterface.IKsebAgencyUserUC
 	pb.UnimplementedKSEBAgencyUserServiceServer
 	userChatStreams map[int32]chan *pb.ChatMessage
-	// mutex           sync.Mutex
+	getGrpcStatus   func(respCode string, errMsg string) error
 }
 
-func NewKSEBAgencyUserServer(ksebUseCase ucinterface.IKsebAgencyUserUC) *KSEBAgencyUserServer {
+func NewKSEBAgencyUserServer(ksebUseCase ucinterface.IKsebAgencyUserUC, logger *logrus.Entry) *KSEBAgencyUserServer {
 	return &KSEBAgencyUserServer{
 		KsebUseCase:     ksebUseCase,
 		userChatStreams: make(map[int32]chan *pb.ChatMessage),
+		getGrpcStatus:   stdresponse.NewGetGrpcStatusForService("agencies-svc", logger),
 	}
 }
 

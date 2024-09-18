@@ -9,6 +9,7 @@ import (
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	stdresponse "github.com/AbdulRahimOM/gov-services-app/internal/std-response/std-response"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -17,11 +18,13 @@ type KSEBAgencyAdminServer struct {
 	pb.UnimplementedKSEBAgencyAdminServiceServer
 	// messages map[int32][]*pb.ChatResponse
 	// mu       sync.Mutex
+	getGrpcStatus func(respCode string, errMsg string) error
 }
 
-func NewKSEBAgencyAdminServer(ksebUseCase ucinterface.IKsebAgencyAdminUC) *KSEBAgencyAdminServer {
+func NewKSEBAgencyAdminServer(ksebUseCase ucinterface.IKsebAgencyAdminUC, logger *logrus.Entry) *KSEBAgencyAdminServer {
 	return &KSEBAgencyAdminServer{
-		KsebUseCase: ksebUseCase,
+		KsebUseCase:   ksebUseCase,
+		getGrpcStatus: stdresponse.NewGetGrpcStatusForService("agencies-svc", logger),
 	}
 }
 

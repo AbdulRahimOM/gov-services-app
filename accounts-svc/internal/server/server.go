@@ -15,6 +15,7 @@ import (
 	ksebuc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/admin-uc/kseb"
 	userAccUc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/user-uc/account"
 	ksebUserUc "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/implementations/user-uc/kseb"
+	logs "github.com/AbdulRahimOM/gov-services-app/internal/logs"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -23,6 +24,8 @@ import (
 type AgenciesClients struct {
 	KSEBClient pb.KSEBAgencyAdminServiceClient
 }
+
+var logger = logs.NewLoggerWithServiceName("agencies-svc")
 
 func InitAgenciesClients() (*AgenciesClients, error) {
 	clientConn, err := grpc.NewClient(config.EnvValues.AgenciesSvcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -44,20 +47,20 @@ func InitializeServer(agenciesClients AgenciesClients) (
 ) {
 	userRepository := userrepo.NewUserRepository(db.DB)
 	userUseCase := userAccUc.NewUserUseCase(userRepository)
-	userAccSvcServer := userAccHandler.NewUserAccountsServer(userUseCase)
+	userAccSvcServer := userAccHandler.NewUserAccountsServer(userUseCase, logger)
 
 	adminRepository := adminrepo.NewAdminRepository(db.DB)
 	adminUseCase := adminuc.NewAdminUseCase(adminRepository)
-	adminAccSvcServer := adminAccHandler.NewAdminAccountsServer(adminUseCase)
+	adminAccSvcServer := adminAccHandler.NewAdminAccountsServer(adminUseCase, logger)
 
 	appointmentsUseCase := appointmentsuc.NewAppointmentUseCase(adminRepository)
-	appointmentsServer := appointmentsHandler.NewAppointmentServer(appointmentsUseCase)
+	appointmentsServer := appointmentsHandler.NewAppointmentServer(appointmentsUseCase, logger)
 
 	ksebAdminUseCase := ksebuc.NewKsebAdminUseCase(adminRepository)
-	ksebAdminAccServer := ksebHandler.NewKSEBAdminServer(ksebAdminUseCase, agenciesClients.KSEBClient)
+	ksebAdminAccServer := ksebHandler.NewKSEBAdminServer(ksebAdminUseCase, agenciesClients.KSEBClient, logger)
 
 	ksebUserUseCase := ksebUserUc.NewKsebUserUseCase(userRepository)
-	ksebUserServer := ksebUserHandler.NewKSEBUserServer(ksebUserUseCase)
+	ksebUserServer := ksebUserHandler.NewKSEBUserServer(ksebUserUseCase, logger)
 
 	return userAccSvcServer, adminAccSvcServer, appointmentsServer, ksebAdminAccServer, ksebUserServer
 }

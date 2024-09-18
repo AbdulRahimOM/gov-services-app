@@ -3,6 +3,7 @@ package respcode
 import (
 	"log"
 
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"
 )
 
@@ -27,7 +28,7 @@ const (
 	//Data
 	AlreadyExists = "DATA-ERR-001"
 	PostOccupied  = "DATA-ERR-002"
-	NameExists = "DATA-ERR-003"
+	NameExists    = "DATA-ERR-003"
 
 	//Internal
 	DBError                = "INT-ERR-001"
@@ -42,9 +43,8 @@ const (
 	FailureToGenerate        = "BUG-ERR-004" //Caution: If failed to generate something
 
 	//Appointments
-	NoEnoughRank = "APT-ERR-001"
+	NoEnoughRank        = "APT-ERR-001"
 	PostAlreadyOccupied = "APT-ERR-002"
-
 )
 
 var errCodeMap = map[string]codes.Code{}
@@ -68,7 +68,7 @@ func init() {
 	//Data
 	errCodeMap[AlreadyExists] = codes.AlreadyExists //DATA-ERR-001
 	errCodeMap[PostOccupied] = codes.AlreadyExists  //DATA-ERR-002
-	errCodeMap[NameExists] = codes.AlreadyExists  //DATA-ERR-003
+	errCodeMap[NameExists] = codes.AlreadyExists    //DATA-ERR-003
 
 	//Internal
 	errCodeMap[DBError] = codes.Internal                //INT-ERR-001
@@ -80,10 +80,10 @@ func init() {
 	errCodeMap[BugNoUserInContext] = codes.Unimplemented       //BUG-ERR-001
 	errCodeMap[GrpcUnimplementedHandler] = codes.Unimplemented //BUG-ERR-002
 	errCodeMap[BugNoAdminInContext] = codes.Unimplemented      //BUG-ERR-003
-	errCodeMap[FailureToGenerate] = codes.Unimplemented         //BUG-ERR-004
+	errCodeMap[FailureToGenerate] = codes.Unimplemented        //BUG-ERR-004
 
 	//Appointments
-	errCodeMap[NoEnoughRank] = codes.PermissionDenied //APT-ERR-001
+	errCodeMap[NoEnoughRank] = codes.PermissionDenied     //APT-ERR-001
 	errCodeMap[PostAlreadyOccupied] = codes.AlreadyExists //APT-ERR-002
 }
 
@@ -94,5 +94,40 @@ func GetGRPCCode(errCode string) codes.Code {
 		return codes.Unknown
 	} else {
 		return grpcCode
+	}
+}
+
+// Log levels
+const (
+	Info  = logrus.InfoLevel
+	Warn  = logrus.WarnLevel
+	Error = logrus.ErrorLevel
+	Debug = logrus.DebugLevel
+)
+
+func GetLogLevel(errCode string) logrus.Level {
+	switch errCode {
+	case CorruptRequest:
+		return Debug
+
+	case DBError:
+		return Error
+	case OtherInternalError:
+		return Error
+	case GrpcCommunicationError:
+		return Error
+	case UnknownErrorViaGrpc:
+		return Debug
+	case BugNoUserInContext:
+		return Debug
+	case GrpcUnimplementedHandler:
+		return Debug
+	case BugNoAdminInContext:
+		return Debug
+	case FailureToGenerate:
+		return Debug
+
+	default:
+		return Info
 	}
 }
