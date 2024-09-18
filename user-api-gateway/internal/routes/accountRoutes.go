@@ -7,7 +7,6 @@ import (
 )
 
 func RegisterRoutes(api fiber.Router, userAccHandler *acchandler.UserAccountHandler) {
-	api.Use(middleware.ClearCache)
 
 	//routes for those who are not logged in______________________________________________
 	strangersGroup := api.Group("/entry")

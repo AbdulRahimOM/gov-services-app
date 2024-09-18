@@ -35,6 +35,7 @@ const (
 	OtherInternalError     = "INT-ERR-002"
 	GrpcCommunicationError = "INT-ERR-003"
 	UnknownErrorViaGrpc    = "INT-ERR-004"
+	CircuitOpened          = "INT-ERR-005"
 
 	//Potential bugs (will reach this code if the code is not handled properly)
 	BugNoUserInContext       = "BUG-ERR-001" //Caution: If user is not set in context by the middleware
@@ -75,6 +76,7 @@ func init() {
 	errCodeMap[OtherInternalError] = codes.Internal     //INT-ERR-002
 	errCodeMap[GrpcCommunicationError] = codes.Internal //INT-ERR-003
 	errCodeMap[UnknownErrorViaGrpc] = codes.Internal    //INT-ERR-004
+	errCodeMap[CircuitOpened] = codes.Unavailable       //INT-ERR-005
 
 	//Potential bugs
 	errCodeMap[BugNoUserInContext] = codes.Unimplemented       //BUG-ERR-001
@@ -118,6 +120,9 @@ func GetLogLevel(errCode string) logrus.Level {
 		return Error
 	case UnknownErrorViaGrpc:
 		return Debug
+	case CircuitOpened:
+		return Warn
+
 	case BugNoUserInContext:
 		return Debug
 	case GrpcUnimplementedHandler:

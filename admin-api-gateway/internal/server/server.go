@@ -7,14 +7,26 @@ import (
 	acchandler "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/acc-handler"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/appointments"
 	ksebhanlder "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/handler/kseb"
+	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/middleware"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/routes"
 	w "github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/webrtc"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	"github.com/eapache/go-resiliency/breaker"
 	"github.com/gofiber/fiber/v2"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
+
+const (
+	//for circuit breaker configuration
+	errorThreshold   = 3
+	successThreshold = 1
+	timeout          = 5 * time.Second
+)
+
+var circuitBreaker *breaker.Breaker = breaker.New(errorThreshold, successThreshold, timeout)
+
 
 type ServiceClients struct {
 	// accounts-svc clients
@@ -59,11 +71,17 @@ func InitServiceClients() (*ServiceClients, error) {
 }
 
 func InitRoutes(serviceClients *ServiceClients, api fiber.Router) {
-	accountHandler := acchandler.NewAdminAccountHandler(serviceClients.AccountsClient)
-	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient)
+	accountHandler := acchandler.NewAdminAccountHandler(serviceClients.AccountsClient, circuitBreaker)
+	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient, circuitBreaker)
 
-	ksebAccHandler := ksebhanlder.NewKsebHandler(serviceClients.KsebAccClient, serviceClients.KSEBAgencyAdminClient, serviceClients.KsebChatClient)
+	ksebAccHandler := ksebhanlder.NewKsebHandler(
+		serviceClients.KsebAccClient, 
+		serviceClients.KSEBAgencyAdminClient, 
+		serviceClients.KsebChatClient,
+		circuitBreaker,
+	)
 
+	api.Use(middleware.ClearCache)
 	routes.RegisterRoutes(api.Group("/"), accountHandler, appointmentHandler)
 	routes.RegisterKSEBAccRoutes(api.Group("/kseb"), ksebAccHandler)
 	w.Rooms = make(map[int32]*w.Room)

@@ -2,22 +2,29 @@ package ksebhandler
 
 import (
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
-	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
+	"github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
 	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/models/response"
+	"github.com/eapache/go-resiliency/breaker"
 	"github.com/gofiber/fiber/v2"
 )
 
 type KsebHandler struct {
 	agencyUserClient pb.KSEBAgencyUserServiceClient
 	ksebChatClient   pb.KsebChatServiceClient
+	circuitBreaker   *breaker.Breaker
 }
 
-func NewKsebHandler(ksebClient pb.KSEBAgencyUserServiceClient, chatClient pb.KsebChatServiceClient) *KsebHandler {
+func NewKsebHandler(
+	ksebClient pb.KSEBAgencyUserServiceClient,
+	chatClient pb.KsebChatServiceClient,
+	circuitBreaker *breaker.Breaker,
+) *KsebHandler {
 	return &KsebHandler{
 		agencyUserClient: ksebClient,
 		ksebChatClient:   chatClient,
+		circuitBreaker:   circuitBreaker,
 	}
 }
 

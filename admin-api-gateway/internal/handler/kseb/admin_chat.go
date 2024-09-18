@@ -16,7 +16,7 @@ import (
 
 func (k *KSEBHandler) AdminChatWebsocket(conn *websocket.Conn) {
 	defer conn.Close()
-	fmt.Println("dddddd")
+	
 	complaintId := conn.Params("complaintId")
 
 	adminID, ok := gateway.GetAdminIdFromWebsocketConn(conn)
@@ -24,7 +24,6 @@ func (k *KSEBHandler) AdminChatWebsocket(conn *websocket.Conn) {
 		conn.WriteMessage(websocket.TextMessage, []byte("Unauthorized"))
 		return
 	}
-	fmt.Println("adminID", adminID)
 
 	// Convert complaintId to int32
 	complaintIdInt, err := strconv.Atoi(complaintId)

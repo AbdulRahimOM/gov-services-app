@@ -21,9 +21,14 @@ func (u *AdminAccountHandler) AdminLoginViaPassword(c *fiber.Ctx) error {
 	if ok, err := gateway.BindAndValidateRequestFiber(c, &req); !ok {
 		return err
 	}
-	resp, err := u.accountsClient.AdminLoginViaPassword(c.Context(), &pb.AdminLoginViaPasswordRequest{
-		Username: req.Username,
-		Password: req.Password,
+	var resp *pb.AdminLoginResponse
+	err := u.circuitBreaker.Run(func() error {
+		var err error
+		resp, err = u.accountsClient.AdminLoginViaPassword(c.Context(), &pb.AdminLoginViaPasswordRequest{
+			Username: req.Username,
+			Password: req.Password,
+		})
+		return err
 	})
 	if err == nil {
 		return c.Status(200).JSON(response.AdminLogin{

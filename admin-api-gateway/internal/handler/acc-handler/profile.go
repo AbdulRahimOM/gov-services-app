@@ -17,9 +17,15 @@ func (u *AdminAccountHandler) AdminGetProfile(c *fiber.Ctx) error {
 		return err
 	}
 
-	resp, err := u.accountsClient.AdminGetProfile(context.Background(), &pb.AdminGetProfileRequest{
-		AdminId: adminID,
+	var resp *pb.AdminGetProfileResponse
+	err = u.circuitBreaker.Run(func() error {
+		var err error
+		resp, err = u.accountsClient.AdminGetProfile(context.Background(), &pb.AdminGetProfileRequest{
+			AdminId: adminID,
+		})
+		return err
 	})
+
 	if err == nil {
 		return c.Status(200).JSON(response.AdminGetProfileResponse{
 			Status: mystatus.Success,

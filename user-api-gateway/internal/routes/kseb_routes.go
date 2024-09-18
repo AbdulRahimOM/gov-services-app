@@ -10,7 +10,6 @@ import (
 )
 
 func RegisterKsebRoutes(api fiber.Router, ksebHandler *ksebhandler.KsebHandler) {
-	api.Use(middleware.ClearCache)
 
 	authGroup := api.Group("/user")
 	authGroup.Use(middleware.UserAuthCheck)

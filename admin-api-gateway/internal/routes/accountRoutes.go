@@ -8,7 +8,6 @@ import (
 )
 
 func RegisterRoutes(api fiber.Router, adminAccHandler *acchandler.AdminAccountHandler, appointmentHandler *appointments.AppointmentHandler) {
-	api.Use(middleware.ClearCache)
 
 	//routes for those who are not logged in______________________________________________
 	strangersGroup := api.Group("/admin/entry")

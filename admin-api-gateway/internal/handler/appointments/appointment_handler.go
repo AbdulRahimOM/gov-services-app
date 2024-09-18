@@ -5,19 +5,22 @@ import (
 
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
-	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
+	"github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
+	"github.com/eapache/go-resiliency/breaker"
 	"github.com/gofiber/fiber/v2"
 )
 
 type AppointmentHandler struct {
 	appointmentsClient pb.AppointmentServiceClient
+	circuitBreaker     *breaker.Breaker
 }
 
-func NewAppointmentHandler(client pb.AppointmentServiceClient) *AppointmentHandler {
+func NewAppointmentHandler(client pb.AppointmentServiceClient, circuitBreaker *breaker.Breaker) *AppointmentHandler {
 	return &AppointmentHandler{
 		appointmentsClient: client,
+		circuitBreaker:     circuitBreaker,
 	}
 }
 
@@ -32,16 +35,19 @@ func (h *AppointmentHandler) AppointAttender(c *fiber.Ctx) error {
 		return err
 	}
 
-	_, err = h.appointmentsClient.AppointAttender(context.Background(), &pb.AttenderAppointmentRequest{
-		Appointer: &pb.Appointer{
-			Id: adminId,
-		},
-		Appointee: &pb.Appointee{
-			FirstName:   req.FirstName,
-			LastName:    req.LastName,
-			Email:       req.Email,
-			PhoneNumber: req.PhoneNumber,
-		},
+	err = h.circuitBreaker.Run(func() error {
+		_, err = h.appointmentsClient.AppointAttender(context.Background(), &pb.AttenderAppointmentRequest{
+			Appointer: &pb.Appointer{
+				Id: adminId,
+			},
+			Appointee: &pb.Appointee{
+				FirstName:   req.FirstName,
+				LastName:    req.LastName,
+				Email:       req.Email,
+				PhoneNumber: req.PhoneNumber,
+			},
+		})
+		return err
 	})
 
 	if err == nil {

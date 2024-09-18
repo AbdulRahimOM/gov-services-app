@@ -10,7 +10,6 @@ import (
 )
 
 func RegisterKSEBAccRoutes(api fiber.Router, ksebHandler *ksebhanlder.KSEBHandler) {
-	api.Use(middleware.ClearCache)
 
 	//admin routes
 	authGroup := api.Group("/admin")

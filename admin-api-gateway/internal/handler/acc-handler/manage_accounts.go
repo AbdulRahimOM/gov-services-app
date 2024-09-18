@@ -38,9 +38,14 @@ func (h *AdminAccountHandler) AdminGetAdmins(c *fiber.Ctx) error {
 	// 	return err
 	// }
 
-	resp, err := h.accountsClient.AdminGetAdmins(c.Context(), &pb.AdminGetAdminsRequest{
-		AdminId:        adminID,
-		SearchCriteria: &searchCriteria,
+	var resp *pb.AdminGetAdminsResponse
+	err = h.circuitBreaker.Run(func() error {
+		var err error
+		resp, err = h.accountsClient.AdminGetAdmins(c.Context(), &pb.AdminGetAdminsRequest{
+			AdminId:        adminID,
+			SearchCriteria: &searchCriteria,
+		})
+		return err
 	})
 
 	if err == nil {

@@ -16,19 +16,26 @@ func (h *AdminAccountHandler) AdminGetOffices(c *fiber.Ctx) error {
 	}
 	var err error
 	var ok bool
-	if searchCriteria.Id,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "id");!ok{
+	if searchCriteria.Id, ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "id"); !ok {
 		return err
 	}
-	if searchCriteria.DeptID,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "deptId");!ok{
+	if searchCriteria.DeptID, ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "deptId"); !ok {
 		return err
 	}
-	if searchCriteria.Rank,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "rank");!ok{
+	if searchCriteria.Rank, ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "rank"); !ok {
 		return err
 	}
-	if searchCriteria.SuperiorOfficeID,ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "superiorOfficeId");!ok{
+	if searchCriteria.SuperiorOfficeID, ok, err = gateway.HandleGetQueryParamsInt32Fiber(c, "superiorOfficeId"); !ok {
 		return err
 	}
-	resp, err := h.accountsClient.AdminGetOffices(c.Context(), &searchCriteria)
+
+	var resp *pb.AdminGetOfficesResponse
+	err = h.circuitBreaker.Run(func() error {
+		var err error
+		resp, err = h.accountsClient.AdminGetOffices(c.Context(), &searchCriteria)
+
+		return err
+	})
 
 	if err == nil {
 		var offices []*commondto.Office

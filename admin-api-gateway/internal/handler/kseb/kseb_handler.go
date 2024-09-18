@@ -6,9 +6,10 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/models/response"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
-	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
+	"github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
 	mystatus "github.com/AbdulRahimOM/gov-services-app/internal/std-response/my_status"
+	"github.com/eapache/go-resiliency/breaker"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -16,15 +17,23 @@ type KSEBHandler struct {
 	accClient         pb.KSEBAdminAccServiceClient
 	agencyAdminClient pb.KSEBAgencyAdminServiceClient
 	ksebChatClient    pb.KsebChatServiceClient
+	circuitBreaker    *breaker.Breaker
 }
 
-func NewKsebHandler(accClient pb.KSEBAdminAccServiceClient, agencyAdminClient pb.KSEBAgencyAdminServiceClient, ksebChatClient pb.KsebChatServiceClient) *KSEBHandler {
+func NewKsebHandler(
+	accClient pb.KSEBAdminAccServiceClient,
+	agencyAdminClient pb.KSEBAgencyAdminServiceClient,
+	ksebChatClient pb.KsebChatServiceClient,
+	circuitBreaker *breaker.Breaker,
+) *KSEBHandler {
 	return &KSEBHandler{
 		accClient:         accClient,
 		agencyAdminClient: agencyAdminClient,
 		ksebChatClient:    ksebChatClient,
+		circuitBreaker:    circuitBreaker,
 	}
 }
+
 
 // KSEBRegisterSectionCode
 func (kseb *KSEBHandler) KSEBRegisterSectionCode(c *fiber.Ctx) error {
@@ -38,10 +47,14 @@ func (kseb *KSEBHandler) KSEBRegisterSectionCode(c *fiber.Ctx) error {
 		return err
 	}
 
-	_, err = kseb.accClient.RegisterSectionCode(context.Background(), &pb.RegisterSectionCodeRequest{
-		AdminId:     adminId,
-		SectionCode: req.SectionCode,
-		OfficeId:    req.OfficeId,
+
+	err = kseb.circuitBreaker.Run(func() error {
+		_, err = kseb.accClient.RegisterSectionCode(context.Background(), &pb.RegisterSectionCodeRequest{
+			AdminId:     adminId,
+			SectionCode: req.SectionCode,
+			OfficeId:    req.OfficeId,
+		})
+		return err
 	})
 
 	if err == nil {
@@ -63,13 +76,19 @@ func (kseb *KSEBHandler) AdminGetComplaints(c *fiber.Ctx) error {
 		return err
 	}
 
-	resp, err := kseb.agencyAdminClient.GetComplaints(context.Background(), &pb.GetComplaintsRequest{
-		AdminId: adminId,
-		SearchCriteria: &pb.KsebComplaintSearchCriteria{
-			Status:        status,
-			AttenderScope: attenderScope,
-		},
+	var resp *pb.GetComplaintsResponse
+	err = kseb.circuitBreaker.Run(func() error {
+		var err error
+		resp, err = kseb.agencyAdminClient.GetComplaints(context.Background(), &pb.GetComplaintsRequest{
+			AdminId: adminId,
+			SearchCriteria: &pb.KsebComplaintSearchCriteria{
+				Status:        status,
+				AttenderScope: attenderScope,
+			},
+		})
+		return err
 	})
+
 	if err == nil {
 		complaints := make([]commondto.KsebComplaintResponse, len(resp.Complaints))
 		for i, complaint := range resp.Complaints {
@@ -108,9 +127,12 @@ func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
 		return err
 	}
 
-	_, err = kseb.agencyAdminClient.OpenComplaint(context.Background(), &pb.OpenComplaintRequest{
-		AdminId:     adminId,
-		ComplaintId: complaintId,
+	err = kseb.circuitBreaker.Run(func() error {
+		_, err = kseb.agencyAdminClient.OpenComplaint(context.Background(), &pb.OpenComplaintRequest{
+			AdminId:     adminId,
+			ComplaintId: complaintId,
+		})
+		return err
 	})
 
 	if err == nil {
@@ -133,10 +155,13 @@ func (kseb *KSEBHandler) AdminCloseComplaint(c *fiber.Ctx) error {
 		return err
 	}
 
-	_, err = kseb.agencyAdminClient.CloseComplaint(context.Background(), &pb.CloseComplaintRequest{
-		AdminId:     adminId,
-		ComplaintId: req.ComplaintId,
-		Remarks:     req.Remarks,
+	err = kseb.circuitBreaker.Run(func() error {
+		_, err = kseb.agencyAdminClient.CloseComplaint(context.Background(), &pb.CloseComplaintRequest{
+			AdminId:     adminId,
+			ComplaintId: req.ComplaintId,
+			Remarks:     req.Remarks,
+		})
+		return err
 	})
 
 	if err == nil {
