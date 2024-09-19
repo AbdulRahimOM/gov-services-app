@@ -27,7 +27,6 @@ const (
 
 var circuitBreaker *breaker.Breaker = breaker.New(errorThreshold, successThreshold, timeout)
 
-
 type ServiceClients struct {
 	// accounts-svc clients
 	AccountsClient     pb.AdminAccountServiceClient
@@ -75,15 +74,16 @@ func InitRoutes(serviceClients *ServiceClients, api fiber.Router) {
 	appointmentHandler := appointments.NewAppointmentHandler(serviceClients.AppointmentsClient, circuitBreaker)
 
 	ksebAccHandler := ksebhanlder.NewKsebHandler(
-		serviceClients.KsebAccClient, 
-		serviceClients.KSEBAgencyAdminClient, 
+		serviceClients.KsebAccClient,
+		serviceClients.KSEBAgencyAdminClient,
 		serviceClients.KsebChatClient,
 		circuitBreaker,
 	)
 
-	api.Use(middleware.ClearCache)
-	routes.RegisterRoutes(api.Group("/"), accountHandler, appointmentHandler)
-	routes.RegisterKSEBAccRoutes(api.Group("/kseb"), ksebAccHandler)
+	adminGroup := api.Group("/admin")
+	adminGroup.Use(middleware.ClearCache)
+	routes.RegisterRoutes(adminGroup, accountHandler, appointmentHandler)
+	routes.RegisterKSEBAccRoutes(adminGroup, ksebAccHandler)
 	w.Rooms = make(map[int32]*w.Room)
 	go dispatchKeyFrames()
 }

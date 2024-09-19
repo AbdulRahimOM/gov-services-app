@@ -12,7 +12,7 @@ import (
 func RegisterKSEBAccRoutes(api fiber.Router, ksebHandler *ksebhanlder.KSEBHandler) {
 
 	//admin routes
-	authGroup := api.Group("/admin")
+	authGroup := api.Group("/kseb")
 	authGroup.Use(middleware.AdminAuthCheck)
 	{
 		authGroup.Put("/register-section-code", ksebHandler.KSEBRegisterSectionCode)

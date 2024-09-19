@@ -11,7 +11,7 @@ import (
 
 func RegisterKsebRoutes(api fiber.Router, ksebHandler *ksebhandler.KsebHandler) {
 
-	authGroup := api.Group("/user")
+	authGroup := api.Group("/kseb")
 	authGroup.Use(middleware.UserAuthCheck)
 	{
 		authGroup.Put("/add-consumer-number", ksebHandler.AddConsumerNumber)

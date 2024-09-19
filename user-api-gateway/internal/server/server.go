@@ -74,9 +74,10 @@ func InitRoutes(serviceClients *ServiceClients, api fiber.Router) {
 		circuitBreaker,
 	)
 
-	api.Use(middleware.ClearCache)
-	routes.RegisterRoutes(api.Group("/"), accountHandler)
-	routes.RegisterKsebRoutes(api.Group("/kseb"), ksebAgencyUserHandler)
+	userGroup := api.Group("/user")
+	userGroup.Use(middleware.ClearCache)
+	routes.RegisterRoutes(userGroup, accountHandler)
+	routes.RegisterKsebRoutes(userGroup, ksebAgencyUserHandler)
 	w.Rooms = make(map[int32]*w.Room)
 	go dispatchKeyFrames()
 }

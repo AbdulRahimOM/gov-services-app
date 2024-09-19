@@ -9,7 +9,7 @@ import (
 func RegisterRoutes(api fiber.Router, userAccHandler *acchandler.UserAccountHandler) {
 
 	//routes for those who are not logged in______________________________________________
-	strangersGroup := api.Group("/entry")
+	strangersGroup := api.Group("/no-auth")
 	strangersGroup.Use(middleware.NotLoggedInCheck)
 	{
 		strangersGroup.Get("/login", userAccHandler.Ping)                          //done
@@ -32,7 +32,7 @@ func RegisterRoutes(api fiber.Router, userAccHandler *acchandler.UserAccountHand
 	}
 
 	//routes for those who are logged in-------------------------------------------------
-	authGroup := api.Group("/user")
+	authGroup := api.Group("/auth")
 	authGroup.Use(middleware.UserAuthCheck)
 	{
 		profileGroup := authGroup.Group("/profile")
