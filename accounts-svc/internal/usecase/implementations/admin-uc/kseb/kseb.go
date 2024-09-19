@@ -10,6 +10,11 @@ import (
 	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
 )
 
+const (
+	ksebSubDivOfficeRank = 6
+	ksebSectionOfficeRank = 7
+)
+
 type KsebAdminUseCase struct {
 	adminRepo repo.IAdminRepo
 }
@@ -23,13 +28,13 @@ func NewKsebAdminUseCase(adminRepo repo.IAdminRepo) usecase.IKsebAdminUC {
 // RegisterSectionCode
 func (k *KsebAdminUseCase) CheckIfAdminCanRegisterSectionCode(adminID int32, req *requests.KsebRegSectionCode) (int32, string, error) {
 	//1. check if office exists with the given section office id
-	//2. check if it is section office (by rank(8) and dept id)
+	//2. check if it is section office (by rank(7) and dept id)
 	//get office details
 	sectionOffice, err := k.adminRepo.GetOfficeDetailsByOfficeID(req.OfficeId)
 	if err != nil {
 		return 0, respcode.DBError, fmt.Errorf("@db: failed to get office details: %v", err)
 	}
-	if sectionOffice.Rank != 8 {
+	if sectionOffice.Rank != ksebSectionOfficeRank {
 		return 0, respcode.KSEB_SectionOfficeNotValid, fmt.Errorf("invalid section office id")
 	}
 	if sectionOffice.DeptID != data.DeptID_KSEB {
@@ -55,7 +60,7 @@ func (k *KsebAdminUseCase) CheckIfAdminCanRegisterSectionCode(adminID int32, req
 	if err != nil {
 		return 0, respcode.DBError, fmt.Errorf("@db: failed to get office rank: %v", err)
 	}
-	if officeRank != 7 {
+	if officeRank != ksebSubDivOfficeRank {
 		return 0, respcode.Unauthorized, fmt.Errorf("admin not authorized to register section code. Admin should belong to sub division office(rank 7)")
 	}
 
