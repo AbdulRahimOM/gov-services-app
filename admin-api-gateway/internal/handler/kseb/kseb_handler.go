@@ -127,8 +127,9 @@ func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
 		return err
 	}
 
+	var resp *pb.KsebComplaint
 	err = kseb.circuitBreaker.Run(func() error {
-		_, err = kseb.agencyAdminClient.OpenComplaint(context.Background(), &pb.OpenComplaintRequest{
+		resp, err = kseb.agencyAdminClient.OpenComplaint(context.Background(), &pb.OpenComplaintRequest{
 			AdminId:     adminId,
 			ComplaintId: complaintId,
 		})
@@ -136,8 +137,21 @@ func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
 	})
 
 	if err == nil {
-		return c.Status(200).JSON(response.SM{
+		return c.Status(200).JSON(response.OpenKsebComplaint{
 			Status: mystatus.Success,
+			Complaint: commondto.KsebComplaintResponse{
+				ID:             resp.ID,
+				UserID:         resp.UserID,
+				Type:           resp.Type,
+				Title:          resp.Title,
+				Description:    resp.Description,
+				ConsumerNumber: resp.ConsumerNumber,
+				AttenderID:     resp.AttenderID,
+				Status:         resp.Status,
+				CreatedAt:      resp.CreatedAt,
+				Remarks:        resp.Remarks,
+				ClosedAt:       resp.ClosedAt,
+			},
 		})
 	} else {
 		return gateway.HandleGrpcStatusFiber(c, err)
