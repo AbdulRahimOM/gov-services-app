@@ -1,6 +1,7 @@
 package userrepo
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 
@@ -109,7 +110,7 @@ func (ur UserRepository) GetUserWithPasswordByPhoneNumber(phoneNumber *string) (
 	row := ur.DB.Raw("SELECT id, f_name, l_name, hashed_pw FROM users WHERE phone_number=?", *phoneNumber).Row()
 	err := row.Scan(&dtoUser.ID, &dtoUser.FName, &dtoUser.LName, &hashedPw)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil, dberror.ErrRecordNotFound
 		}
 		return nil, nil, fmt.Errorf("@db: failed to get user: %v", err)

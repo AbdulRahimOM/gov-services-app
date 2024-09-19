@@ -8,9 +8,8 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
+	dberror "github.com/AbdulRahimOM/gov-services-app/internal/std-response/error/db"
 	responsecode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // VerifyPasswordForLogin
@@ -18,8 +17,8 @@ func (uc AdminUseCase) VerifyPasswordForLogin(username, password *string) (*resp
 	//verify password
 	admin, hashedPw, err := uc.adminRepo.GetAdminWithPasswordByUsername(username)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, responsecode.CorruptRequest, fmt.Errorf("no admin registered with this phoneNumber number")
+		if err == dberror.ErrRecordNotFound {
+			return nil, responsecode.Unauthorized, fmt.Errorf("no admin registered with this username,error: %v", err)
 		} else {
 			return nil, responsecode.DBError, fmt.Errorf("at database: failed to get admin password: %v", err)
 		}

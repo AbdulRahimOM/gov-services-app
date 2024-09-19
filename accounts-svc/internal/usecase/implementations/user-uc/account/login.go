@@ -8,10 +8,8 @@ import (
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/response"
 	jwttoken "github.com/AbdulRahimOM/gov-services-app/internal/jwt-token"
+	dberror "github.com/AbdulRahimOM/gov-services-app/internal/std-response/error/db"
 	responsecode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (uc UserUseCase) UserLoginGetOTP(phone *string) (string, error) {
@@ -48,7 +46,7 @@ func (uc UserUseCase) VerifyOtpForLogin(phone, otp *string) (*response.UserLogin
 	//get user details
 	user, err := uc.userRepo.GetUserByPhoneNumber(phone)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
+		if err == dberror.ErrRecordNotFound {
 			return nil, responsecode.CorruptRequest, fmt.Errorf("user not registered with this phoneNumber number, but attempted to verify otp for login")
 		} else {
 			return nil, responsecode.DBError, fmt.Errorf("at database: failed to get user details: %v", err)
@@ -76,7 +74,7 @@ func (uc UserUseCase) VerifyPasswordForLogin(phone, password *string) (*response
 	//verify password
 	user, hashedPw, err := uc.userRepo.GetUserWithPasswordByPhoneNumber(phone)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
+		if err == dberror.ErrRecordNotFound {
 			return nil, responsecode.CorruptRequest, fmt.Errorf("no user registered with this phoneNumber number")
 		} else {
 			return nil, responsecode.DBError, fmt.Errorf("at database: failed to get user password: %v", err)

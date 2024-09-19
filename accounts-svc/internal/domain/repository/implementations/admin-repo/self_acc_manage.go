@@ -1,13 +1,13 @@
 package adminrepo
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 
 	dto "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/other-dto"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/dto/request"
 	dberror "github.com/AbdulRahimOM/gov-services-app/internal/std-response/error/db"
-	"gorm.io/gorm"
 )
 
 func (ur AdminRepository) GetPasswordByAdminID(adminID int32) (*string, error) {
@@ -57,7 +57,7 @@ func (ur AdminRepository) GetAdminWithPasswordByUsername(username *string) (*dto
 			FROM admins WHERE username=?`, *username).Row()
 	err := row.Scan(&dtoAdmin.ID, &dtoAdmin.FName, &dtoAdmin.LName, &hashedPw, &dtoAdmin.Designation)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil, dberror.ErrRecordNotFound
 		}
 		return nil, nil, fmt.Errorf("@db: failed to get admin: %v", err)
