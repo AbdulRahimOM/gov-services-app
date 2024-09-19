@@ -22,7 +22,7 @@ func NewUserUseCase(userRepo repo.IUserRepo) usecase.IUserUC {
 		log.Fatalf("Failed to create token generator: %v", err)
 	}
 
-	twilioOTPClient := twilioOTP.NewTwilioClient(config.Twilio.AccountSid, config.Twilio.AuthToken, config.Twilio.ServiceSid)
+	twilioOTPClient := twilioOTP.NewTwilioClient(config.Twilio.AccountSid, config.Twilio.AuthToken, config.Twilio.ServiceSid, config.DevMode.ByPassTwilio)
 	return &UserUseCase{
 		userRepo:        userRepo,
 		jwtClient:       jwtClient,

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/spf13/viper"
@@ -24,10 +25,14 @@ var Twilio struct {
 }
 
 var Emailing struct {
-	FromEmail string `mapstructure:"EMAIL_FROM"`
-	AppPassword string `mapstructure:"EMAIL_APP_PASSWORD"`
+	FromEmail         string `mapstructure:"EMAIL_FROM"`
+	AppPassword       string `mapstructure:"EMAIL_APP_PASSWORD"`
 	SmtpServerAddress string `mapstructure:"SMTP_SERVER_ADDRESS"`
-	SmtpsPort string `mapstructure:"SMTPS_PORT"`
+	SmtpsPort         string `mapstructure:"SMTPS_PORT"`
+}
+
+var DevMode struct {
+	ByPassTwilio bool
 }
 
 func init() {
@@ -64,4 +69,8 @@ func loadConfig() {
 	if err != nil {
 		log.Fatalln("error occured while writing env values onto variables, error:", err)
 	}
+
+	DevMode.ByPassTwilio = (viper.Get("DEVMODE_BYPASS_TWILIO") == "true")
+	fmt.Println("DevMode.TwiliioBypass=", DevMode.ByPassTwilio)
+
 }

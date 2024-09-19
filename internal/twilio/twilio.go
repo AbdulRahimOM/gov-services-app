@@ -10,17 +10,19 @@ import (
 )
 
 type TwilioClient struct {
+	bypassMode bool
 	client     *twilio.RestClient
 	serviceSid string
 }
 
-func NewTwilioClient(accountSid, authToken, serviceSid string) *TwilioClient {
+func NewTwilioClient(accountSid, authToken, serviceSid string, byPassTwilio bool) *TwilioClient {
 	return &TwilioClient{
 		client: twilio.NewRestClientWithParams(twilio.ClientParams{
 			Username: accountSid,
 			Password: authToken,
 		}),
 		serviceSid: serviceSid,
+		bypassMode: byPassTwilio,
 	}
 }
 
@@ -94,6 +96,10 @@ func NewTwilioClient(accountSid, authToken, serviceSid string) *TwilioClient {
 // }
 
 func (tc *TwilioClient) SendOtp(phone string) error {
+	if tc.bypassMode{
+		fmt.Println("ByPass mode is turned on in environment. Skipping sending of otp")
+		return nil
+	}
 	fmt.Println("Sending OTP")
 	params := &verify.CreateVerificationParams{}
 	params.SetTo(phone)
@@ -125,12 +131,9 @@ func (tc *TwilioClient) SendOtp(phone string) error {
 func (tc *TwilioClient) VerifyOtp(phone string, otp string) (bool, error) {
 	// fmt.Println("phone", phone)
 	// fmt.Println("otp", otp)
-	//temporarily skipping the otp verification, due to failure in sending otp
-	if len(otp) != 6 {
-		return false, fmt.Errorf("invalid otp")
-	}
-	if len(otp) == 6{
-		return true, nil
+	if tc.bypassMode {
+		fmt.Println("ByPass mode is turned on in environment. Skipping sending of otp")
+		return true,nil
 	}
 	params := &verify.CreateVerificationCheckParams{}
 	params.SetTo(phone)
