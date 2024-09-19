@@ -10,6 +10,7 @@ var EnvValues struct {
 	Port           string `mapstructure:"PORT"`
 	DbUrl          string `mapstructure:"DB_URL"`
 	AgenciesSvcUrl string `mapstructure:"AGENCIES_SVC_URL"`
+	Environment    string `mapstructure:"ENVIRONMENT"`
 }
 
 var JWT struct {
@@ -20,6 +21,13 @@ var Twilio struct {
 	AccountSid string `mapstructure:"TWILIO_ACCOUNT_SID"`
 	AuthToken  string `mapstructure:"TWILIO_AUTH_TOKEN"`
 	ServiceSid string `mapstructure:"TWILIO_SERVICE_SID"`
+}
+
+var Emailing struct {
+	FromEmail string `mapstructure:"EMAIL_FROM"`
+	AppPassword string `mapstructure:"EMAIL_APP_PASSWORD"`
+	SmtpServerAddress string `mapstructure:"SMTP_SERVER_ADDRESS"`
+	SmtpsPort string `mapstructure:"SMTPS_PORT"`
 }
 
 func init() {
@@ -48,6 +56,11 @@ func loadConfig() {
 	}
 
 	err = viper.Unmarshal(&JWT)
+	if err != nil {
+		log.Fatalln("error occured while writing env values onto variables, error:", err)
+	}
+
+	err = viper.Unmarshal(&Emailing)
 	if err != nil {
 		log.Fatalln("error occured while writing env values onto variables, error:", err)
 	}

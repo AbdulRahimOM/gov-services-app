@@ -6,6 +6,8 @@ require (
 	github.com/AbdulRahimOM/go-utils/hashPassword v0.0.0-20240625005829-7d8214cf7d50
 	github.com/AbdulRahimOM/go-utils/helper v0.0.0-20240710141430-3e08a5bcd862
 	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-00010101000000-000000000000
+	github.com/atotto/clipboard v0.1.4
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
 	google.golang.org/grpc v1.64.0
 	google.golang.org/protobuf v1.34.2

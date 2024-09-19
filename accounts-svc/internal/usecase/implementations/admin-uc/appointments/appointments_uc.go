@@ -2,17 +2,24 @@ package appointmentsuc
 
 import (
 	"fmt"
+	"net/smtp"
 	"strings"
 	"time"
 
 	hashpassword "github.com/AbdulRahimOM/go-utils/hashPassword"
 	"github.com/AbdulRahimOM/go-utils/helper"
+	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/models"
 	repo "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/domain/repository/interface"
 	usecase "github.com/AbdulRahimOM/gov-services-app/accounts-svc/internal/usecase/interface"
 	requests "github.com/AbdulRahimOM/gov-services-app/internal/common-dto/request"
 	"github.com/AbdulRahimOM/gov-services-app/internal/project/data"
 	respcode "github.com/AbdulRahimOM/gov-services-app/internal/std-response/response-code"
+	"github.com/atotto/clipboard"
+)
+
+const (
+	ksebBottomOfficeRank = 7
 )
 
 type AppointmentUseCase struct {
@@ -31,7 +38,7 @@ func (uc *AppointmentUseCase) CreateChildOffice(adminID int32, proposedChildOffi
 	if err != nil {
 		return 0, respcode.DBError, fmt.Errorf("@db: couldn't get office id of admin")
 	}
-	_,respCode, err := uc.checkIfOfficeCanCreateSubOffice(officeDetails.ID, officeDetails.DeptID)
+	_, respCode, err := uc.checkIfOfficeCanCreateSubOffice(officeDetails.ID, officeDetails.DeptID)
 	if err != nil {
 		return 0, respCode, fmt.Errorf("while checking if office can create sub office, error: %v", err)
 	}
@@ -139,12 +146,32 @@ func generateUsername(firstName, lastName string, length int) string {
 
 func sendCredentialsToSubAdmin(email, username, password string) error {
 	fmt.Println("sending credentials to sub admin...")
-	fmt.Println("To be implemented...")
-	fmt.Println("Username: ", username)
-	fmt.Println("Password: ", password)
-	fmt.Println("Email: ", email)
-	//send email
-	//send sms
+
+	if config.EnvValues.Environment == "development" {
+		copyText := `{
+	"username": "` + username + `",
+	"password": "` + password + `"
+}`
+		err := clipboard.WriteAll(copyText)
+		if err != nil {
+			fmt.Println("failed to copy to clipboard: ", err)
+		}
+	}
+	sendEmail(email, "Credentials", "Username: "+username+"\nPassword: "+password)
+
+	return nil
+}
+func sendEmail(to, subject, body string) error {
+	from := config.Emailing.FromEmail
+	auth := smtp.PlainAuth("", from, config.Emailing.AppPassword, config.Emailing.SmtpServerAddress)
+	addr := fmt.Sprintf("%s:%s", config.Emailing.SmtpServerAddress, config.Emailing.SmtpsPort)
+
+	msg := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", from, to, subject, body))
+
+	err := smtp.SendMail(addr, auth, from, []string{to}, msg)
+	if err != nil {
+		return fmt.Errorf("failed to send email: %v", err)
+	}
 	return nil
 }
 
@@ -299,6 +326,8 @@ func (uc *AppointmentUseCase) checkIfOfficeCanCreateSubOffice(officeID int32, de
 	}
 	if rankOfOffice < 2 {
 		return false, respcode.Unauthorized, fmt.Errorf("admin rank should not be 1 or 2")
+	} else if rankOfOffice >= ksebBottomOfficeRank {
+		return false, respcode.Unauthorized, fmt.Errorf("admin's office's heirarchial rank should not be %d or above", ksebBottomOfficeRank)
 	}
 
 	switch deptID {
