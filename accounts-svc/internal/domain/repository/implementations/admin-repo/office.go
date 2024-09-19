@@ -20,11 +20,14 @@ func (ur AdminRepository) CheckIfOfficeExists(officeID int32) (bool, error) {
 
 func (ur AdminRepository) GetRankOfOffice(officeID int32) (int32, error) {
 	var rank int32
+	fmt.Println("officeID: ", officeID)
 	result := ur.DB.Raw("SELECT rank FROM offices WHERE id=?", officeID).Scan(&rank)
 	if result.Error != nil {
+		fmt.Println("error: ", result.Error)
 		return 0, fmt.Errorf("@db: failed to get rank of office: %v", result.Error)
 	}
 	if result.RowsAffected == 0 {
+		fmt.Println("error: ", dberror.ErrRecordNotFound)
 		return 0, dberror.ErrRecordNotFound
 	}
 	return rank, nil
@@ -44,7 +47,8 @@ func (ur AdminRepository) GetSuperiorOfficeIdByOfficeId(officeID int32) (int32, 
 
 func (ur AdminRepository) GetOfficeDetailsByAdminID(adminID int32) (*dto.OfficeDetails, error) {
 	var officeDetails dto.OfficeDetails//, rank, dept_id
-	result := ur.DB.Raw("SELECT office_id FROM admins WHERE id=?", adminID).Scan(&officeDetails.ID)
+	var officeId int32
+	result := ur.DB.Raw("SELECT office_id FROM admins WHERE id=?", adminID).Scan(&officeId)
 	if result.Error != nil {
 		return nil, fmt.Errorf("@db: failed to get office details: %v", result.Error)
 	}
@@ -52,14 +56,14 @@ func (ur AdminRepository) GetOfficeDetailsByAdminID(adminID int32) (*dto.OfficeD
 		return nil, dberror.ErrRecordNotFound
 	}
 
-	result = ur.DB.Raw("SELECT rank, dept_id FROM offices WHERE id=?", officeDetails.ID).Scan(&officeDetails)
+	result = ur.DB.Raw("SELECT rank, dept_id FROM offices WHERE id=?", officeId).Scan(&officeDetails)
 	if result.Error != nil {
 		return nil, fmt.Errorf("@db: failed to get office details: %v", result.Error)
 	}
 	if result.RowsAffected == 0 {
 		return nil, dberror.ErrRecordNotFound
 	}
-	
+	officeDetails.ID = officeId
 	return &officeDetails, nil
 }
 

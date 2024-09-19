@@ -31,7 +31,6 @@ func (uc *AppointmentUseCase) CreateChildOffice(adminID int32, proposedChildOffi
 	if err != nil {
 		return 0, respcode.DBError, fmt.Errorf("@db: couldn't get office id of admin")
 	}
-
 	_,respCode, err := uc.checkIfOfficeCanCreateSubOffice(officeDetails.ID, officeDetails.DeptID)
 	if err != nil {
 		return 0, respCode, fmt.Errorf("while checking if office can create sub office, error: %v", err)

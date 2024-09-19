@@ -17,10 +17,10 @@ type AppointmentServer struct {
 	getGrpcStatus func(respCode string, errMsg string) error
 }
 
-func NewAppointmentServer(appointmentUseCase ucinterface.IAppointmentUC,logger *logrus.Entry) *AppointmentServer {
+func NewAppointmentServer(appointmentUseCase ucinterface.IAppointmentUC, logger *logrus.Entry) *AppointmentServer {
 	return &AppointmentServer{
 		AppointmentUseCase: appointmentUseCase,
-		getGrpcStatus: stdresponse.NewGetGrpcStatusForService("accounts-svc", logger),
+		getGrpcStatus:      stdresponse.NewGetGrpcStatusForService("accounts-svc", logger),
 	}
 }
 
@@ -68,7 +68,7 @@ func (s *AppointmentServer) AppointChildOfficeHead(ctx context.Context, req *pb.
 		PhoneNumber: req.Appointee.PhoneNumber,
 	}
 
-	_, responseCode, err := s.AppointmentUseCase.AppointChildOfficeHead(req.Appointer.Id,req.ChildOfficeID, &appointee)
+	_, responseCode, err := s.AppointmentUseCase.AppointChildOfficeHead(req.Appointer.Id, req.ChildOfficeID, &appointee)
 	if err != nil {
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	} else {
@@ -85,7 +85,7 @@ func (s *AppointmentServer) AppointChildOfficeDeputyHead(ctx context.Context, re
 		PhoneNumber: req.Appointee.PhoneNumber,
 	}
 
-	_, responseCode, err := s.AppointmentUseCase.AppointChildOfficeDeputyHead(req.Appointer.Id,req.ChildOfficeID, &appointee)
+	_, responseCode, err := s.AppointmentUseCase.AppointChildOfficeDeputyHead(req.Appointer.Id, req.ChildOfficeID, &appointee)
 	if err != nil {
 		return nil, stdresponse.GetGrpcStatus(responseCode, err.Error())
 	} else {
