@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"net/http"
+	_ "net/http/pprof"
 
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/config"
 	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/middleware"
@@ -24,6 +26,10 @@ func main() {
 
 	server.InitRoutes(serviceClients, app.Use(middleware.CustomLogger))
 
+	go func() {
+		log.Println("Starting pprof server on " + config.EnvValues.PprofUrl)
+		log.Println(http.ListenAndServe(config.EnvValues.PprofUrl, nil))
+	}()
 	err = app.Listen(config.EnvValues.Port)
 	if err != nil {
 		log.Fatal("error occured while running the server, error:", err)

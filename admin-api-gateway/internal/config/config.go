@@ -13,6 +13,7 @@ var EnvValues struct {
 	ChatSvcUrl     string `mapstructure:"CHAT_SVC_URL"`
 
 	UserHost string `mapstructure:"USER_HOST"`
+	PprofUrl string `mapstructure:"PPROF_URL"`
 }
 
 func init() {

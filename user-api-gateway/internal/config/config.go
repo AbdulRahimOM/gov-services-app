@@ -13,6 +13,7 @@ var EnvValues struct {
 	AgenciesSvcUrl string `mapstructure:"AGENCIES_SVC_URL"`
 	ChatSvcUrl     string `mapstructure:"CHAT_SVC_URL"`
 	LogToFile      bool   `mapstructure:"LOG_TO_FILE"`
+	PprofUrl	   string `mapstructure:"PPROF_URL"`
 }
 
 func init() {

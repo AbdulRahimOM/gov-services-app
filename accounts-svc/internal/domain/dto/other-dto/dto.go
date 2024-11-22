@@ -16,12 +16,12 @@ type LoggedInAdmin struct {
 }
 
 type UserProfile struct {
-	FirstName   string `json:"firstName"`
-	LastName    string `json:"lastName"`
+	FirstName   string `json:"firstName" gorm:"column:f_name"`
+	LastName    string `json:"lastName" gorm:"column:l_name"`
 	Email       string `json:"email"`
 	Address     string `json:"address"`
 	Pincode     string `json:"pincode"`
-	PhoneNumber string `json:"phoneNumber"`
+	PhoneNumber string `json:"phoneNumber" gorm:"column:phone_number"`
 }
 
 type AdminProfile struct {

@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	ksebBottomOfficeRank = 7
+	ksebBottomOfficeRank = 8
 )
 
 type AppointmentUseCase struct {

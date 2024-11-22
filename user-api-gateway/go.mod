@@ -4,6 +4,7 @@ go 1.22.2
 
 require (
 	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0
+	github.com/eapache/go-resiliency v1.7.0
 	github.com/gofiber/adaptor/v2 v2.2.1
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/template/html/v2 v2.1.2
@@ -12,6 +13,7 @@ require (
 	github.com/pion/webrtc/v3 v3.3.0
 	github.com/prometheus/client_golang v1.20.3
 	github.com/segmentio/kafka-go v0.4.47
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
 	google.golang.org/grpc v1.64.0
 )
@@ -79,7 +81,6 @@ require (
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect

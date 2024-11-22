@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	ksebSubDivOfficeRank = 6
-	ksebSectionOfficeRank = 7
+	ksebSubDivOfficeRank = 7
+	ksebSectionOfficeRank = 8
 )
 
 type KsebAdminUseCase struct {

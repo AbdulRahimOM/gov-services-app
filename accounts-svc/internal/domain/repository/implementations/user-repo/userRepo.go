@@ -49,7 +49,7 @@ func (ur UserRepository) UpdatePasswordByUserID(userID int32, hashedPassword *st
 // UserGetProfileByUserID
 func (ur UserRepository) UserGetProfileByUserID(userID int32) (*dto.UserProfile, error) {
 	var profile dto.UserProfile
-	result := ur.DB.Raw("SELECT f_name, l_name, email, address, pincode FROM users WHERE id=?", userID).Scan(&profile)
+	result := ur.DB.Raw("SELECT f_name, l_name, email, address, pincode, phone_number FROM users WHERE id=?", userID).Scan(&profile)
 	if result.Error != nil {
 		return nil, fmt.Errorf("@db: failed to get profile: %v", result.Error)
 	}
