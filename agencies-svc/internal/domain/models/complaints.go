@@ -14,5 +14,5 @@ type KsebComplaint struct {
 	Status         string    `json:"status" gorm:"default:'not-opened'"`
 	CreatedAt      time.Time `json:"created_at" gorm:"autoCreateTime"`
 	Remarks        string    `json:"remarks" gorm:"default:''"`
-	ClosedAt       time.Time `json:"closed_at" gorm:"default:null"`
+	ClosedAt       *time.Time `json:"closed_at" gorm:"default:null"`
 }

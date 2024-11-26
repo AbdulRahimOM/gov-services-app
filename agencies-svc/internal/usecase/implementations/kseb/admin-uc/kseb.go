@@ -102,6 +102,8 @@ func (k *KSEBAgencyAdminUseCase) OpenComplaint(adminID, complaintID int32) (*mod
 		return nil, respcode.DBError, fmt.Errorf("@db: failed to update complaint-status to 'opened'. Error: %v", err)
 	}
 
+	complaint.Status = "opened"
+
 	return complaint, "", nil
 }
 

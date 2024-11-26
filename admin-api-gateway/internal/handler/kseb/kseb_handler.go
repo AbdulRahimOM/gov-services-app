@@ -150,7 +150,6 @@ func (kseb *KSEBHandler) AdminOpenComplaint(c *fiber.Ctx) error {
 				Status:         resp.Status,
 				CreatedAt:      resp.CreatedAt,
 				Remarks:        resp.Remarks,
-				ClosedAt:       resp.ClosedAt,
 			},
 		})
 	} else {

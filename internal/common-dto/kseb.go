@@ -16,6 +16,6 @@ type KsebComplaintResponse struct {
 	AttenderID     int32  `json:"attenderId"`
 	Status         string `json:"status"`
 	CreatedAt      string `json:"createdAt"`
-	Remarks        string `json:"remarks"`
-	ClosedAt       string `json:"closedAt"`
+	Remarks        string `json:"remarks,omitempty"`
+	ClosedAt       string `json:"closedAt,omitempty"`
 }

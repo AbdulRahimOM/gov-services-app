@@ -63,7 +63,10 @@ func (k *KSEBAgencyAdminServer) GetComplaints(ctx context.Context, req *pb.GetCo
 				Status:         v.Status,
 				CreatedAt:      v.CreatedAt.Format(time.RFC3339),
 				Remarks:        v.Remarks,
-				ClosedAt:       v.ClosedAt.Format(time.RFC3339),
+			}
+
+			if v.ClosedAt != nil {
+				complaintsResponse[i].ClosedAt = v.ClosedAt.Format(time.RFC3339)
 			}
 		}
 		return &pb.GetComplaintsResponse{
@@ -88,7 +91,6 @@ func (k *KSEBAgencyAdminServer) OpenComplaint(ctx context.Context, req *pb.OpenC
 			Status:         complaint.Status,
 			CreatedAt:      complaint.CreatedAt.Format(time.RFC3339),
 			Remarks:        complaint.Remarks,
-			ClosedAt:       complaint.ClosedAt.Format(time.RFC3339),
 		}, nil
 	}
 }
