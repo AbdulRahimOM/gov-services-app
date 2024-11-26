@@ -324,7 +324,7 @@ func (uc *AppointmentUseCase) checkIfOfficeCanCreateSubOffice(officeID int32, de
 	if err != nil {
 		return false, respcode.DBError, fmt.Errorf("@db: couldn't get rank of admin")
 	}
-	if rankOfOffice < 2 {
+	if rankOfOffice <= 2 {
 		return false, respcode.Unauthorized, fmt.Errorf("admin rank should not be 1 or 2")
 	} else if rankOfOffice >= ksebBottomOfficeRank {
 		return false, respcode.Unauthorized, fmt.Errorf("admin's office's heirarchial rank should not be %d or above", ksebBottomOfficeRank)

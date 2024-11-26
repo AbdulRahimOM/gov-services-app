@@ -102,3 +102,12 @@ func (ur AdminRepository) AdminGetAdmins(sc *request.AdminSearchCriteria) (*[]co
 	}
 	return &admins, nil
 }
+
+func (ur AdminRepository) GetDeptIDByOfficeID(officeID int32) (int32, error) {
+	var deptID int32
+	result := ur.DB.Raw("SELECT dept_id FROM offices WHERE id=?", officeID).Scan(&deptID)
+	if result.Error != nil {
+		return 0, fmt.Errorf("@db: failed to get dept id: %v", result.Error)
+	}
+	return deptID, nil
+}

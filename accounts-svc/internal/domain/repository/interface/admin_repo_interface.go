@@ -27,6 +27,7 @@ type IAdminRepo interface {
 	CheckOccupancyByDesignation(officeID int32, designation string) (bool, error)
 	CheckIfOfficeNameExists(name *string) (bool, error)
 	CheckIfOfficeExists(officeID int32) (bool, error)
+	GetDeptIDByOfficeID(officeID int32) (int32, error)
 
 	//account management
 	AdminGetAdmins(searchCriteria *request.AdminSearchCriteria) (*[]commondto.Admin, error)

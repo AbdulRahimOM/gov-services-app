@@ -20,7 +20,6 @@ func (ur AdminRepository) CheckIfOfficeExists(officeID int32) (bool, error) {
 
 func (ur AdminRepository) GetRankOfOffice(officeID int32) (int32, error) {
 	var rank int32
-	fmt.Println("officeID: ", officeID)
 	result := ur.DB.Raw("SELECT rank FROM offices WHERE id=?", officeID).Scan(&rank)
 	if result.Error != nil {
 		fmt.Println("error: ", result.Error)
