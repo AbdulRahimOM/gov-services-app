@@ -151,15 +151,12 @@ func (tc *TwilioClient) VerifyOtp(phone string, otp string) (bool, error) {
 			case "approved":
 				fmt.Println("OTP verification approved")
 				return true, nil
-			case "pending":
-
-				fmt.Println("OTP verification pending. OTP already sent")
-			case "denied":
-				fmt.Println("OTP verification denied")
+			default:
+				fmt.Println("OTP verification failed: ", *resp.Status)
+				return false, fmt.Errorf("OTP verification failed")
 			}
-			fmt.Println(*resp.Status)
 		} else {
-			fmt.Println(resp.Status)
+			fmt.Println("resp status:", resp.Status)
 		}
 		return true, nil
 	}

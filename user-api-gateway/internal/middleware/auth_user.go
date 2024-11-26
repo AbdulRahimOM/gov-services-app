@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -59,6 +60,8 @@ func UserAuthCheck(c *fiber.Ctx) error {
 	}
 
 	if addlInfo != nil {
+		fmt.Println("addlInfo is not nil")
+		fmt.Println("addlInfo: ", addlInfo)
 		addlInfo.SetContextFiber(c)
 	}
 

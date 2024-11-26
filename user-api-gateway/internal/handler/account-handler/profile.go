@@ -166,8 +166,23 @@ func (u *UserAccountHandler) UserUpdatePasswordUsingOldPw(c *fiber.Ctx) error {
 }
 
 func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *fiber.Ctx) error {
-	purpose := c.Locals(tag.CtxPurpose).(string)
-	purposeStatus := c.Locals(tag.CtxPurposeStatus).(string)
+	purpose,ok := c.Locals(tag.CtxPurpose).(string)
+	if !ok {
+		return c.Status(400).JSON(response.SRE{
+			Status:       mystatus.Failed,
+			Error:        "no '" + tag.CtxPurpose + "' in context",
+			ResponseCode: respCode.NotEnoughPermissionsInToken,
+		})
+	}
+
+	purposeStatus,ok := c.Locals(tag.CtxPurposeStatus).(string)
+	if !ok {
+		return c.Status(400).JSON(response.SRE{
+			Status:       mystatus.Failed,
+			Error:        "no '" + tag.CtxPurposeStatus + "' in context",
+			ResponseCode: respCode.NotEnoughPermissionsInToken,
+		})
+	}
 	if purpose == "" || purpose != tag.PwChange {
 		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
