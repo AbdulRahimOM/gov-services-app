@@ -80,6 +80,14 @@ func (u *KsebUserUseCase) GetUserConsumerNumbers(userID int32) (*[]commondto.Use
 
 // RaiseComplaint
 func (u *KsebUserUseCase) RaiseComplaint(userID int32, complaint *requests.KSEBComplaint) (int32, string, error) {
+	if complaint.Type == "standard" {
+		switch complaint.Title {
+			case "power cut","low voltage","high voltage","power fluctuation":
+			default:
+				return 0, respcode.KSEB_InvalidComplaintTitle, fmt.Errorf("invalid complaint title for standard types. allowed titles: power cut, low voltage, high voltage, power fluctuation")
+		}
+		} 
+
 	entry := models.KsebComplaint{
 		UserID:         userID,
 		Type:           complaint.Type,

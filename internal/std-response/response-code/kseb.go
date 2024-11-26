@@ -18,6 +18,7 @@ const (
 	KSEB_ComplaintAlreadyOpened        = "KSEB-CRE-002"
 	KSEB_ComplaintNotOpened            = "KSEB-CRE-003"
 	KSEB_ComplaintNotAccessibleToAdmin = "KSEB-CRE-004"
+	KSEB_InvalidComplaintTitle         = "KSEB-CRE-005"
 )
 
 // KSEB response codes
@@ -36,4 +37,5 @@ func init() {
 	errCodeMap[KSEB_ComplaintAlreadyOpened] = codes.FailedPrecondition      //KSEB-CRE-002
 	errCodeMap[KSEB_ComplaintNotOpened] = codes.FailedPrecondition          //KSEB-CRE-003
 	errCodeMap[KSEB_ComplaintNotAccessibleToAdmin] = codes.PermissionDenied //KSEB-CRE-004
+	errCodeMap[KSEB_InvalidComplaintTitle] = codes.InvalidArgument          //KSEB-CRE-005
 }

@@ -7,6 +7,7 @@ import (
 )
 
 func RegisterRoutes(api fiber.Router, userAccHandler *acchandler.UserAccountHandler) {
+	api.Get("/health", userAccHandler.Ping)
 
 	//routes for those who are not logged in______________________________________________
 	strangersGroup := api.Group("/no-auth")
@@ -37,7 +38,7 @@ func RegisterRoutes(api fiber.Router, userAccHandler *acchandler.UserAccountHand
 	{
 		profileGroup := authGroup.Group("/profile")
 		{
-			profileGroup.Get("/view", userAccHandler.UserGetProfile)                                           
+			profileGroup.Get("/view", userAccHandler.UserGetProfile)
 			profileGroup.Get("/edit-page", userAccHandler.UserGetProfile)                                            //done
 			profileGroup.Post("/update", userAccHandler.UserUpdateProfile)                                           //done
 			profileGroup.Post("/update-password/using-old-pw", userAccHandler.UserUpdatePasswordUsingOldPw)          //done

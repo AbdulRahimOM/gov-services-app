@@ -3,8 +3,7 @@ package tag
 const (
 	//name of the tag
 	CtxPurpose= "purpose"
-	CtxPurposeStatus= "purpose_status"
-
+	CtxPurposeExpiryTime= "purpose-expiry-time"
 	PwChange = "pw-change"
 	
 )

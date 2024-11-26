@@ -2,6 +2,7 @@ package acchandler
 
 import (
 	"fmt"
+	"time"
 
 	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
@@ -166,7 +167,7 @@ func (u *UserAccountHandler) UserUpdatePasswordUsingOldPw(c *fiber.Ctx) error {
 }
 
 func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *fiber.Ctx) error {
-	purpose,ok := c.Locals(tag.CtxPurpose).(string)
+	purpose, ok := c.Locals(tag.CtxPurpose).(string)
 	if !ok {
 		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
@@ -175,14 +176,15 @@ func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *fiber.Ctx) error {
 		})
 	}
 
-	purposeStatus,ok := c.Locals(tag.CtxPurposeStatus).(string)
+	purposeExpiryTime, ok := c.Locals(tag.CtxPurposeExpiryTime).(time.Time)
 	if !ok {
 		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
-			Error:        "no '" + tag.CtxPurposeStatus + "' in context",
+			Error:        "no '" + tag.CtxPurposeExpiryTime + "' in context",
 			ResponseCode: respCode.NotEnoughPermissionsInToken,
 		})
 	}
+
 	if purpose == "" || purpose != tag.PwChange {
 		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
@@ -190,7 +192,8 @@ func (u *UserAccountHandler) UserSetNewPwAfterVerifyingOTP(c *fiber.Ctx) error {
 			ResponseCode: respCode.NotEnoughPermissionsInToken,
 		})
 	}
-	if purposeStatus == "expired" {
+
+	if time.Now().After(purposeExpiryTime) {
 		return c.Status(400).JSON(response.SRE{
 			Status:       mystatus.Failed,
 			Error:        "Purpose '" + tag.PwChange + "' expired in token",

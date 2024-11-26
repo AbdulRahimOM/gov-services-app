@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/AbdulRahimOM/gov-services-app/internal/tag"
 	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,14 +17,14 @@ type ExtraPurposeInfo struct {
 func (e *ExtraPurposeInfo) isCustomClaimType() {}
 
 func (e *ExtraPurposeInfo) SetContextGin(c *gin.Context) {
-	c.Set("purpose", e.Purpose)
-	c.Set("purpose-expiry-time", e.ExpiryTime)
+	c.Set(tag.CtxPurpose, e.Purpose)
+	c.Set(tag.CtxPurposeExpiryTime, e.ExpiryTime)
 	fmt.Println("e.Purpose:", e.Purpose)
 }
 
 func (e *ExtraPurposeInfo) SetContextFiber(c *fiber.Ctx) {
-	c.Locals("purpose", e.Purpose)
-	c.Locals("purpose-expiry-time", e.ExpiryTime)
+	c.Locals(tag.CtxPurpose, e.Purpose)
+	c.Locals(tag.CtxPurposeExpiryTime, e.ExpiryTime)
 }
 
 func (e *ExtraPurposeInfo) getWithLabel() additionalInfoWithLabel {
