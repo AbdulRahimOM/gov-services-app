@@ -1,5 +1,7 @@
 github.com/AbdulRahimOM/go-utils v0.0.0-20240710141430-3e08a5bcd862 h1:sfKK2b/1wthlg/EVc3lPvGEotMu8xk9l7Bm+Vy5HPfA=
 github.com/AbdulRahimOM/go-utils v0.0.0-20240710141430-3e08a5bcd862/go.mod h1:lCgIbRaOlTZ9vCdAddRJxff6/zYZCSevs3QDimCAy0o=
+github.com/AbdulRahimOM/go-utils/mymath v0.0.0-20240710141430-3e08a5bcd862 h1:wIcA5Enfhfr05sKwBcB0V8m8q67j0BcDU3eGdzw0YRE=
+github.com/AbdulRahimOM/go-utils/mymath v0.0.0-20240710141430-3e08a5bcd862/go.mod h1:xgpD6Ot8NZLG6Ocp79hz6dAyyBkEZXdSVoGwFhwdHhY=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
 github.com/andybalholm/brotli v1.0.5/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=

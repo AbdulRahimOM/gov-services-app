@@ -54,7 +54,7 @@ func main() {
 
 func kafkaReader(ctx context.Context) {
 	reader := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{"localhost:9092"},
+		Brokers:   []string{config.EnvValues.KafkaUrl},
 		Topic:     "chat-messages",
 		Partition: 0,
 	})
@@ -98,7 +98,7 @@ func waitForShutdown() {
 
 // func kafkaReader() {
 // 	reader := kafka.NewReader(kafka.ReaderConfig{
-// 		Brokers:   []string{"localhost:9092"},
+// 		Brokers:   []string{config.EnvValues.KafkaUrl},
 // 		Topic:     "chat-messages",
 // 		Partition: 0,
 // 	})

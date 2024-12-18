@@ -1,0 +1,19 @@
+# First stage (build)
+FROM golang:1.22-alpine AS builder
+ARG SOURCE_DIR=agencies-svc
+WORKDIR /app
+COPY ${SOURCE_DIR}/go.mod ${SOURCE_DIR}/go.sum ./
+
+# Copy the internal folder to the root level (as sibling to /app)
+COPY /internal /internal
+
+RUN go mod download
+COPY ./${SOURCE_DIR} .
+RUN CGO_ENABLED=0 GOOS=linux go build -o cmd/main ./cmd
+
+# Last stage
+FROM scratch
+COPY --from=builder /app/cmd/main /cmd/main
+COPY --from=builder /app/internal/config/k8sconfig.env /internal/config/config.env
+EXPOSE 50053
+ENTRYPOINT ["/cmd/main"]

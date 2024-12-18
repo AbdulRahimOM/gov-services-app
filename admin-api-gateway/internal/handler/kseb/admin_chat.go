@@ -7,6 +7,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/AbdulRahimOM/gov-services-app/admin-api-gateway/internal/config"
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
 	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
@@ -16,7 +17,7 @@ import (
 
 func (k *KSEBHandler) AdminChatWebsocket(conn *websocket.Conn) {
 	defer conn.Close()
-	
+
 	complaintId := conn.Params("complaintId")
 
 	adminID, ok := gateway.GetAdminIdFromWebsocketConn(conn)
@@ -99,7 +100,7 @@ func grpcReader(stream pb.KsebChatService_AdminChatClient, conn *websocket.Conn)
 
 func websocketToKafka(conn *websocket.Conn, adminID int32, complaintId int32) {
 	writer := kafka.NewWriter(kafka.WriterConfig{
-		Brokers: []string{"localhost:9092"},
+		Brokers: []string{config.EnvValues.KafkaUrl},
 		Topic:   "admin-messages",
 	})
 
@@ -143,7 +144,7 @@ func websocketToKafka(conn *websocket.Conn, adminID int32, complaintId int32) {
 
 func kafkaReader(ctx context.Context, conn *websocket.Conn) {
 	reader := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{"localhost:9092"},
+		Brokers:   []string{config.EnvValues.KafkaUrl},
 		Topic:     "user-messages",
 		Partition: 0,
 	})
