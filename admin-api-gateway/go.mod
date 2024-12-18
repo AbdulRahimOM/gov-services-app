@@ -9,10 +9,7 @@ require (
 	google.golang.org/grpc v1.64.0
 )
 
-replace (
-	github.com/AbdulRahimOM/go-utils/mymath => ../../go-utils/mymath
-	github.com/AbdulRahimOM/gov-services-app/internal => ../internal
-)
+replace github.com/AbdulRahimOM/gov-services-app/internal => ../internal
 
 require (
 	github.com/eapache/go-resiliency v1.7.0
@@ -28,7 +25,7 @@ require (
 
 require (
 	github.com/AbdulRahimOM/go-utils v0.0.0-20240710141430-3e08a5bcd862 // indirect
-	github.com/AbdulRahimOM/go-utils/mymath v0.0.0 // indirect
+	github.com/AbdulRahimOM/go-utils/mymath v0.0.0-20240710141430-3e08a5bcd862 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect

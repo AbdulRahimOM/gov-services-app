@@ -14,6 +14,7 @@ var EnvValues struct {
 
 	UserHost string `mapstructure:"USER_HOST"`
 	PprofUrl string `mapstructure:"PPROF_URL"`
+	KafkaUrl string `mapstructure:"KAFKA_URL"`
 }
 
 func init() {

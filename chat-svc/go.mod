@@ -3,13 +3,16 @@ module github.com/AbdulRahimOM/gov-services-app/chat-svc
 go 1.22.2
 
 require (
-	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-20240711183451-bed81020336a
+	// github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-20240711183451-bed81020336a
+	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-00010101000000-000000000000
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/spf13/viper v1.19.0
 	google.golang.org/grpc v1.65.0
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.11
 )
+
+replace github.com/AbdulRahimOM/gov-services-app/internal => ../internal
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

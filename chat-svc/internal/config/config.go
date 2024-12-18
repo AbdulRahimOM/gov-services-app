@@ -7,8 +7,9 @@ import (
 )
 
 var EnvValues struct {
-	Port  string `mapstructure:"PORT"`
-	DbUrl string `mapstructure:"DB_URL"`
+	Port     string `mapstructure:"PORT"`
+	DbUrl    string `mapstructure:"DB_URL"`
+	KafkaUrl string `mapstructure:"KAFKA_URL"`
 }
 
 func init() {

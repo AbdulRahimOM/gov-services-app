@@ -3,7 +3,8 @@ module github.com/AbdulRahimOM/gov-services-app/agencies-svc
 go 1.22.2
 
 require (
-	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-20240711183451-bed81020336a
+	github.com/AbdulRahimOM/gov-services-app/internal v0.0.0-20241126121545-0bb3e2998316
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2

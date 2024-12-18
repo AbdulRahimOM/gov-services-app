@@ -10,6 +10,7 @@ import (
 	commondto "github.com/AbdulRahimOM/gov-services-app/internal/common-dto"
 	gateway "github.com/AbdulRahimOM/gov-services-app/internal/gateway/fiber"
 	pb "github.com/AbdulRahimOM/gov-services-app/internal/pb/generated"
+	"github.com/AbdulRahimOM/gov-services-app/user-api-gateway/internal/config"
 	"github.com/gofiber/websocket/v2"
 	"github.com/segmentio/kafka-go"
 )
@@ -100,7 +101,7 @@ func grpcReader(stream pb.KsebChatService_UserChatClient, conn *websocket.Conn) 
 
 func websocketToKafka(conn *websocket.Conn, userID int32, complaintId int32) {
 	writer := kafka.NewWriter(kafka.WriterConfig{
-		Brokers: []string{"localhost:9092"},
+		Brokers: []string{config.EnvValues.KafkaUrl},
 		Topic:   "user-messages",
 	})
 
@@ -144,7 +145,7 @@ func websocketToKafka(conn *websocket.Conn, userID int32, complaintId int32) {
 
 func kafkaReader(ctx context.Context, conn *websocket.Conn) {
 	reader := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{"localhost:9092"},
+		Brokers:   []string{config.EnvValues.KafkaUrl},
 		Topic:     "admin-messages",
 		Partition: 0,
 	})
